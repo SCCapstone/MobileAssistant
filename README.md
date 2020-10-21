@@ -69,3 +69,5 @@ Cameron Brandenburg cpb2@email.sc.edu
 
 Henry Vy vyh@email.sc.edu
 
+Cooper Gregory cooperlg@email.sc.edu
+
