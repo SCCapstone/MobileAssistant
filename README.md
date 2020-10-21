@@ -1,7 +1,8 @@
 # MobileAssistant
 
-This first paragraph should be a short description of the app. You can add links
-to your wiki pages that have more detailed descriptions.
+Our app will have an assistant that will be similar to Google Assistant. The user
+will be able to interact with an animated character by talking to him/her with commands 
+or conversations. The app will respond with an appropiate answer.
 
 Your audience for the Readme.md are other developers who are joining your team.
 Specifically, the file should contain detailed instructions that any developer
