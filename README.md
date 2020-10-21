@@ -71,3 +71,5 @@ Henry Vy vyh@email.sc.edu
 
 Cooper Gregory cooperlg@email.sc.edu
 
+Hui Wang huiw@email.sc.edu
+
