@@ -66,5 +66,6 @@ Explain how to run the automated tests.
 # Authors
 
 Cameron Brandenburg cpb2@email.sc.edu
+
 Henry Vy vyh@email.sc.edu
 
