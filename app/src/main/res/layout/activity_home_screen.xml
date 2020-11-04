@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Homescreen">
+    tools:context=".Home_screen">
 
     <Button
-        android:id="@+id/button_homescreen"
+        android:id="@+id/button_home"
         android:layout_width="120dp"
         android:layout_height="60dp"
         android:background="#C9DBF8"
@@ -32,11 +32,10 @@
         android:id="@+id/button_settings"
         android:layout_width="120dp"
         android:layout_height="60dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
         android:background="#c9dbf8"
         android:text="Settings"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

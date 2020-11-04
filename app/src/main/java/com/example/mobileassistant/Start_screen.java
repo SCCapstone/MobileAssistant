@@ -47,7 +47,7 @@ public class Start_screen extends AppCompatActivity {
 
     // This method is used for swapping to the homescreen class and xml
     public void open_Homescreen(){
-        Intent intent = new Intent(this, Homescreen.class); // Setting intent
+        Intent intent = new Intent(this, Home_screen.class); // Setting intent
         startActivity(intent); // open the activity
     }
 }
