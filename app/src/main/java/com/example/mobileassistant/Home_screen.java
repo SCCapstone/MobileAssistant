@@ -40,6 +40,7 @@ public class Home_screen extends AppCompatActivity {
                 open_Settings_screen(); // opens Settings class/screen
             }
         });
+
     }
 
     // method for opening Profile screen
