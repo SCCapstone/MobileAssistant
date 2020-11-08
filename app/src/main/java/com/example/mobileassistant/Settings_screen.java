@@ -12,6 +12,8 @@ public class Settings_screen extends AppCompatActivity {
     private Button button_profile;
     private Button button_home;
     private Button button_settings;
+    private Button button_light_mode;
+    private Button button_dark_mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,10 @@ public class Settings_screen extends AppCompatActivity {
         button_profile = findViewById(R.id.button_profile);
         button_home = findViewById(R.id.button_home);
         button_settings = findViewById(R.id.button_settings);
+        button_light_mode = findViewById(R.id.button_light_mode);
+        button_dark_mode = findViewById(R.id.button_dark_mode);
+
+        //button_settings.setBackgroundColor(0xc9dbf8); // Color for light blue
 
         // button to swap to Profile screen
         button_profile.setOnClickListener(new View.OnClickListener(){
@@ -38,6 +44,21 @@ public class Settings_screen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 open_Home_screen(); // opens Home class/screen
+            }
+        });
+
+        button_light_mode.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+            }
+        });
+
+        button_dark_mode.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
