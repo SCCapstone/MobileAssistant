@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".Settings_screen">
 
     <Button
         android:id="@+id/button_profile"
         android:layout_width="120dp"
         android:layout_height="60dp"
-        android:background="#C9DBF8"
+        android:background="@color/buttonColor"
         android:text="Profile"
-        android:textColor="#000000"
+        android:textColor="@color/textColor"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -21,8 +22,9 @@
         android:id="@+id/button_home"
         android:layout_width="120dp"
         android:layout_height="60dp"
-        android:background="#C9DBF8"
+        android:background="@color/buttonColor"
         android:text="Homescreen"
+        android:textColor="@color/textColor"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_settings"
@@ -32,9 +34,39 @@
         android:id="@+id/button_settings"
         android:layout_width="120dp"
         android:layout_height="60dp"
-        android:background="#c9dbf8"
+        android:background="@color/buttonColor"
         android:text="Settings"
+        android:textColor="@color/backgroundColor"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button_dark_mode"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="100dp"
+        android:background="@color/buttonColor"
+        android:text="Dark Mode"
+        android:textColor="@color/textColor"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_settings"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button_light_mode"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="200dp"
+        android:background="@color/buttonColor"
+        android:text="Light Mode"
+        android:textColor="@color/textColor"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_settings"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

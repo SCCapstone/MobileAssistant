@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#073763</color>
+    <color name="colorPrimaryDark">#073763</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="colorAccent">#03DAC5</color> <!-- Don't think this is needed -->
+
+    <!-- Light Mode Color -->
+    <color name="textColor">#FFFFFF</color>
+    <color name="buttonColor">#073763</color>
+    <color name="backgroundColor">#434343</color>
+</resources>
