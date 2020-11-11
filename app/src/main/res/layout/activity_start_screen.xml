@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/backgroundColor"
     tools:context=".Start_screen">
 
     <EditText
@@ -18,6 +18,7 @@
         android:layout_marginRight="50dp"
         android:gravity="center"
         android:hint="First Name"
+        android:textColorHint="@color/textColor"
         android:textSize="36sp"
         app:drawableTint="#514B4B"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +36,7 @@
         android:layout_marginRight="50dp"
         android:gravity="center"
         android:hint="Last Name"
+        android:textColorHint="@color/textColor"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,6 +53,7 @@
         android:layout_marginRight="50dp"
         android:gravity="center"
         android:hint="Date of Birth"
+        android:textColorHint="@color/textColor"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,8 +64,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="500dp"
-        android:background="#C9DBF8"
+        android:background="@color/buttonColor"
         android:text="Confirm"
+        android:textColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
