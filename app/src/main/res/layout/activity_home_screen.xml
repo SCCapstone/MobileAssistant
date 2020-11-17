@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorSecondary"
             android:text="Send"
-            android:srcCompat="@drawable/up_arrow"/>
+            app:srcCompat="@drawable/up_arrow"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
