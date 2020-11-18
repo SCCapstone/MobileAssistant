@@ -8,15 +8,16 @@ import org.alicebot.ab.MagicBooleans;
 import org.alicebot.ab.MagicStrings;
 import org.alicebot.ab.utils.IOUtils;
 
-public class chat {
-    private static final boolean TRACE_MODE = false;
-    static String botname="mybot";
+public class ChatFromAlice {
+    private final boolean TRACE_MODE = false;
+    static String botName="my bot";
 
-    public static void main(String[] args) {
-        Bot bot = new Bot(botname);
-        Chat chatSession = new Chat(bot);
+    public String getChatFromAlice() {
+        Bot bot = new Bot(botName);
+        org.alicebot.ab.Chat chatSession = new org.alicebot.ab.Chat(bot);
         String request = "Hello. Are you alive? What is your name?";
         String response = chatSession.multisentenceRespond(request);
-        System.out.println(response);
+        //System.out.println(response);
+        return response;
     }
 }
