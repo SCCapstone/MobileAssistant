@@ -18,6 +18,7 @@
         android:layout_marginRight="50dp"
         android:gravity="center"
         android:hint="First Name"
+        android:inputType="textPersonName"
         android:textColorHint="@color/textColor"
         android:textSize="36sp"
         app:drawableTint="#514B4B"
@@ -36,6 +37,7 @@
         android:layout_marginRight="50dp"
         android:gravity="center"
         android:hint="Last Name"
+        android:inputType="textPersonName"
         android:textColorHint="@color/textColor"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,6 +55,7 @@
         android:layout_marginRight="50dp"
         android:gravity="center"
         android:hint="Date of Birth"
+        android:inputType="date"
         android:textColorHint="@color/textColor"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,4 +73,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

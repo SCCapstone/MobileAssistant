@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText ;
+import android.widget.Toast;
 
 public class Start_screen extends AppCompatActivity {
 
-    private EditText first_name;
-    private EditText last_name;
-    private EditText date_of_birth;
+    // static if you want to use outside of class
+    private static EditText first_name;
+    private static EditText last_name;
+    private static EditText date_of_birth;
     private Button button_confirm;
     SharedPreferences sharedPreferences = null;
 
@@ -37,13 +39,14 @@ public class Start_screen extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                // We just store the first name, last name, and date of birth in local DB
-                String f_name = first_name.getText().toString();
-                String l_name = last_name.getText().toString();
-                String dob = date_of_birth.getText().toString();
-
-                // Then we go to the homescreen.
-                open_Homescreen();
+                // Check if user entered first name, last name, and date of birth
+                if (!first_name.getText().toString().equals("")
+                && !last_name.getText().toString().equals("")
+                && !date_of_birth.getText().toString().equals(""))
+                    open_Homescreen();
+                else{
+                    makeToast("Please Enter All Information");
+                }
             }
         });
 
@@ -65,5 +68,51 @@ public class Start_screen extends AppCompatActivity {
     public void open_Homescreen(){
         Intent intent = new Intent(this, Home_screen.class); // Setting intent
         startActivity(intent); // open the activity
+    }
+
+    // Getters and Setters for accessing variables outside of this activity
+    public static String getFirst_name() {
+        if (first_name.getText().toString().equals("")){
+            return "No First Name";
+        }
+        else{
+            return first_name.getText().toString();
+        }
+    }
+
+    public static void setFirst_name(String s) {
+        first_name.setText(s);
+    }
+
+    public static String getLast_name() {
+        if (last_name.getText().toString().equals("")){
+            return "No Last Name";
+        }
+        else{
+            return last_name.getText().toString();
+        }
+    }
+
+    public static void setLast_name(String s) {
+        last_name.setText(s);
+    }
+
+    public static String getDate_of_birth() {
+        if (date_of_birth.getText().toString().equals("")){
+            return "No Date of Birth";
+        }
+        else{
+            return date_of_birth.getText().toString();
+        }
+    }
+
+    public static void setDate_of_birth(String s) {
+        date_of_birth.setText(s);
+    }
+
+    // Just for debugging
+    public void makeToast(String message){
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
     }
 }
