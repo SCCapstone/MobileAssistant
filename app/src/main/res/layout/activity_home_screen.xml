@@ -7,89 +7,102 @@
     android:background="@color/backgroundColor"
     tools:context=".Home_screen">
 
-    <Button
-        android:id="@+id/button_home"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:background="@color/buttonColor"
-        android:text="Homescreen"
-        android:textColor="@color/backgroundColor"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_settings"
-        app:layout_constraintStart_toEndOf="@+id/button_profile" />
-
-    <Button
-        android:id="@+id/button_profile"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:background="@color/buttonColor"
-        android:text="Profile"
-        android:textColor="@color/textColor"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button_settings"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:background="@color/buttonColor"
-        android:text="Settings"
-        android:textColor="@color/textColor"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!--List view for displaying chat messages-->
-    <!--To type and send the message-->
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/animation" />
-
-    <ListView
-        android:id="@+id/chatListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/sendMessageLayout"
-        android:divider="@null"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animationView"
-        app:layout_constraintBottom_toTopOf="@+id/sendMessageLayout"/>
-
     <LinearLayout
-        android:id="@+id/sendMessageLayout"
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/backgroundColor"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/button_home">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/messageEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_weight="1"
-            android:textColorHighlight="@color/colorPrimary" />
+        <!--List view for displaying chat messages-->
+        <!--To type and send the message-->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/animation"
+            android:layout_weight="1"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnSend"
-            android:layout_width="wrap_content"
+        <ListView
+            android:id="@+id/chatListView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/sendMessageLayout"
+            android:divider="@null"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/sendMessageLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorSecondary"
-            android:text="Send"
-            app:srcCompat="@drawable/up_arrow"/>
+            android:background="@color/backgroundColor"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/messageEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:textColorHighlight="@color/colorPrimary"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnSend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorSecondary"
+                android:text="Send"
+                app:srcCompat="@drawable/up_arrow"
+                android:layout_margin="5dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/screenButtonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <Button
+                android:id="@+id/button_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/buttonColor"
+                android:text="Profile"
+                android:textColor="@color/textColor"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"/>
+
+            <Button
+                android:id="@+id/button_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/buttonColor"
+                android:text="Homescreen"
+                android:textColor="@color/backgroundColor"
+                android:textSize="14sp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/button_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/buttonColor"
+                android:text="Settings"
+                android:textColor="@color/textColor"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
