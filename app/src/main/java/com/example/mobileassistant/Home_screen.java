@@ -57,7 +57,7 @@ public class Home_screen extends AppCompatActivity {
 
         // Getting variables for attributes to send messages
         chatListView = (ListView) findViewById(R.id.chatListView);
-        btnSend = (FloatingActionButton) findViewById(R.id.btnSend);
+        btnSend = (FloatingActionButton) findViewById(R.id.button_send);
         messageEditText = (EditText) findViewById(R.id.messageEditText);
         chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
         chatListView.setAdapter(chatMessageAdapter);
