@@ -24,7 +24,7 @@
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="This is the user's text!"
+            android:text="@string/user_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
     </me.himanshusoni.chatmessageview.ChatMessageView>
 

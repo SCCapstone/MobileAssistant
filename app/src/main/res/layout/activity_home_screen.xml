@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--used an article from https://medium.com/@harivigneshjayapalan/android-baking-a-simple-chatbot-in-30-minutes-aiml-ff43c3269025-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +14,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!--List view for displaying chat messages-->
         <!--To type and send the message-->
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animationView"
@@ -27,6 +27,7 @@
             app:lottie_rawRes="@raw/animation"
             android:layout_weight="1"/>
 
+        <!--List view for displaying chat messages-->
         <ListView
             android:id="@+id/chatListView"
             android:layout_width="match_parent"
@@ -53,7 +54,7 @@
                 android:textColorHighlight="@color/colorPrimary"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnSend"
+                android:id="@+id/button_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/colorSecondary"
