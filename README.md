@@ -2,7 +2,7 @@
 
 Our app will have an assistant that will be similar to Google Assistant. The user
 will be able to interact with an animated character by talking to him/her with commands 
-or conversations. The app will respond with an appropiate answer.
+or conversations. The app will respond with an appropriate answer.
 
 Your audience for the Readme.md are other developers who are joining your team.
 Specifically, the file should contain detailed instructions that any developer

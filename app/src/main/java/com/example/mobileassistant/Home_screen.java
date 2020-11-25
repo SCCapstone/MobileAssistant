@@ -150,25 +150,23 @@ public class Home_screen extends AppCompatActivity {
         }
     }
     //Request and response of user and the bot
-    public static void mainFunction (String[] args) {
+    public static void mainFunction(String[] args) {
         MagicBooleans.trace_mode = false;
-        System.out.println("trace mode = " + MagicBooleans.trace_mode);
+        //System.out.println("trace mode = " + MagicBooleans.trace_mode);
         Graphmaster.enableShortCuts = true;
         Timer timer = new Timer();
         String request = "Hello.";
         String response = chat.multisentenceRespond(request);
 
-        System.out.println("Human: "+request);
-        System.out.println("Robot: " + response);
+        //System.out.println("Human: "+request);
+        //System.out.println("Robot: " + response);
     }
     // Sends the user's message to the chatListView
-    // Currently also used to call the but's message to reply in a default way
+    // To debug, call the bot's message to reply in a default way
     private void sendUserMessage(String message) {
         ChatMessage chatMessage = new ChatMessage(message, true);
         chatMessageAdapter.add(chatMessage);
-
-        // Used to have the bot reply with a default message
-        sendBotMessage("This is the bot's reply!");
+        sendBotMessage(chat.multisentenceRespond(message));
     }
 
     // Sends the bot's message to the chatListView
