@@ -1,5 +1,6 @@
 package com.example.mobileassistant;
 
+
 import android.content.res.AssetManager;
 import android.os.Environment;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.alicebot.ab.AIMLProcessor;
@@ -28,7 +30,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Home_screen extends AppCompatActivity {
 
@@ -138,6 +143,7 @@ public class Home_screen extends AppCompatActivity {
         chat = new Chat(bot);
         String[] args = null;
         mainFunction(args);
+
     }
 
     //main chat functionality
@@ -166,9 +172,14 @@ public class Home_screen extends AppCompatActivity {
     private void sendUserMessage(String message) {
         ChatMessage chatMessage = new ChatMessage(message, true);
         chatMessageAdapter.add(chatMessage);
-
+        // call AccessCalendar activity to get events
+        if (message.equals("show event")) {
+            //new CalendarAsyncTask(AccessCalendar).execute();
+            Intent intent = new Intent(this, AccessCalendar.class);
+            startActivity(intent);
+        }
         // Used to have the bot reply with a default message
-        sendBotMessage("This is the bot's reply!");
+        else {sendBotMessage("This is the bot's reply!");}
     }
 
     // Sends the bot's message to the chatListView
@@ -176,6 +187,7 @@ public class Home_screen extends AppCompatActivity {
         ChatMessage chatMessage = new ChatMessage(message, false);
         chatMessageAdapter.add(chatMessage);
     }
+
 
     //switch to other screens
     // Method for opening Profile screen
