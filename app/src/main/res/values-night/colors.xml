@@ -3,7 +3,7 @@
     <color name="colorPrimary">#073763</color>
     <color name="colorPrimaryDark">#073763</color>
     <color name="textColorPrimary">#FFFFFF</color>
-    <color name="colorAccent">#03DAC5</color> <!-- Don't think this is needed -->
+    <color name="colorAccent">#073763</color>
 
     <!-- Light Mode Color -->
     <color name="textColor">#FFFFFF</color>
