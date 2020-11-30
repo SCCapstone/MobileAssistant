@@ -212,10 +212,10 @@ public class Home_screen extends AppCompatActivity {
         }
         else if(chatMessage.getContent().contains("Search") || chatMessage.getContent().contains("search"))
         {
+            //change so that search keyword is subtracted from what gets sent to gsearch
             //if the message contains the word "search", send it to gsearch, if not, continue
             gsearch a = new gsearch();
-            System.out.println("printing query in home screen : " + chatMessage.getContent());
-            sendBotMessage(a.doInBackground(chatMessage.getContent()));
+            sendBotMessage(a.doInBackground(message));
         }
         else
         {
