@@ -1,6 +1,7 @@
 package com.example.mobileassistant;
 
 import android.content.Context;
+
 import android.content.res.AssetManager;
 import android.os.Environment;
 import android.os.Bundle;
@@ -31,7 +32,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Home_screen extends AppCompatActivity {
 
@@ -201,7 +205,12 @@ public class Home_screen extends AppCompatActivity {
     private void sendUserMessage(String message) {
         ChatMessage chatMessage = new ChatMessage(message, true);
         chatMessageAdapter.add(chatMessage);
-        if(chatMessage.getContent().contains("Search") || chatMessage.getContent().contains("search"))
+        if (message.equals("show event")) {
+            //new CalendarAsyncTask(AccessCalendar).execute();
+            Intent intent = new Intent(this, AccessCalendar.class);
+            startActivity(intent);
+        }
+        else if(chatMessage.getContent().contains("Search") || chatMessage.getContent().contains("search"))
         {
             //change so that search keyword is subtracted from what gets sent to gsearch
             //if the message contains the word "search", send it to gsearch, if not, continue
