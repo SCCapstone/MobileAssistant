@@ -1,5 +1,5 @@
 url:http://www.alicebot.org
-name:SUPER
+name:Alice
 email:callmom-info@pandorabots.com
 gender:male
 botmaster:Dr. Richard S. Wallace
