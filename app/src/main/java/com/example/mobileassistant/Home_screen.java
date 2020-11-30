@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 
+import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -53,6 +54,13 @@ public class Home_screen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        //hoping that this fixes network errors for gsearch
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if(SDK_INT > 8)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         // Getting variables from xml
         button_profile = findViewById(R.id.button_profile);
@@ -193,7 +201,17 @@ public class Home_screen extends AppCompatActivity {
     private void sendUserMessage(String message) {
         ChatMessage chatMessage = new ChatMessage(message, true);
         chatMessageAdapter.add(chatMessage);
-        sendBotMessage(chat.multisentenceRespond(message));
+        if(chatMessage.getContent().contains("Search") || chatMessage.getContent().contains("search"))
+        {
+            //if the message contains the word "search", send it to gsearch, if not, continue
+            gsearch a = new gsearch();
+            System.out.println("printing query in home screen : " + chatMessage.getContent());
+            sendBotMessage(a.doInBackground(chatMessage.getContent()));
+        }
+        else
+        {
+            sendBotMessage(chat.multisentenceRespond(message));
+        }
     }
 
     // Sends the bot's message to the chatListView
