@@ -31,23 +31,6 @@ public class gsearch extends AsyncTask<String, String, String> {
         System.out.println("Size of outputs : " + outputs.size());
         Element output = outputs.get(9);
         result=result+output.select("a[href]").text();
-        /*
-        Element title = searchs.select("title").get(9);
-        result=result+"Website Title : " + title.text();ti
-        Element link = searchs.select("a[href]").get(9);
-        result=result+"\n Link : " + link.text();
-        Elements outputs = searchs.select("h3.r1 > a");
-        System.out.println("Printing toString of outputs : " + outputs.toString() + "\n");
-        for(Element i : outputs) //coded with possibility of multiple result default in mind
-        {
-            String temp = i.attr("href");
-            if(temp.startsWith("/url?q="))
-            {
-                result=result+temp+"\n";
-            }
-            //result = result +"\nTitle : "+i.text()+" URL : "+i.html();
-        }
-        */
         return result;
     }
     /*
