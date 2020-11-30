@@ -1,5 +1,6 @@
 package com.example.mobileassistant;
 
+import android.content.Context;
 
 import android.content.res.AssetManager;
 import android.os.Environment;
@@ -8,12 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 
+import android.os.StrictMode;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.alicebot.ab.AIMLProcessor;
@@ -56,6 +58,13 @@ public class Home_screen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        //hoping that this fixes network errors for gsearch
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if(SDK_INT > 8)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         // Getting variables from xml
         button_profile = findViewById(R.id.button_profile);
@@ -103,39 +112,12 @@ public class Home_screen extends AppCompatActivity {
             }
         });
 
-        //bot configurations
-        AssetManager assets = getResources().getAssets();
-        File jayDir = new File(Environment.getExternalStorageDirectory().toString() + "/bots/super/");
-        if (jayDir.exists()) {
-            //Reading the file
-            try {
-                for (String dir : assets.list("super")) {
-                    File subDir = new File(jayDir.getPath() + "/" + dir);
-                    boolean subDir_check = subDir.mkdirs();
-                    for (String file : assets.list("super/" + dir)) {
-                        File f = new File(jayDir.getPath() + "/" + dir + "/" + file);
-                        if (f.exists()) {
-                            continue;
-                        }
-                        InputStream in = null;
-                        OutputStream out = null;
-                        in = assets.open("super/" + dir + "/" + file);
-                        out = new FileOutputStream(jayDir.getPath() + "/" + dir + "/" + file);
-                        //copy file from assets to the mobile's SD card or any secondary memory
-                        copyFile(in, out);
-                        in.close();
-                        in = null;
-                        out.flush();
-                        out.close();
-                        out = null;
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        //get the working directory
-        MagicStrings.root_path = Environment.getExternalStorageDirectory().toString() + "/super";
+        // Used to copy the assets from the assets/bots/ folder to Android's external storage
+        copyAsset("bots");
+
+        // Gets the working directory for the AIML files
+        // The external storage directory leads to a virtual SD card where the AIML assets are copied to
+        MagicStrings.root_path = Environment.getExternalStorageDirectory().toString() + "/Android/data/com.example.mobileassistant/files";
         System.out.println("Working Directory = " + MagicStrings.root_path);
         AIMLProcessor.extension =  new PCAIMLProcessorExtension();
         //Assign the AIML files to bot for processing
@@ -143,43 +125,102 @@ public class Home_screen extends AppCompatActivity {
         chat = new Chat(bot);
         String[] args = null;
         mainFunction(args);
-
     }
 
-    //main chat functionality
-    //copying the file
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while((read = in.read(buffer)) != -1){
-            out.write(buffer, 0, read);
+    /**
+     * Copy the asset at the specified path to this app's data directory. If the
+     * asset is a directory, its contents are also copied.
+     *
+     * @param path
+     * Path to asset, relative to app's assets directory.
+     */
+    private void copyAsset(String path) {
+        AssetManager manager = getAssets();
+
+        // If we have a directory, we make it and recurse. If a file, we copy its
+        // contents.
+        try {
+            String[] contents = manager.list(path);
+
+            // The documentation suggests that list throws an IOException, but doesn't
+            // say under what conditions. It'd be nice if it did so when the path was
+            // to a file. That doesn't appear to be the case. If the returned array is
+            // null or has 0 length, we assume the path is to a file. This means empty
+            // directories will get turned into files.
+            if (contents == null || contents.length == 0)
+                throw new IOException();
+
+            // Make the directory.
+            File dir = new File(getExternalFilesDir(null), path);
+            dir.mkdirs();
+
+            // Recurse on the contents.
+            for (String entry : contents) {
+                copyAsset(path + "/" + entry);
+            }
+        } catch (IOException e) {
+            copyFileAsset(path);
         }
     }
+
+    /**
+     * Copy the asset file specified by path to app's data directory. Assumes
+     * parent directories have already been created.
+     *
+     * @param path
+     * Path to asset, relative to app's assets directory.
+     */
+    private void copyFileAsset(String path) {
+        File file = new File(getExternalFilesDir(null), path);
+        try {
+            InputStream in = getAssets().open(path);
+            OutputStream out = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int read = in.read(buffer);
+            while (read != -1) {
+                out.write(buffer, 0, read);
+                read = in.read(buffer);
+            }
+            out.close();
+            in.close();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
     //Request and response of user and the bot
-    public static void mainFunction (String[] args) {
+    public static void mainFunction(String[] args) {
         MagicBooleans.trace_mode = false;
-        System.out.println("trace mode = " + MagicBooleans.trace_mode);
+        //System.out.println("trace mode = " + MagicBooleans.trace_mode);
         Graphmaster.enableShortCuts = true;
         Timer timer = new Timer();
         String request = "Hello.";
         String response = chat.multisentenceRespond(request);
 
-        System.out.println("Human: "+request);
-        System.out.println("Robot: " + response);
+        //System.out.println("Human: "+request);
+        //System.out.println("Robot: " + response);
     }
     // Sends the user's message to the chatListView
-    // Currently also used to call the but's message to reply in a default way
+    // To debug, call the bot's message to reply in a default way
     private void sendUserMessage(String message) {
         ChatMessage chatMessage = new ChatMessage(message, true);
         chatMessageAdapter.add(chatMessage);
-        // call AccessCalendar activity to get events
         if (message.equals("show event")) {
             //new CalendarAsyncTask(AccessCalendar).execute();
             Intent intent = new Intent(this, AccessCalendar.class);
             startActivity(intent);
         }
-        // Used to have the bot reply with a default message
-        else {sendBotMessage("This is the bot's reply!");}
+        else if(chatMessage.getContent().contains("Search") || chatMessage.getContent().contains("search"))
+        {
+            //if the message contains the word "search", send it to gsearch, if not, continue
+            gsearch a = new gsearch();
+            System.out.println("printing query in home screen : " + chatMessage.getContent());
+            sendBotMessage(a.doInBackground(chatMessage.getContent()));
+        }
+        else
+        {
+            sendBotMessage(chat.multisentenceRespond(message));
+        }
     }
 
     // Sends the bot's message to the chatListView
@@ -187,7 +228,6 @@ public class Home_screen extends AppCompatActivity {
         ChatMessage chatMessage = new ChatMessage(message, false);
         chatMessageAdapter.add(chatMessage);
     }
-
 
     //switch to other screens
     // Method for opening Profile screen
