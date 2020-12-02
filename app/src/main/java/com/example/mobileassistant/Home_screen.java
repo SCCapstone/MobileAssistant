@@ -3,6 +3,7 @@ package com.example.mobileassistant;
 import android.content.Context;
 
 import android.content.res.AssetManager;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -217,10 +218,24 @@ public class Home_screen extends AppCompatActivity {
             gsearch a = new gsearch();
             sendBotMessage(a.doInBackground(message));
         }
+        else if (message.toLowerCase().contains("weather")){
+            WeatherFetcher weatherFetcher = new WeatherFetcher();
+            /**
+             * Currently hardcoded, will need to take the city from "message" and pass
+             * in the city into .doInBackground(...)
+             */
+            String location = "Columbia,US"; // Hard coded
+
+
+            sendBotMessage(weatherFetcher.doInBackground(location));
+        }
         else
         {
             sendBotMessage(chat.multisentenceRespond(message));
         }
+
+        // Add an else if and check if user replies with "weather"
+        //chatMessage.getContent().toLowerCase().contains(("weather"))
     }
 
     // Sends the bot's message to the chatListView
