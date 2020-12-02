@@ -127,34 +127,25 @@ public class Home_screen extends AppCompatActivity {
         mainFunction(args);
     }
 
-    /**
-     * Copy the asset at the specified path to this app's data directory. If the
-     * asset is a directory, its contents are also copied.
-     *
-     * @param path
-     * Path to asset, relative to app's assets directory.
-     */
+    // Copies assets to the external storage on the device
+    // The String path refers to the folder relative to the assets folder
+    // An empty string ("") will copy all the assets
+    // Currently the directory on the phone is storage/emulated/0/Android/data/com.example.mobileassistant/files
     private void copyAsset(String path) {
         AssetManager manager = getAssets();
 
-        // If we have a directory, we make it and recurse. If a file, we copy its
-        // contents.
+        // If we have a directory, we make it and recurse. If a file, we copy its contents.
         try {
             String[] contents = manager.list(path);
 
-            // The documentation suggests that list throws an IOException, but doesn't
-            // say under what conditions. It'd be nice if it did so when the path was
-            // to a file. That doesn't appear to be the case. If the returned array is
-            // null or has 0 length, we assume the path is to a file. This means empty
-            // directories will get turned into files.
             if (contents == null || contents.length == 0)
                 throw new IOException();
 
-            // Make the directory.
+            // Creates a new directory
             File dir = new File(getExternalFilesDir(null), path);
             dir.mkdirs();
 
-            // Recurse on the contents.
+            // Recursively copies subfolders
             for (String entry : contents) {
                 copyAsset(path + "/" + entry);
             }
@@ -163,13 +154,7 @@ public class Home_screen extends AppCompatActivity {
         }
     }
 
-    /**
-     * Copy the asset file specified by path to app's data directory. Assumes
-     * parent directories have already been created.
-     *
-     * @param path
-     * Path to asset, relative to app's assets directory.
-     */
+    // Copies the individual files within the assets directory
     private void copyFileAsset(String path) {
         File file = new File(getExternalFilesDir(null), path);
         try {
