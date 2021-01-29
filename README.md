@@ -25,6 +25,7 @@ Running the app from within Android Studio
 
 ## Testing
 Unit Tests can be found in MobileAssistant/app/src/test/java/com/example/mobileassistant
+
 Behvavioral Tests can be found in MobileAssistant/app/src/androidTest/java/com/example/mobileassistant
 
 1. Complete the above steps in the Running section of the ReadMe to a point where the app has successfully launched at least to the Start Screen once.
