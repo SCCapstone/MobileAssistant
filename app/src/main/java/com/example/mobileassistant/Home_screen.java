@@ -209,10 +209,14 @@ public class Home_screen extends AppCompatActivity {
              * Currently hardcoded, will need to take the city from "message" and pass
              * in the city into .doInBackground(...)
              */
+
+            // TODO: Parse Weather location
+            // Add a helper method that will parse out if message
+            // is asking for weather.
             String location = "Columbia,US"; // Hard coded
 
 
-            sendBotMessage(weatherFetcher.doInBackground(location));
+            sendBotMessage(weatherFetcher.doInBackground(location, this));
         }
         else
         {
