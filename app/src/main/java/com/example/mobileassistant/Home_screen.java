@@ -55,6 +55,11 @@ public class Home_screen extends AppCompatActivity {
     public Bot bot;
     public static Chat chat;
 
+    // Global Variables
+    // chatFlag is used for when the bot is asking the user a question and so that they can keep
+    // the same conversation going.
+    private int chatFlag = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,14 +107,23 @@ public class Home_screen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String message = messageEditText.getText().toString();
-                //bot
-                String response = chat.multisentenceRespond(messageEditText.getText().toString());
+                ChatMessage chatMessage = new ChatMessage(message, true);
+                chatMessageAdapter.add(chatMessage);
+
                 if (TextUtils.isEmpty(message)) {
                     return;
                 }
-                sendUserMessage(message);
+
+                if (chatFlag == 0){
+                    sendUserMessage(message);
+                }
+                else{
+                    findChatFlag(message, chatFlag);
+                }
+
                 messageEditText.setText("");
                 chatListView.setSelection(chatMessageAdapter.getCount() - 1);
+
             }
         });
 
@@ -189,48 +203,117 @@ public class Home_screen extends AppCompatActivity {
     // Sends the user's message to the chatListView
     // To debug, call the bot's message to reply in a default way
     private void sendUserMessage(String message) {
-        ChatMessage chatMessage = new ChatMessage(message, true);
-        chatMessageAdapter.add(chatMessage);
-        if (message.equals("show event")) {
+        int action = checkForAction(message);
+        if (action == 1) {
             //new CalendarAsyncTask(AccessCalendar).execute();
             Intent intent = new Intent(this, AccessCalendar.class);
             startActivity(intent);
         }
-        else if(chatMessage.getContent().contains("Search") || chatMessage.getContent().contains("search"))
+        else if(action == 2)
         {
             //change so that search keyword is subtracted from what gets sent to gsearch
             //if the message contains the word "search", send it to gsearch, if not, continue
             gsearch a = new gsearch();
             sendBotMessage(a.doInBackground(message));
         }
-        else if (message.toLowerCase().contains("weather")){
-            WeatherFetcher weatherFetcher = new WeatherFetcher();
-            /**
-             * Currently hardcoded, will need to take the city from "message" and pass
-             * in the city into .doInBackground(...)
-             */
-
-            // TODO: Parse Weather location
-            // Add a helper method that will parse out if message
-            // is asking for weather.
-            String location = "Columbia,US"; // Hard coded
-
-
-            sendBotMessage(weatherFetcher.doInBackground(location, this));
+        else if (action == 3){
+            confirmWeatherAction(message);
         }
         else
         {
             sendBotMessage(chat.multisentenceRespond(message));
         }
-
-        // Add an else if and check if user replies with "weather"
-        //chatMessage.getContent().toLowerCase().contains(("weather"))
     }
 
     // Sends the bot's message to the chatListView
     private void sendBotMessage(String message) {
         ChatMessage chatMessage = new ChatMessage(message, false);
         chatMessageAdapter.add(chatMessage);
+    }
+
+    // Checks for which action to take
+    private int checkForAction(String message){
+        String[] eventKeywords = {"show event"};
+        String[] searchKeywords = {"search", "look up"};
+        String[] weatherKeywords = {"weather", "forecast", "temperature"};
+
+        // I put them all in one for loop because I did not want to have 3 separate for loops
+        // Be sure to use the array with the highest length
+        // 0 = None, 1 = google calendar, 2 = google search, 3 = weather search
+        for(int i = 0; i < weatherKeywords.length; i++){
+
+            // Event keywords
+            if (i < eventKeywords.length && message.toLowerCase().contains(eventKeywords[i]))
+                return 1;
+
+            // Search keywords
+            if (i < searchKeywords.length && message.toLowerCase().contains(searchKeywords[i]))
+                return 2;
+
+            // Weather
+            if (message.toLowerCase().contains(weatherKeywords[i]))
+                return 3;
+        }
+
+        return 0;
+    }
+
+    // This method will confirm if the user request for the right weather location.
+    private boolean isCurrentWeather = true;
+    public int weatherAction = 0;
+    private WeatherFetcher weatherFetcher = new WeatherFetcher();
+    private void confirmWeatherAction(String message){
+        chatFlag = 3; // Lets bot know to keep the conversation going
+        String botMessage = "";
+
+        if (weatherAction == 0) {
+            botMessage = "Did you want the current weather or an 8-day forecast?";
+            weatherAction++;
+
+            sendBotMessage(botMessage);
+        }
+        else if (weatherAction == 1){
+            if (message.toLowerCase().contains("current"))
+                isCurrentWeather = true;
+            else
+                isCurrentWeather = false;
+
+            botMessage = "What is your City and State?";
+            weatherAction++;
+
+            sendBotMessage(botMessage);
+        }
+        else{
+            // Still need to convert state name to abbreviated state name
+            // eg: South Carolina -> SC
+            String location = message.replace(" ", "");
+
+            //reset globals
+            weatherAction = 0;
+            chatFlag = 0;
+
+            WeatherFetcher weatherFetcher = new WeatherFetcher();
+            sendBotMessage(weatherFetcher.doInBackground(location,isCurrentWeather, this));
+        }
+
+
+
+
+    }
+
+    // This will take us to which conversation they are currently in
+    private void findChatFlag(String message, int num){
+        // 1 = Google calendar, 2 = Google search, 3 = weather
+
+        if (num == 1){
+
+        }
+        else if(num == 2){
+
+        }
+        else if(num == 3){
+            confirmWeatherAction(message);
+        }
     }
 
     //switch to other screens
