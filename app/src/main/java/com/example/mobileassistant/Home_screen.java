@@ -3,6 +3,7 @@ package com.example.mobileassistant;
 import android.content.Context;
 
 import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class Home_screen extends AppCompatActivity {
 
@@ -217,6 +219,13 @@ public class Home_screen extends AppCompatActivity {
 
 
             sendBotMessage(weatherFetcher.doInBackground(location, this));
+        }
+        else if (message.toLowerCase().contains("directions to")){
+            MapLauncher mapLauncher = new MapLauncher(Home_screen.this);
+
+            // TODO: Implement better input message/command handling
+            String directions = message.substring(message.indexOf("directions to") + "directions to".length());
+            mapLauncher.openDirections(directions);
         }
         else
         {
