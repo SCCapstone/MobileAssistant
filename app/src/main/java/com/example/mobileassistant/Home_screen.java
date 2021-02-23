@@ -101,6 +101,8 @@ public class Home_screen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String message = messageEditText.getText().toString();
+
+                // This will show the message that the user typed in on the chat screen.
                 ChatMessage chatMessage = new ChatMessage(message, true);
                 chatMessageAdapter.add(chatMessage);
 
@@ -214,7 +216,7 @@ public class Home_screen extends AppCompatActivity {
             confirmWeatherAction(message);
         }
         // Opens the Google Maps app at the directions page to a certain location
-        else if (message.toLowerCase().contains("directions to")){
+        else if (action == 4){
             MapLauncher mapLauncher = new MapLauncher(Home_screen.this);
             mapLauncher.openDirections(message);
         }
@@ -235,6 +237,7 @@ public class Home_screen extends AppCompatActivity {
         String[] eventKeywords = {"show event"};
         String[] searchKeywords = {"search", "look up"};
         String[] weatherKeywords = {"weather", "forecast", "temperature"};
+        String[] mapKeywords = {"directions to"};
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
         // Be sure to use the array with the highest length
@@ -252,6 +255,10 @@ public class Home_screen extends AppCompatActivity {
             // Weather
             if (message.toLowerCase().contains(weatherKeywords[i]))
                 return 3;
+
+            // Map keywords
+            if (i < mapKeywords.length && message.toLowerCase().contains(mapKeywords[i]))
+                return 4;
         }
 
         return 0;
