@@ -1,10 +1,6 @@
 package com.example.mobileassistant;
 
-import android.content.Context;
-
 import android.content.res.AssetManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +9,6 @@ import android.content.Intent;
 
 import android.os.StrictMode;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,11 +29,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+
 
 public class Home_screen extends AppCompatActivity {
 
@@ -193,6 +185,7 @@ public class Home_screen extends AppCompatActivity {
     private void sendUserMessage(String message) {
         ChatMessage chatMessage = new ChatMessage(message, true);
         chatMessageAdapter.add(chatMessage);
+        // TODO: Implement better input message/command handling
         if (message.equals("show event")) {
             //new CalendarAsyncTask(AccessCalendar).execute();
             Intent intent = new Intent(this, AccessCalendar.class);
@@ -220,12 +213,10 @@ public class Home_screen extends AppCompatActivity {
 
             sendBotMessage(weatherFetcher.doInBackground(location, this));
         }
+        // Opens the Google Maps app at the directions page to a certain location
         else if (message.toLowerCase().contains("directions to")){
             MapLauncher mapLauncher = new MapLauncher(Home_screen.this);
-
-            // TODO: Implement better input message/command handling
-            String directions = message.substring(message.indexOf("directions to") + "directions to".length());
-            mapLauncher.openDirections(directions);
+            mapLauncher.openDirections(message);
         }
         else
         {
