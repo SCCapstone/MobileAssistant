@@ -219,11 +219,6 @@ public class Home_screen extends AppCompatActivity {
         else if(action == 5){
             confirmNewsAction(message);
         }
-        // Opens the Google Maps app at the directions page to a certain location
-        else if (message.toLowerCase().contains("directions to")){
-            MapLauncher mapLauncher = new MapLauncher(Home_screen.this);
-            mapLauncher.openDirections(message);
-        }
         else
         {
             sendBotMessage(chat.multisentenceRespond(message));
@@ -353,6 +348,9 @@ public class Home_screen extends AppCompatActivity {
         }
         else if(num == 3){
             confirmWeatherAction(message);
+        }
+        else if(num == 4){
+
         }
         else if(num == 5){
             confirmNewsAction(message);
