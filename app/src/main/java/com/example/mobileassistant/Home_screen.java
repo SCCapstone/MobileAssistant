@@ -213,6 +213,10 @@ public class Home_screen extends AppCompatActivity {
             confirmWeatherAction(message);
         }
         else if(action == 4){
+            MapLauncher mapLauncher = new MapLauncher(Home_screen.this);
+            mapLauncher.openDirections(message);
+        }
+        else if(action == 5){
             confirmNewsAction(message);
         }
         // Opens the Google Maps app at the directions page to a certain location
@@ -242,6 +246,7 @@ public class Home_screen extends AppCompatActivity {
         String[] eventKeywords = {"show event"};
         String[] searchKeywords = {"search", "look up"};
         String[] weatherKeywords = {"weather", "forecast", "temperature"};
+        String[] mapKeywords = {"directions to"};
         String[] newsKeywords = {"news", "headlines"};
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
@@ -261,11 +266,13 @@ public class Home_screen extends AppCompatActivity {
             if (message.toLowerCase().contains(weatherKeywords[i]))
                 return 3;
 
-            // News
-            if (message.toLowerCase().contains(newsKeywords[i]))
-            {
+            // Map keywords
+            if (i < mapKeywords.length && message.toLowerCase().contains(mapKeywords[i]))
                 return 4;
-            }
+
+            // News
+            if (i < newsKeywords.length && message.toLowerCase().contains(newsKeywords[i]))
+                return 5;
         }
 
         return 0;
@@ -315,7 +322,7 @@ public class Home_screen extends AppCompatActivity {
 
     }
     private void confirmNewsAction(String message){
-        chatFlag=4;
+        chatFlag=5;
         String botMessage="";
 
         if(newsAction==0)
@@ -347,7 +354,7 @@ public class Home_screen extends AppCompatActivity {
         else if(num == 3){
             confirmWeatherAction(message);
         }
-        else if(num == 4){
+        else if(num == 5){
             confirmNewsAction(message);
         }
     }
