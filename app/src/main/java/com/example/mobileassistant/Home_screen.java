@@ -205,13 +205,15 @@ public class Home_screen extends AppCompatActivity {
         }
         else if(action == 2)
         {
-            //change so that search keyword is subtracted from what gets sent to gsearch
             //if the message contains the word "search", send it to gsearch, if not, continue
             gsearch a = new gsearch();
             sendBotMessage(a.doInBackground(message));
         }
         else if (action == 3){
             confirmWeatherAction(message);
+        }
+        else if(action == 4){
+            confirmNewsAction(message);
         }
         // Opens the Google Maps app at the directions page to a certain location
         else if (message.toLowerCase().contains("directions to")){
@@ -221,6 +223,11 @@ public class Home_screen extends AppCompatActivity {
         else
         {
             sendBotMessage(chat.multisentenceRespond(message));
+            if(chat.multisentenceRespond(message).equals("Im not sure about that one."))
+            {
+                gsearch b = new gsearch();
+                sendBotMessage(b.doInBackground(message));
+            }
         }
     }
 
@@ -235,6 +242,7 @@ public class Home_screen extends AppCompatActivity {
         String[] eventKeywords = {"show event"};
         String[] searchKeywords = {"search", "look up"};
         String[] weatherKeywords = {"weather", "forecast", "temperature"};
+        String[] newsKeywords = {"news", "headlines"};
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
         // Be sure to use the array with the highest length
@@ -252,6 +260,12 @@ public class Home_screen extends AppCompatActivity {
             // Weather
             if (message.toLowerCase().contains(weatherKeywords[i]))
                 return 3;
+
+            // News
+            if (message.toLowerCase().contains(newsKeywords[i]))
+            {
+                return 4;
+            }
         }
 
         return 0;
@@ -260,6 +274,7 @@ public class Home_screen extends AppCompatActivity {
     // This method will confirm if the user request for the right weather location.
     private boolean isCurrentWeather = true;
     public int weatherAction = 0;
+    public int newsAction = 0;
     private WeatherFetcher weatherFetcher = new WeatherFetcher();
     private void confirmWeatherAction(String message){
         chatFlag = 3; // Lets bot know to keep the conversation going
@@ -299,10 +314,29 @@ public class Home_screen extends AppCompatActivity {
 
 
     }
+    private void confirmNewsAction(String message){
+        chatFlag=4;
+        String botMessage="";
+
+        if(newsAction==0)
+        {
+            botMessage="What type of news would you like? If you would like to know the news for a city, Columbia SC for example, then say Columbia SC News. You can also specify the number of results by including something like 'top 5' or '5 results' in your message.";
+            newsAction++;
+            sendBotMessage(botMessage);
+        }
+        else
+        {
+            newsAction=0;
+            chatFlag=0;
+            gsearch c = new gsearch();
+            botMessage = c.doInBackground(message);
+            sendBotMessage(botMessage);
+        }
+    }
 
     // This will take us to which conversation they are currently in
     private void findChatFlag(String message, int num){
-        // 1 = Google calendar, 2 = Google search, 3 = weather
+        // 1 = Google calendar, 2 = Google search, 3 = weather, 4 = news
 
         if (num == 1){
 
@@ -312,6 +346,9 @@ public class Home_screen extends AppCompatActivity {
         }
         else if(num == 3){
             confirmWeatherAction(message);
+        }
+        else if(num == 4){
+            confirmNewsAction(message);
         }
     }
 
