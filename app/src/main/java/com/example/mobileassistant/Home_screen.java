@@ -368,14 +368,14 @@ public class Home_screen extends AppCompatActivity {
     // This method will confirm if the user request for the right weather location.
     private boolean isCurrentWeather = true;
     public int weatherAction = 0;
-    public int newsAction = 0;
+    private String info = "";
     private WeatherFetcher weatherFetcher = new WeatherFetcher();
     private void confirmWeatherAction(String message){
         chatFlag = 4; // Lets bot know to keep the conversation going
         String botMessage = "";
 
         if (weatherAction == 0) {
-            botMessage = "Did you want the current weather or an 8-day forecast?";
+            botMessage += "Did you want the current weather or an 8-day forecast?";
             weatherAction++;
 
             sendBotMessage(botMessage);
@@ -386,7 +386,27 @@ public class Home_screen extends AppCompatActivity {
             else
                 isCurrentWeather = false;
 
-            botMessage = "What is your City and State?";
+            botMessage += "What weather information would you like to know?" +
+                    "\nType in \"temperature\", \"high\", \"low\", \"wind speed\", \"humidity\", \"description\", or \"all\"";
+            weatherAction++;
+
+            sendBotMessage(botMessage);
+        }
+        else if (weatherAction == 2){
+            if (message.equalsIgnoreCase("temperature")
+                    || message.equalsIgnoreCase("high")
+                    || message.equalsIgnoreCase("low")
+                    || message.equalsIgnoreCase("wind speed")
+                    || message.equalsIgnoreCase("humidity")
+                    || message.equalsIgnoreCase("description")
+                    || message.equalsIgnoreCase("all"))
+                info = message;
+            else{
+                botMessage += "Hmm I am not sure about that one, I will default your weather information to \"all\"\n";
+                info = "all";
+            }
+
+            botMessage += "What is your City and State?";
             weatherAction++;
 
             sendBotMessage(botMessage);
@@ -396,18 +416,17 @@ public class Home_screen extends AppCompatActivity {
             // eg: South Carolina -> SC
             String location = message.replace(" ", "");
 
+            WeatherFetcher weatherFetcher = new WeatherFetcher();
+            sendBotMessage(weatherFetcher.doInBackground(location,isCurrentWeather,info, this));
+
             //reset globals
             weatherAction = 0;
             chatFlag = 0;
-
-            WeatherFetcher weatherFetcher = new WeatherFetcher();
-            sendBotMessage(weatherFetcher.doInBackground(location,isCurrentWeather, this));
+            info = "";
         }
-
-
-
-
     }
+  
+    public int newsAction = 0;
     private void confirmNewsAction(String message){
         chatFlag=6;
         String botMessage="";
