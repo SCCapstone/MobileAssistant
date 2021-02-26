@@ -37,8 +37,11 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
         //Current weather or 8-day forecast?
         boolean isCurrentWeather = (boolean) objects[1];
 
+        // What info do they want?
+        String weatherInfo = (String) objects[2];
+
         // Context
-        Context context = (Context) objects[2]; // passes in "this" from Home_screen
+        Context context = (Context) objects[3]; // passes in "this" from Home_screen
 
         // Build url String
         String urlString = BASE_URL + location + ",US" + BASE_API_KEY + BASE_UNITS;
@@ -77,29 +80,51 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
             String trueLocation = getTrueLocation(context, latitude, longitude);
 
             if (isCurrentWeather) {
-                ret_response += "The weather in " + trueLocation + " is:";
-
                 // Json Main
                 JSONObject json_main = new JSONObject(json.getString("main"));
-                String temperature = json_main.getString("temp"); // Temperature
-                String feels_like = json_main.getString("feels_like"); // Feels like temperature
-                String temp_min = json_main.getString("temp_min"); // low temperature
-                String temp_max = json_main.getString("temp_max"); // high temperature
+                String temperature = json_main.getString("temp") + "°F"; // Temperature
+                String temp_min = json_main.getString("temp_min") + "°F"; // low temperature
+                String temp_max = json_main.getString("temp_max") + "°F"; // high temperature
+                String humidity = json_main.getString("humidity") + "%"; // humidity with percentage
+
+                JSONObject json_wind = new JSONObject(json.getString("wind")); // wind
+                String wind_speed = json_wind.getString("speed") + "mph"; // wind speed
 
                 JSONArray json_weather = json.getJSONArray("weather"); // Weather is an array
-                String description = json_weather.getJSONObject(0).getString("description");
+                String description = json_weather.getJSONObject(0).getString("description");// weather description
 
-                ret_response += "\nTemperature:\t" + temperature
-                        + "\nFeels Like:\t" + feels_like
-                        + "\nLow:\t" + temp_min
-                        + "\nHigh:\t" + temp_max
-                        + "\nDescription:\t" + description;
+                // build output based on what the user wants
+                if (weatherInfo.equalsIgnoreCase("temperature"))
+                    ret_response += "The temperature in " + trueLocation + " is " + temperature;
 
+                else if (weatherInfo.equalsIgnoreCase("high"))
+                    ret_response += "The high temperature in " + trueLocation + " is " + temp_max;
+
+                else if(weatherInfo.equalsIgnoreCase("low"))
+                    ret_response += "The low temperature in " + trueLocation + " is " + temp_min;
+
+                else if(weatherInfo.equalsIgnoreCase("wind speed"))
+                    ret_response += "The wind speed in " + trueLocation + " is " + wind_speed;
+
+                else if(weatherInfo.equalsIgnoreCase("humidity"))
+                    ret_response += "The humidity level in " + trueLocation + " is " + humidity;
+
+                else if(weatherInfo.equalsIgnoreCase("description"))
+                    ret_response += "You can expect " + description + " in " + trueLocation;
+
+                else{
+                    ret_response += "The weather in " + trueLocation + " is:"
+                            + "\nTemperature:\t" + temperature
+                            + "\nHigh:\t" + temp_max
+                            + "\nLow:\t" + temp_min
+                            + "\nWind Speed:\t" + wind_speed
+                            + "\nHumidity Level:\t" + humidity
+                            + "\nDescription:\t" + description;
+                }
                 //Disconnect the HttpURLConnection stream
                 conn.disconnect();
-            } else { // 8-day forecast
-                ret_response += "The 8-day forecast for " + trueLocation + " is:";
-
+            }
+            else { // 8-day forecast
                 //Disconnect the HttpURLConnection stream
                 conn.disconnect();
 
@@ -129,11 +154,6 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
                     sc.close();
                 }
 
-                /**
-                 * JSONArray json_weather = json.getJSONArray("weather"); // Weather is an array
-                 * String description = json_weather.getJSONObject(0).getString("description");
-                 */
-
                 // String to JSON
                 JSONObject json2 = new JSONObject(result2); // JSON
                 JSONArray json_daily = json2.getJSONArray("daily"); // 8 day array forecast
@@ -141,24 +161,76 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
                 // Date converter for unix timestamp
                 Date date = new Date();
 
+                // Building output, building the heading
+                if (weatherInfo.equalsIgnoreCase("temperature"))
+                    ret_response += "The 8-day temperature in " + trueLocation + " is:";
+
+                else if (weatherInfo.equalsIgnoreCase("high"))
+                    ret_response += "The 8-day high temperature in " + trueLocation + " is:";
+
+                else if(weatherInfo.equalsIgnoreCase("low"))
+                    ret_response += "The 8-day low temperature in " + trueLocation + " is:";
+
+                else if(weatherInfo.equalsIgnoreCase("wind speed"))
+                    ret_response += "The 8-day wind speed in " + trueLocation + " is:";
+
+                else if(weatherInfo.equalsIgnoreCase("humidity"))
+                    ret_response += "The 8-day humidity level in " + trueLocation + " is:";
+
+                else if(weatherInfo.equalsIgnoreCase("description"))
+                    ret_response += "The 8-day description in " + trueLocation + " is:";
+
+                else
+                    ret_response += "The 8-day forecast in " + trueLocation + " is:";
+
+
+
                 for (int i = 0; i < json_daily.length(); i++) {
                     long dt = Long.parseLong(json_daily.getJSONObject(i).getString("dt"));
                     date.setTime(dt * 1000); // Date and time
 
                     // max and min temperature
                     JSONObject json_temp = new JSONObject(json_daily.getJSONObject(i).getString("temp"));
-                    String max_temp = json_temp.getString("max");
-                    String min_temp = json_temp.getString("min");
+                    String temperature = json_temp.getString("day") + "°F";
+                    String max_temp = json_temp.getString("max") + "°F";
+                    String min_temp = json_temp.getString("min") + "°F";
+
+                    String wind_speed = json_daily.getJSONObject(i).getString("wind_speed") + "mph"; // wind speed
+                    String humidity = json_daily.getJSONObject(i).getString("humidity") + "%"; // humidity
 
                     // Weather Description
                     JSONArray json_weather = json_daily.getJSONObject(i).getJSONArray("weather");
                     String description = json_weather.getJSONObject(0).getString("description");
 
-                    // build output
-                    ret_response += "\n" + date.toString()
-                            + "\n\tMax: " + max_temp
-                            + "\n\tMin: " + min_temp
-                            + "\n\tDescription: " + description;
+                    // Building output, building the body
+                    ret_response += "\n" + date.toString();
+                    if (weatherInfo.equalsIgnoreCase("temperature"))
+                        ret_response += "\n\tTemperature: " + temperature;
+
+                    else if (weatherInfo.equalsIgnoreCase("high"))
+                        ret_response += "\n\tHigh: " + max_temp + "";
+
+                    else if(weatherInfo.equalsIgnoreCase("low"))
+                        ret_response += "\n\tLow: " + min_temp + "";
+
+                    else if(weatherInfo.equalsIgnoreCase("wind speed"))
+                        ret_response += "\n\tWind Speed: " + wind_speed;
+
+                    else if(weatherInfo.equalsIgnoreCase("humidity"))
+                        ret_response += "\n\tHumidity Level: " + humidity;
+
+                    else if(weatherInfo.equalsIgnoreCase("description"))
+                        ret_response += "\n\tDescription: " + description;
+
+                    else {
+                        ret_response += "\n\tTemperature: " + temperature
+                                + "\n\tHigh: " + max_temp
+                                + "\n\tLow: " + min_temp
+                                + "\n\tWind Speed: " + wind_speed
+                                + "\n\tHumidity Level: " + humidity
+                                + "\n\tDescription: " + description;
+                    }
+
 
 
                 }
