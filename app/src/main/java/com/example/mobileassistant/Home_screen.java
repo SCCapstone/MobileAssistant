@@ -267,7 +267,6 @@ public class Home_screen extends AppCompatActivity {
 
         // Launches the Google MapActivity for traffic
         else if (action == 7) {
-            System.out.println("HERE*****");
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         }
