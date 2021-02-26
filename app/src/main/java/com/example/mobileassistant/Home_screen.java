@@ -264,6 +264,14 @@ public class Home_screen extends AppCompatActivity {
         else if(action == 6){
             confirmNewsAction(message);
         }
+
+        // Launches the Google MapActivity for traffic
+        else if (action == 7) {
+            System.out.println("HERE*****");
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
+        }
+
         else
         {
             sendBotMessage(chat.multisentenceRespond(message));
@@ -313,8 +321,9 @@ public class Home_screen extends AppCompatActivity {
         String[] eventKeywords = {"event","events"};
         String[] searchKeywords = {"search", "look up"};
         String[] weatherKeywords = {"weather", "forecast", "temperature"};
-        String[] mapKeywords = {"directions to"};
+        String[] mapKeywords = {"directions to", "directions"};
         String[] newsKeywords = {"news", "headlines"};
+        String[] trafficKeywords = {"traffic", "show traffic"};
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
         // Be sure to use the array with the highest length
@@ -348,6 +357,10 @@ public class Home_screen extends AppCompatActivity {
             // News
             if (i < newsKeywords.length && message.toLowerCase().contains(newsKeywords[i]))
                 return 6;
+
+            // Traffic keywords
+            if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i]))
+                return 7;
         }
 
         return 0;
