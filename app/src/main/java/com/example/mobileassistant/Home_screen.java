@@ -285,6 +285,7 @@ public class Home_screen extends AppCompatActivity {
             else
                 isCurrentWeather = false;
 
+            // Ask user if they would like to know a specific weather topic
             botMessage += "What weather information would you like to know?" +
                     "\nType in \"temperature\", \"high\", \"low\", \"wind speed\", \"humidity\", \"description\", or \"all\"";
             weatherAction++;
@@ -301,6 +302,7 @@ public class Home_screen extends AppCompatActivity {
                     || message.equalsIgnoreCase("all"))
                 info = message;
             else{
+                // default to "all" if user does not type any listed
                 botMessage += "Hmm I am not sure about that one, I will default your weather information to \"all\"\n";
                 info = "all";
             }
@@ -311,12 +313,56 @@ public class Home_screen extends AppCompatActivity {
             sendBotMessage(botMessage);
         }
         else{
-            // Still need to convert state name to abbreviated state name
-            // eg: South Carolina -> SC
-            String location = message.replace(" ", "");
+            // Filter out user message to find a valid state name
+            String location = message.toUpperCase().replace(",", "");
+            String[] locations = location.split(" "); // split the location by white spaces
+            String temp = "";
+            String validStateName = "";
+            int marker = 0;
+            for(int i = locations.length - 1; i >= 0; i--) {
+                temp = locations[i] + " " + temp;
+                temp = temp.trim(); // trim leading/trailing white spaces
 
-            WeatherFetcher weatherFetcher = new WeatherFetcher();
-            sendBotMessage(weatherFetcher.doInBackground(location,isCurrentWeather,info, this));
+                // checks if temp has a valid state name, if it does, then convert that to abbreviated state name
+                if (!State.stateToAbbr(temp).equalsIgnoreCase("UNKNOWN")) {
+                    validStateName = State.stateToAbbr(temp); // Abbreviated state name
+                    marker = i;
+                    break;
+                }
+                // checks if abbreviated state name is already given by the user
+                else if(!State.abbrToState(temp).toString().equals("UNKNOWN")) {
+                    validStateName = temp; // Already abbreviated state name
+                    marker = i;
+                    break;
+                }
+            }
+
+            // check if we have validStateName
+            if (validStateName.equals("")){
+                botMessage += "Sorry, I cannot find your state :(";
+                sendBotMessage(botMessage);
+            }
+            else{
+                // Now re loop to get the rest of the city name
+                String city = "";
+                for(int i = 0; i < marker; i++){
+                    city = city + " " + locations[i];
+                }
+                city = city.trim().replace(" ", "+");
+
+                // We finally have the right location syntax for openweathermap.org
+                location = city + "," + validStateName + ",US";
+
+                WeatherFetcher weatherFetcher = new WeatherFetcher(); // Create weather fetcher
+                botMessage += weatherFetcher.doInBackground(location,isCurrentWeather,info, this); // Run weather API
+
+                // Check if response is valid
+                if (botMessage.equals(""))
+                    sendBotMessage("Sorry I could not find your city and/or state :(");
+                else
+                    sendBotMessage(botMessage);
+            }
+
 
             //reset globals
             weatherAction = 0;
