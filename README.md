@@ -45,6 +45,7 @@ You can send any message to the assistant, and it will converse with you, but it
 8. Typing "weather", "forecast", or "temperature" will initiate a series of questions to the user related to what weather information that they would like to receive, such as the specific information they would like (if any) and the location they would like to know about.
 9. If the user asks the assistant for "directions to" a location using the aforementioned keyword Google Maps will open with directions to that location.
 10. If the user asks about traffic using the "traffic" keyword, they will receive a map with a traffic information layer in their general vicinity. 
+11. If the user sends "game 2", they will open up a text-based "rock, paper, scissors" game. The user then can pick a gesture and press either "yes" or "no" to continue or quit the game, respectively.
 
 ## Testing
 Unit Tests can be found in MobileAssistant/app/src/test/java/com/example/mobileassistant
