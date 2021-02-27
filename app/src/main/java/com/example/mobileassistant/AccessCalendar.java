@@ -34,65 +34,49 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class AccessCalendar extends AppCompatActivity {
 
-   // A Google Calendar API service object used to access the API
-    Calendar service;
-    GoogleAccountCredential credential;
-    private TextView mStatusText;
-    private TextView mResultsText;
-    final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    JacksonFactory jsonFactory = new JacksonFactory();
-    // final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-    // final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+    /*static String feedback = "loading";*/ // used for debugging
 
+    static Calendar service;// A Google Calendar API service object used to access the API
+    GoogleAccountCredential credential; //google account credential for accessing google calendar
+    final HttpTransport HTTP_TRANSPORT = new NetHttpTransport(); // used for fetching resources
+    // Returns a new instance of a low-level JSON serializer for the given output stream and encoding.
+    JacksonFactory jsonFactory = new JacksonFactory();
+
+    /* final HttpTransport transport = AndroidHttp.newCompatibleTransport();
+       final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();*/
+
+    // varaibles used for onActivityResult to get results
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     private static final String PREF_ACCOUNT_NAME = "accountName";
+
     // Google Calendar Scopes
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY};
+    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY,  CalendarScopes.CALENDAR};
     private static final String TAG = "calendar";
-    ProgressDialog pd; // progress report use to debugging
+    // ProgressDialog pd; // progress report use to debugging
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
-         // Default view to show the results
-         LinearLayout activityLayout = new LinearLayout(this);
-         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                  LinearLayout.LayoutParams.MATCH_PARENT,
-                  LinearLayout.LayoutParams.MATCH_PARENT);
-         activityLayout.setLayoutParams(lp);
-         activityLayout.setOrientation(LinearLayout.VERTICAL);
-         activityLayout.setPadding(16, 16, 16, 16);
 
-         ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
-               ViewGroup.LayoutParams.WRAP_CONTENT,
-               ViewGroup.LayoutParams.WRAP_CONTENT);
+         /*pd = new ProgressDialog(this);
+         pd.setMessage("Calling Google Calendar API ...");*/ // used for debugging purpose
 
-         mStatusText = new TextView(this);
-         mStatusText.setLayoutParams(tlp);
-         mStatusText.setTypeface(null, Typeface.BOLD);
-         mStatusText.setText("Retrieving data...");
-         activityLayout.addView(mStatusText);
-
-         mResultsText = new TextView(this);
-         mResultsText.setLayoutParams(tlp);
-         mResultsText.setPadding(16, 16, 16, 16);
-         mResultsText.setVerticalScrollBarEnabled(true);
-         mResultsText.setMovementMethod(new ScrollingMovementMethod());
-         activityLayout.addView(mResultsText);
-
-         setContentView(activityLayout);
-
-         pd = new ProgressDialog(this);
-         pd.setMessage("Calling Google Calendar API ...");
          // SharedPreferences to save google account info
          SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
          // Initialize credentials and service object.
@@ -101,7 +85,6 @@ public class AccessCalendar extends AppCompatActivity {
                .setBackOff(new ExponentialBackOff())
                .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
                //.setSelectedAccount(new Account(PREF_ACCOUNT_NAME, "com.example.mobileassistant"));
-
          service = new Calendar.Builder(
               HTTP_TRANSPORT, jsonFactory, credential)
               .setApplicationName("MobileAssistant")
@@ -120,18 +103,20 @@ public class AccessCalendar extends AppCompatActivity {
          if (isGooglePlayServicesAvailable()) {
             refreshResults();
          } else {
-            mStatusText.setText("Google Play Services is required: " +
-                  "after installing, please close and relaunch this app.");
+             String feedback ="Google Play Services is required: " +
+                     "after installing, please close and relaunch this app.";
+             sendFeedback(feedback);
          }
       }
 
       /**
-       * Called when an activity launched here
+       * Called when an activity launched here, check activity request & results
        */
       @Override
       protected void onActivityResult(
               int requestCode, int resultCode, Intent data) {
          super.onActivityResult(requestCode, resultCode, data);
+         // check requestCode
          switch(requestCode) {
             // if google play service available, get results
              // otherwise check the availability
@@ -160,7 +145,9 @@ public class AccessCalendar extends AppCompatActivity {
                      refreshResults();
                   }
                } else if (resultCode == RESULT_CANCELED) {
-                  mStatusText.setText("Account unspecified.");
+                  //mStatusText.setText("Account unspecified.");
+                   String feedback = "Account unspecified.";
+                   sendFeedback(feedback);
                }
                break;
             // if google account authorized, get results
@@ -186,56 +173,63 @@ public class AccessCalendar extends AppCompatActivity {
             chooseAccount();
          } else {
             if (isDeviceOnline()) {
-               new CalendarAsyncTask(this).execute();
+                    new CalendarAsyncTask(this).execute();
+                    //sendFeedback();
+                // put the string to pass back into an intent and close this activity
+               /*Intent intent = new Intent();
+               intent.putExtra("result",feedback);
+               setResult(RESULT_OK, intent);
+               finish();*/
             } else {
-               mStatusText.setText("No network connection available.");
+                String feedback = "No network connection available.";
+                sendFeedback(feedback);
             }
          }
       }
 
       /**
-       * clear old data and reset UI
-       */
-      public void clearResultsText() {
-         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-               mStatusText.setText("Retrieving data…");
-               mResultsText.setText("");
-            }
-         });
-      }
-
-      /**
-       * Fill the data TextView with results
+       * Return/get results (Events list)
        */
       public void updateResultsText(final List<String> dataStrings) {
-         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-               if (dataStrings == null) {
-                  mStatusText.setText("Error retrieving data!");
-               } else if (dataStrings.size() == 0) {
-                  mStatusText.setText("No data found.");
-               } else {
-                  mStatusText.setText("Data retrieved using" +
-                          " the Google Calendar API:");
-                  mResultsText.setText(TextUtils.join("\n\n", dataStrings));
-               }
-            }
-         });
+          String feedback; // result to return in main activity(chat)
+          if (dataStrings == null) {
+              feedback = "Error retrieving data!";
+          } else if (dataStrings.size() == 0) {
+              feedback = "No data found.";
+          } else {
+              // convert list<String> to String to return in main activity chat
+              feedback = dataStrings.toString();
+          }
+          sendFeedback(feedback); // send result to main activity
       }
 
-      /**
-       * Show a status message in the list header TextView
+    /**
+     * feedback to the user when asked to create a new event
+     */
+    public void newEvent(final String str) {
+                String feedback;
+                if (str == null) {
+                    feedback = "Error create event!";
+                } else {
+                    feedback = str;
+                }
+                sendFeedback(feedback); // send result to main activity
+    }
+
+    /**
+       * get status message when an error occurs
        */
       public void updateStatus(final String message) {
-         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-               mStatusText.setText(message);
-            }
-         });
+          String feedback = message;
+          sendFeedback(feedback);
+      }
+
+      // put the string to pass back into main activity and close this activity
+      private void sendFeedback(String feedback) {
+          Intent intent = new Intent();
+          intent.putExtra("feedback",feedback);
+          setResult(RESULT_OK, intent);
+          finish();
       }
 
       /**

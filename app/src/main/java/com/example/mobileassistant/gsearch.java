@@ -44,6 +44,9 @@ public class gsearch extends AsyncTask<String, String, String> {
             String temp2=numresults+" ";
             query[0] = query[0].replaceAll(temp2,"");
             query[0]=query[0].trim();
+            int nresultstemp=Integer.parseInt(numresults);
+            nresultstemp++;
+            numresults=String.valueOf(nresultstemp);
         }
         Document searches;
         String URL = "https://www.google.com/search?q="+query[0]+"&num="+numresults;//this is currently hard-coded to output just 1 result but I can change that
@@ -128,9 +131,9 @@ public class gsearch extends AsyncTask<String, String, String> {
             }
         }
         result=result.trim();
-        if(result.length()<=5) //if still empty even after backup plan, apologize and give the URL of the google search
+        if(result.length()<=10) //if still empty even after backup plan, apologize and give the URL of the google search
         {
-            result=result+"I'm sorry, my API seems to have been unable to resolve your request. Try this - \n" + URL;
+            result="I'm sorry, my API seems to have been unable to resolve your request. Try this - \n" + URL;
         }
         if(toolongflag)
         {

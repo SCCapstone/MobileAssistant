@@ -1,6 +1,8 @@
 package com.example.mobileassistant;
 
 import android.content.res.AssetManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.alicebot.ab.AIMLProcessor;
@@ -48,6 +52,18 @@ public class Home_screen extends AppCompatActivity {
     //set up the bot
     public Bot bot;
     public static Chat chat;
+
+    // variables used for calendar
+    int LAUNCH_CALENDAR = 2; // launch calendar request
+    String result; // result to intend AccessCalendar activity for result
+    static String eventRequest; // user commands
+    static int number; // number of events user wants to see
+    static String id; // event label
+    static String location; // event location
+    static String attend; // event attendees
+    static boolean create = false; // create event/ search event
+    private int createEventsAction = -1; // used to keep conversation going
+
 
     // Global Variables
     // chatFlag is used for when the bot is asking the user a question and so that they can keep
@@ -101,8 +117,6 @@ public class Home_screen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String message = messageEditText.getText().toString();
-
-                // This will show the message that the user typed in on the chat screen.
                 ChatMessage chatMessage = new ChatMessage(message, true);
                 chatMessageAdapter.add(chatMessage);
 
@@ -199,31 +213,77 @@ public class Home_screen extends AppCompatActivity {
     // Sends the user's message to the chatListView
     // To debug, call the bot's message to reply in a default way
     private void sendUserMessage(String message) {
+        eventRequest = message;  // used for events commands
+
         int action = checkForAction(message);
+        // search event
         if (action == 1) {
-            //new CalendarAsyncTask(AccessCalendar).execute();
-            Intent intent = new Intent(this, AccessCalendar.class);
-            startActivity(intent);
+            //System.out.println("the request is: " + eventRequest);
+            //System.out.println("Action 1! Go to show event request function!");
+            searchEvents(message);
         }
-        else if(action == 2)
+
+        // create event
+        else if (action == 2) {
+            //System.out.println("the request is: " + eventRequest);
+            //System.out.println("Action 2! Go to create event request function!");
+            // check if user entered event label correctly
+            if (message.contains("\"")) {
+                String[] eventInfo = message.split("\"");
+                id = eventInfo[1];
+                createEventsAction = 0;
+                createEvents(message);
+            }
+            else {
+                sendBotMessage("Please re-enter the request with the event label inside double quotes");
+                createEventsAction = -1;
+                id = null;
+            }
+        }
+
+        // google search
+        else if(action == 3)
         {
-            //change so that search keyword is subtracted from what gets sent to gsearch
             //if the message contains the word "search", send it to gsearch, if not, continue
             gsearch a = new gsearch();
             sendBotMessage(a.doInBackground(message));
         }
-        else if (action == 3){
+
+        // weather
+        else if (action == 4){
             confirmWeatherAction(message);
         }
+
         // Opens the Google Maps app at the directions page to a certain location
-        else if (action == 4){
+        else if (action == 5){
             MapLauncher mapLauncher = new MapLauncher(Home_screen.this);
             mapLauncher.openDirections(message);
         }
+
+        // default bot responds
+        else if(action == 6){
+            confirmNewsAction(message);
+        }
+
+        // Launches the Google MapActivity for traffic
+        else if (action == 7) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
+        }
+
         else
         {
             sendBotMessage(chat.multisentenceRespond(message));
+            if(chat.multisentenceRespond(message).equals("Im not sure about that one."))
+            {
+                gsearch b = new gsearch();
+                sendBotMessage(b.doInBackground(message));
+            }
         }
+
+        // Add an else if and check if user replies with "weather"
+        //chatMessage.getContent().toLowerCase().contains(("weather"))
+
     }
 
     // Sends the bot's message to the chatListView
@@ -232,33 +292,74 @@ public class Home_screen extends AppCompatActivity {
         chatMessageAdapter.add(chatMessage);
     }
 
+
+    /**
+     * used for get results from another activity (communicate between activities)
+     * get results from AccessCalendar activity
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // if request for access calendar, check for result and if result is correct
+        // then get result from AccessCalendar activity by using the keyname "feedback"
+        if (requestCode == LAUNCH_CALENDAR) {
+            if(resultCode == RESULT_OK) {
+                result = data.getStringExtra("feedback");
+                // send the result into the chat box
+                sendBotMessage(result);
+            }
+            else {
+                // if cannot get the result, gives user feedback
+                Toast.makeText(this, "Something is not right", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     // Checks for which action to take
     private int checkForAction(String message){
-        String[] eventKeywords = {"show event"};
+        String[] eventKeywords = {"event","events"};
         String[] searchKeywords = {"search", "look up"};
         String[] weatherKeywords = {"weather", "forecast", "temperature"};
-        String[] mapKeywords = {"directions to"};
+        String[] mapKeywords = {"directions to", "directions"};
+        String[] newsKeywords = {"news", "headlines"};
+        String[] trafficKeywords = {"traffic", "show traffic"};
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
         // Be sure to use the array with the highest length
-        // 0 = None, 1 = google calendar, 2 = google search, 3 = weather search
+        // 0 = None, 1 = search events, 2 = create events, 3 = google search, 4 = weather search
         for(int i = 0; i < weatherKeywords.length; i++){
 
-            // Event keywords
-            if (i < eventKeywords.length && message.toLowerCase().contains(eventKeywords[i]))
-                return 1;
+            // Show/Create Event keywords
+            if (i < eventKeywords.length && message.toLowerCase().contains(eventKeywords[i])) {
+                if (message.toLowerCase().contains("show")) {
+                    System.out.println("show event request! go to action 1");
+                    return 1;
+                }
+                else if (message.toLowerCase().contains("create")) {
+                    System.out.println("create event request! go to action 2");
+                    return 2;
+                }
+            }
 
             // Search keywords
             if (i < searchKeywords.length && message.toLowerCase().contains(searchKeywords[i]))
-                return 2;
+                return 3;
 
             // Weather
             if (message.toLowerCase().contains(weatherKeywords[i]))
-                return 3;
+                return 4;
 
             // Map keywords
             if (i < mapKeywords.length && message.toLowerCase().contains(mapKeywords[i]))
-                return 4;
+                return 5;
+
+            // News
+            if (i < newsKeywords.length && message.toLowerCase().contains(newsKeywords[i]))
+                return 6;
+
+            // Traffic keywords
+            if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i]))
+                return 7;
         }
 
         return 0;
@@ -269,8 +370,8 @@ public class Home_screen extends AppCompatActivity {
     public int weatherAction = 0;
     private String info = "";
     private WeatherFetcher weatherFetcher = new WeatherFetcher();
-    private void confirmWeatherAction(String message) {
-        chatFlag = 3; // Lets bot know to keep the conversation going with the weather
+    private void confirmWeatherAction(String message){
+        chatFlag = 4; // Lets bot know to keep the conversation going
         String botMessage = "";
 
         if (weatherAction == 0) {
@@ -370,19 +471,162 @@ public class Home_screen extends AppCompatActivity {
             info = "";
         }
     }
+  
+    public int newsAction = 0;
+    private void confirmNewsAction(String message){
+        chatFlag=6;
+        String botMessage="";
+
+        if(newsAction==0)
+        {
+            botMessage="What type of news would you like? If you would like to know the news for a city, Columbia SC for example, then say Columbia SC News. You can also specify the number of results by including something like 'top 5' or '5 results' in your message.";
+            newsAction++;
+            sendBotMessage(botMessage);
+        }
+        else
+        {
+            newsAction=0;
+            chatFlag=0;
+            gsearch c = new gsearch();
+            botMessage = c.doInBackground(message);
+            sendBotMessage(botMessage);
+        }
+    }
 
     // This will take us to which conversation they are currently in
     private void findChatFlag(String message, int num){
-        // 1 = Google calendar, 2 = Google search, 3 = weather
+        // 1 = show events, 2 = create events, 3 = Google search,
+        // 4 = weather, 5 = map search, 6 = news
 
         if (num == 1){
-
+            //System.out.println("the chatFlag is: "+num+" go to search event");
+            searchEvents(message);
         }
         else if(num == 2){
+          //  System.out.println("the chatFlag is: "+num+" go to create event");
+            createEvents(message);
+        }
+        else if(num ==3) {
 
         }
-        else if(num == 3){
+        else if(num ==4) {
             confirmWeatherAction(message);
+        }
+        else if(num == 5){
+
+        }
+        else if(num == 6) {
+            confirmNewsAction(message);
+        }
+    }
+
+    // Method for show events
+    private void searchEvents(String message) {
+        create = false;
+        //System.out.println("search request is: "+message);
+        //System.out.println("searching event");
+
+        // get event label or get number of requested events
+        if (message.contains("\"")) {
+            String[] eventInfo = message.split("\"");
+            id = eventInfo[1];
+        } else {
+            id = null;
+            char[] findNum = message.toCharArray(); // convert string to char array
+            StringBuilder newStr = new StringBuilder(); // StringBuilder to build a String
+            for (char c : findNum) {
+                if (Character.isDigit(c)) {
+                    newStr.append(c);
+                }
+            }
+            // by default, just show the next upcoming event
+            if (newStr.toString().isEmpty())
+                number = 1;
+            else number = Integer.parseInt(newStr.toString());
+        }
+        //System.out.println("The id is: "+id);
+        // start AccessCalendar activity to get results
+       Intent intent = new Intent(this, AccessCalendar.class);
+       startActivityForResult(intent, LAUNCH_CALENDAR);
+    }
+
+    //private int createEventsAction = 0;
+    //private boolean loca = false;
+    // Method for create events
+    private void createEvents(String message) {
+        chatFlag = 2; // Lets bot know to keep the conversation going
+        String botMessage = "";
+        create = true;
+        //System.out.println("the create request is: "+message);
+        //System.out.println("Creating event");
+
+        // at 0 ask if want to add location, goes to 1
+        if (createEventsAction == 0) {
+            botMessage = ("Do you want to add a location?");
+            createEventsAction++;
+            sendBotMessage(botMessage);
+        }
+
+        // at 1 check yes/no, if yes ask to enter location then goes to 2
+        // if no, goes to 3
+        else if (createEventsAction == 1) {
+            if (message.equalsIgnoreCase("yes")) {
+                //loca = true;
+                botMessage = "Please enter the location";
+                createEventsAction++;  // goes to to ask for attendees
+                sendBotMessage(botMessage);
+            }
+            else {
+                //loca = false;
+                location = null;
+                botMessage = "Do you want to add attendees?";
+                createEventsAction = createEventsAction+2;
+                //System.out.println("in 1:" + createEventsAction);
+                sendBotMessage(botMessage);
+            }
+        }
+
+        // at 2, save location, goes to 3
+        // ask if want to add attendees
+        else if (createEventsAction == 2) {
+            location = message;
+            createEventsAction++;
+            botMessage = "Do you want to add attendees?";
+           // createEventsAction++;
+           // System.out.println("in 2:" +createEventsAction);
+            sendBotMessage(botMessage);
+        }
+
+        // at 3, check yes/no
+        // if yes, ask to enter attendees, goes to last one
+        // if no, create events
+        else if (createEventsAction == 3) {
+            if(message.equalsIgnoreCase("yes")) {
+                botMessage = "Please enter list of attendees' emails, separate by comma";
+                createEventsAction++;
+                sendBotMessage(botMessage);
+            }
+            else {
+                attend = null;
+                //reset globals
+                createEventsAction = 0;
+                chatFlag = 0;
+
+                Intent intent = new Intent(this,AccessCalendar.class);
+                startActivityForResult(intent,LAUNCH_CALENDAR);
+            }
+        }
+
+        // at last one, reset variables, save attendees info, and create events
+        else if (createEventsAction == 4) {
+            attend = message;
+
+            //reset globals
+            createEventsAction = 0;
+            chatFlag = 0;
+
+            Intent intent = new Intent(this,AccessCalendar.class);
+            startActivityForResult(intent,LAUNCH_CALENDAR);
         }
     }
 
@@ -398,5 +642,7 @@ public class Home_screen extends AppCompatActivity {
         Intent intent = new Intent(this, Settings_screen.class);
         startActivity(intent);
     }
+
+
 
 }
