@@ -34,7 +34,7 @@ You can send any message to the assistant, and it will converse with you, but it
 * show event "event"
 3. If the user sends a message with the keywords "create event" then you will create an event on your Google Calender. You can specify information about the Google Calender when you use the "create event" keyword. Example :
 * create event "event" on Feb 27th from 3pm to 4pm
-4. The user can also specify an event that will repeat by specifying a day of the week which the event will occur and a stopping date. Example :
+4. The user can also specify an event that will repeat by specifying a day of the week which the event will occur and a stopping date. Example:
 * create event "Event" repeat every Tuesday and Thursday until April, 2021
 5. The user can ask the assistant to search the internet using the "search" keyword or "look up" keyword. This will return a set of links and their HTML titles if they are available. Example :
 * search Columbia SC
