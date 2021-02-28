@@ -29,23 +29,26 @@ Running the app from within Android Studio
 
 You can send any message to the assistant, and it will converse with you, but it will default to searching the internet for what you asked it for if it does not understand what you are talking to it about. 
 
-1. If the user types in something with the keywords "show event(s)" then you will receive information about your next event. You can specify the number of events you would like to see by including a number in your message.
-2. The user can specify which event they would like to see with the "show event" command by including the name of the event in quotations. Example :
+1. If the user types in something with the keywords "show event(s)" then you will receive information about your next event. You can specify the number of events you would like to see by including a number in your message. Examples:
+* show me next event
+* show me next 5 events
+3. The user can specify which event they would like to see with the "show event" command by including the name of the event in quotations. Example :
 * show event "event"
-3. If the user sends a message with the keywords "create event" then you will create an event on your Google Calender. You can specify information about the Google Calender when you use the "create event" keyword. Example :
-* create event "event" on Feb 27th from 3pm to 4pm
-4. The user can also specify an event that will repeat by specifying a day of the week which the event will occur and a stopping date. Example:
+4. If the user sends a message with the keywords "create event" then you will create an event on your Google Calender. You can specify information about the Google Calender when you use the "create event" keyword. You can create a event with a specific date and time by using a keyword "on" for the date and "am/pm" for the time. Also, the user will be asked if he/she wants to add a location and attendees for the creating event. Example :
+* create event for a specific date & time     -    create event "event" on Feb 27th from 3pm to 4pm   
+* create event for a specific date only (whole day event)    - create event "whole" on Feb 28th
+5. The user can also specify an event that will repeat by specifying a day of the week which the event will occur and a stopping date by using the day of week and the keyword "until" for the end date. Example:
 * create event "Event" repeat every Tuesday and Thursday until April, 2021
-5. The user can ask the assistant to search the internet using the "search" keyword or "look up" keyword. This will return a set of links and their HTML titles if they are available. Example :
+6. The user can ask the assistant to search the internet using the "search" keyword or "look up" keyword. This will return a set of links and their HTML titles if they are available. Example :
 * search Columbia SC
-6. The user can also specify the number of results you would like to receive from your search if you include the words 'top' or 'results' and a number. Example :
+7. The user can also specify the number of results you would like to receive from your search if you include the words 'top' or 'results' and a number. Example :
 * search University of South Carolina top 5 results
-7. The user can ask for news by entering the "news" keyword or "headlines" keyword anywhere in your message. You will be prompted for what news you would like to receive and after specifying what news that is, you will receive relevant results about it. Example :
+8. The user can ask for news by entering the "news" keyword or "headlines" keyword anywhere in your message. You will be prompted for what news you would like to receive and after specifying what news that is, you will receive relevant results about it. Example :
 * covid 19 news
-8. Typing "weather", "forecast", or "temperature" will initiate a series of questions to the user related to what weather information that they would like to receive, such as the specific information they would like (if any) and the location they would like to know about.
-9. If the user asks the assistant for "directions to" a location using the aforementioned keyword Google Maps will open with directions to that location.
-10. If the user asks about traffic using the "traffic" keyword, they will receive a map with a traffic information layer in their general vicinity. 
-11. If the user sends "game 2", they will open up a text-based "rock, paper, scissors" game. The user then can pick a gesture and press either "yes" or "no" to continue or quit the game, respectively.
+9. Typing "weather", "forecast", or "temperature" will initiate a series of questions to the user related to what weather information that they would like to receive, such as the specific information they would like (if any) and the location they would like to know about.
+10. If the user asks the assistant for "directions to" a location using the aforementioned keyword Google Maps will open with directions to that location.
+11. If the user asks about traffic using the "traffic" keyword, they will receive a map with a traffic information layer in their general vicinity. 
+12. If the user sends "game 2", they will open up a text-based "rock, paper, scissors" game. The user then can pick a gesture and press either "yes" or "no" to continue or quit the game, respectively.
 
 ## Testing
 Unit Tests can be found in MobileAssistant/app/src/test/java/com/example/mobileassistant
