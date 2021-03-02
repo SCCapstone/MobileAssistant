@@ -327,7 +327,7 @@ public class Home_screen extends AppCompatActivity {
         String[] mapKeywords = {"directions to", "directions"};
         String[] newsKeywords = {"news", "headlines"};
         String[] trafficKeywords = {"traffic", "show traffic"};
-        String[] gameKeywords = {"game 1", "game 2"};
+        String[] gameKeywords = {"game 1", "rock paper scissors"}; //still need game 1
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
         // Be sure to use the array with the highest length
@@ -367,7 +367,7 @@ public class Home_screen extends AppCompatActivity {
                 return 7;
 
             // Games
-            if (i < gameKeywords.length && message.toLowerCase().contains("game 2") || message.toUpperCase().contains("game 2"))
+            if (i < gameKeywords.length && message.toLowerCase().contains(gameKeywords[i]))
                 return 8;
         }
         return 0;
