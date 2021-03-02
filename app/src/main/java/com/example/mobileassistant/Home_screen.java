@@ -650,7 +650,7 @@ public class Home_screen extends AppCompatActivity {
             gameAction = 2;
         }
         if (message.equalsIgnoreCase("yes")) {
-            gameAction = 1;
+            gameAction = 0;
         }
         if (gameAction == 0) {
             game2IsOn = true;
