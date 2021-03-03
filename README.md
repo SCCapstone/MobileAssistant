@@ -24,6 +24,7 @@ Running the app from within Android Studio
 4. Click Launch this AVD in the emulator
 5. The emulator automatically denies location access so go into the Settings of the emulated phone and give 'MobileAssistant' the location permission 'Always allow'.
 6. The location the emulator says it is at is the Googleplex in California, but you can manually change your emulator location using the "extended controls" menu for the emulator.
+7. If the app had been installed on this emulator from last semester(fall 2020), it has to be uninstalled first before install this new release use the apk file, because the "sha-1 certificate fingerprint" has been changed this semester and will cause a problem when running commands that will access Google Calendar. (note. if using Android Studio, do not install the app use the "run" button instead run the emulator only and install the app use the apk file instead of using the repo from github.)
 
 ## Commands
 
