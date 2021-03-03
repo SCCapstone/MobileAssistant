@@ -71,6 +71,7 @@ public class Home_screen extends AppCompatActivity {
     // chatFlag is used for when the bot is asking the user a question and so that they can keep
     // the same conversation going.
     private int chatFlag = 0;
+    private boolean game2IsOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,8 +218,10 @@ public class Home_screen extends AppCompatActivity {
     private Weather weather = new Weather(this);
     private void sendUserMessage(String message) {
         eventRequest = message;  // used for events commands
-
         int action = checkForAction(message);
+        if (game2IsOn) {
+            action = 8;
+        }
         // search event
         if (action == 1) {
             //System.out.println("the request is: " + eventRequest);
@@ -274,20 +277,21 @@ public class Home_screen extends AppCompatActivity {
             startActivity(intent);
         }
 
-        else
-        {
+        //starts a new game
+        else if (action == 8) {
+            confirmGamesAction(message);
+        } else {
             sendBotMessage(chat.multisentenceRespond(message));
-            if(chat.multisentenceRespond(message).equals("Im not sure about that one."))
-            {
+            if (chat.multisentenceRespond(message).equals("Im not sure about that one.")) {
                 gsearch b = new gsearch();
                 sendBotMessage(b.doInBackground(message));
             }
         }
+    }
 
         // Add an else if and check if user replies with "weather"
         //chatMessage.getContent().toLowerCase().contains(("weather"))
 
-    }
 
     // Sends the bot's message to the chatListView
     private void sendBotMessage(String message) {
@@ -326,6 +330,7 @@ public class Home_screen extends AppCompatActivity {
         String[] mapKeywords = {"directions to", "directions"};
         String[] newsKeywords = {"news", "headlines"};
         String[] trafficKeywords = {"traffic", "show traffic"};
+        String[] gameKeywords = {"game 1", "rock paper scissors"}; //still need game 1
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
         // Be sure to use the array with the highest length
@@ -367,8 +372,10 @@ public class Home_screen extends AppCompatActivity {
             if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i]))
                 return 7;
 
+            // Games
+            if (i < gameKeywords.length && message.toLowerCase().contains(gameKeywords[i]))
+                return 8;
         }
-
         return 0;
     }
 
@@ -425,7 +432,13 @@ public class Home_screen extends AppCompatActivity {
         else if(num == 6) {
             confirmNewsAction(message);
         }
-    }
+        else if(num == 7){
+
+        }
+        else if(num == 8){
+            confirmGamesAction(message);
+        }
+        }
 
     // Method for show events
     private void searchEvents(String message) {
@@ -469,7 +482,7 @@ public class Home_screen extends AppCompatActivity {
 
         // at 0 ask if want to add location, goes to 1
         if (createEventsAction == 0) {
-            botMessage = ("Do you want to add a location?");
+            botMessage = ("Do you want to add a location? yes/no");
             createEventsAction++;
             sendBotMessage(botMessage);
         }
@@ -486,7 +499,7 @@ public class Home_screen extends AppCompatActivity {
             else {
                 //loca = false;
                 location = null;
-                botMessage = "Do you want to add attendees?";
+                botMessage = "Do you want to add attendees? yes/no";
                 createEventsAction = createEventsAction+2;
                 //System.out.println("in 1:" + createEventsAction);
                 sendBotMessage(botMessage);
@@ -536,16 +549,52 @@ public class Home_screen extends AppCompatActivity {
             startActivityForResult(intent,LAUNCH_CALENDAR);
         }
     }
+    public int gameAction = 0;
+    private void confirmGamesAction (String message){
+        chatFlag = 8;
+        if (message.equalsIgnoreCase("no")) {
+            gameAction = 2;
+        }
+        if (message.equalsIgnoreCase("yes")) {
+            gameAction = 0;
+        }
+        if (gameAction == 0) {
+            game2IsOn = true;
+            sendBotMessage("To make a move, enter rock, paper, or scissors.");
+            gameAction++;
+        } else if (gameAction == 1) {
+            chatFlag = 0;
+            rockPaperScissors();
+        } else {
+            chatFlag = 0;
+            sendBotMessage("Thank you for playing");
+            game2IsOn = false;
+            gameAction = 0;
+        }
+    }
 
+    public void rockPaperScissors () {
+        RockPaperScissors rps = new RockPaperScissors();
+        String message = rps.checkUserGesture(messageEditText.getText().toString());
+        if (message.equalsIgnoreCase("Invalid input")) {
+            sendBotMessage(message);
+        }
+        String botMove = rps.botMove();
+        sendBotMessage("Your gesture is: " + message);
+        sendBotMessage("My gesture is: " + botMove);
+        sendBotMessage(rps.result(message, botMove));
+        sendBotMessage("Do you still want to play? Enter yes or no");
+        chatFlag = 0;
+    }
     //switch to other screens
     // Method for opening Profile screen
-    public void open_Profile_screen(){
+    public void open_Profile_screen () {
         Intent intent = new Intent(this, Profile_screen.class);
         startActivity(intent);
     }
 
     // Method for opening Settings screen
-    public void open_Settings_screen(){
+    public void open_Settings_screen () {
         Intent intent = new Intent(this, Settings_screen.class);
         startActivity(intent);
     }
