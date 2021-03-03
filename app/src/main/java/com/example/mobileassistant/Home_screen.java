@@ -71,6 +71,7 @@ public class Home_screen extends AppCompatActivity {
     // chatFlag is used for when the bot is asking the user a question and so that they can keep
     // the same conversation going.
     private int chatFlag = 0;
+    private int firstNews = 0;
     private boolean game2IsOn;
 
     @Override
@@ -250,9 +251,14 @@ public class Home_screen extends AppCompatActivity {
         // google search
         else if(action == 3)
         {
-            //if the message contains the word "search", send it to gsearch, if not, continue
             gsearch a = new gsearch();
             sendBotMessage(a.doInBackground(message));
+            if((message.contains("news") || message.contains("headlines")) && firstNews == 0)
+            {
+                String botMessage = "Your results are above. You can search for specific news or general news. For example, if you would like news about Columbia SC, simply type in Columbia SC News. You can also specify the number of results by including something like 'top 5' or '5 results' in your message.";
+                sendBotMessage(botMessage);
+                firstNews = 1;
+            }
         }
 
         // weather
@@ -267,9 +273,9 @@ public class Home_screen extends AppCompatActivity {
         }
 
         // default bot responds
-        else if(action == 6){
-            confirmNewsAction(message);
-        }
+        //else if(action == 6){
+            //confirmNewsAction(message);
+        //}
 
         // Launches the Google MapActivity for traffic
         else if (action == 7) {
@@ -282,7 +288,7 @@ public class Home_screen extends AppCompatActivity {
             confirmGamesAction(message);
         } else {
             sendBotMessage(chat.multisentenceRespond(message));
-            if (chat.multisentenceRespond(message).equals("Im not sure about that one.")) {
+            if (chat.multisentenceRespond(message).equals("Im not sure about that one.") || chat.multisentenceRespond(message).contains("Google") || chat.multisentenceRespond(message).contains("search")) {
                 gsearch b = new gsearch();
                 sendBotMessage(b.doInBackground(message));
             }
@@ -325,10 +331,10 @@ public class Home_screen extends AppCompatActivity {
     // Checks for which action to take
     private int checkForAction(String message){
         String[] eventKeywords = {"event","events"};
-        String[] searchKeywords = {"search", "look up"};
+        String[] searchKeywords = {"search", "look up", "news", "headlines"};
         String[] weatherKeywords = {"weather", "forecast", "temperature", "high", "low", "wind speed", "humidity", "description", "pressure"};
+        //String[] newsKeywords = {"news", "headlines"};
         String[] mapKeywords = {"directions to", "directions"};
-        String[] newsKeywords = {"news", "headlines"};
         String[] trafficKeywords = {"traffic", "show traffic"};
         String[] gameKeywords = {"game 1", "rock paper scissors"}; //still need game 1
 
@@ -365,8 +371,8 @@ public class Home_screen extends AppCompatActivity {
                 return 5;
 
             // News
-            if (i < newsKeywords.length && message.toLowerCase().contains(newsKeywords[i]))
-                return 6;
+            //if (i < newsKeywords.length && message.toLowerCase().contains(newsKeywords[i]))
+                //return 6;
 
             // Traffic keywords
             if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i]))
@@ -385,7 +391,7 @@ public class Home_screen extends AppCompatActivity {
         sendBotMessage(botMessage);
         chatFlag = weather.getChatFlag();
     }
-
+/*
     public int newsAction = 0;
     private void confirmNewsAction(String message){
         chatFlag=6;
@@ -406,7 +412,7 @@ public class Home_screen extends AppCompatActivity {
             sendBotMessage(botMessage);
         }
     }
-
+*/
     // This will take us to which conversation they are currently in
     private void findChatFlag(String message, int num){
         // 1 = show events, 2 = create events, 3 = Google search,
@@ -430,7 +436,7 @@ public class Home_screen extends AppCompatActivity {
 
         }
         else if(num == 6) {
-            confirmNewsAction(message);
+            //confirmNewsAction(message);
         }
         else if(num == 7){
 
