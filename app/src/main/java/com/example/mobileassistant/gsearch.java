@@ -17,15 +17,21 @@ public class gsearch extends AsyncTask<String, String, String> {
     {
         String numresults = "1";
         boolean toolongflag = false;
-        if(query[0].contains("search"))
+        if(query[0].contains("search") || query[0].contains("Google") || query[0].contains("look up"))
         {
             query[0] = query[0].replace("search ","");
+            query[0] = query[0].replace("Google ","");
+            query[0] = query[0].replace("look up ","");
+            query[0] = query[0].replace("search","");
+            query[0] = query[0].replace("Google","");
+            query[0] = query[0].replace("look up","");
             query[0]=query[0].trim();
         }
         if(query[0].contains("top") || query[0].contains("results") && query[0].contains("1") || query[0].contains("2") || query[0].contains("3") || query[0].contains("4") || query[0].contains("5") || query[0].contains("6") || query[0].contains("7") || query[0].contains("8") || query[0].contains("9") || query[0].contains("0"))
         {
             query[0] = query[0].replace("top ","");
             query[0] = query[0].replace("results ","");
+            query[0] = query[0].replace("top","");
             query[0] = query[0].replace("results","");
             for(int i=0;i<query[0].length();i++)
             {

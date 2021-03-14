@@ -24,17 +24,21 @@ Running the app from within Android Studio
 4. Click Launch this AVD in the emulator
 5. The emulator automatically denies location access so go into the Settings of the emulated phone and give 'MobileAssistant' the location permission 'Always allow'.
 6. The location the emulator says it is at is the Googleplex in California, but you can manually change your emulator location using the "extended controls" menu for the emulator.
+7. If the app had been installed on this emulator from last semester(fall 2020), it has to be uninstalled first before install this new release use the apk file, because the "sha-1 certificate fingerprint" has been changed this semester and will cause a problem when running commands that will access Google Calendar. (note. if using Android Studio, do not install the app use the "run" button instead run the emulator only and install the app use the apk file instead of using the repo from github.)
 
 ## Commands
 
 You can send any message to the assistant, and it will converse with you, but it will default to searching the internet for what you asked it for if it does not understand what you are talking to it about. 
 
-1. If the user types in something with the keywords "show event(s)" then you will receive information about your next event. You can specify the number of events you would like to see by including a number in your message.
+1. If the user types in something with the keywords "show event(s)" then you will receive information about your next event. You can specify the number of events you would like to see by including a number in your message. Examples:
+* show me next event
+* show me next 5 events
 2. The user can specify which event they would like to see with the "show event" command by including the name of the event in quotations. Example :
 * show event "event"
-3. If the user sends a message with the keywords "create event" then you will create an event on your Google Calender. You can specify information about the Google Calender when you use the "create event" keyword. Example :
-* create event "event" on Feb 27th from 3pm to 4pm
-4. The user can also specify an event that will repeat by specifying a day of the week which the event will occur and a stopping date. Example:
+3. If the user sends a message with the keywords "create event" then you will create an event on your Google Calender. You can specify information about the Google Calender when you use the "create event" keyword. You can create a event with a specific date and time by using a keyword "on" for the date and "am/pm" for the time. Also, the user will be asked if he/she wants to add a location and attendees for the creating event. Example :
+* create event for a specific date & time     -    create event "event" on Feb 27th from 3pm to 4pm   
+* create event for a specific date only (whole day event)    - create event "whole" on Feb 28th
+4. The user can also specify an event that will repeat by specifying a day of the week which the event will occur and a stopping date by using the day of week and the keyword "until" for the end date (month and year). Example:
 * create event "Event" repeat every Tuesday and Thursday until April, 2021
 5. The user can ask the assistant to search the internet using the "search" keyword or "look up" keyword. This will return a set of links and their HTML titles if they are available. Example :
 * search Columbia SC

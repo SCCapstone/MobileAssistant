@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Home_screen extends AppCompatActivity {
@@ -69,6 +71,7 @@ public class Home_screen extends AppCompatActivity {
     // chatFlag is used for when the bot is asking the user a question and so that they can keep
     // the same conversation going.
     private int chatFlag = 0;
+    private int firstNews = 0;
     private boolean game2IsOn;
 
     @Override
@@ -213,6 +216,7 @@ public class Home_screen extends AppCompatActivity {
     }
     // Sends the user's message to the chatListView
     // To debug, call the bot's message to reply in a default way
+    private Weather weather = new Weather(this);
     private void sendUserMessage(String message) {
         eventRequest = message;  // used for events commands
         int action = checkForAction(message);
@@ -247,14 +251,19 @@ public class Home_screen extends AppCompatActivity {
         // google search
         else if(action == 3)
         {
-            //if the message contains the word "search", send it to gsearch, if not, continue
             gsearch a = new gsearch();
             sendBotMessage(a.doInBackground(message));
+            if((message.contains("news") || message.contains("headlines")) && firstNews == 0)
+            {
+                String botMessage = "Your results are above. You can search for specific news or general news. For example, if you would like news about Columbia SC, simply type in Columbia SC News. You can also specify the number of results by including something like 'top 5' or '5 results' in your message.";
+                sendBotMessage(botMessage);
+                firstNews = 1;
+            }
         }
 
         // weather
-        else if (action == 4){
-            confirmWeatherAction(message);
+        else if (action == 4 || action == 9){
+            runWeatherSearch(message);
         }
 
         // Opens the Google Maps app at the directions page to a certain location
@@ -264,9 +273,9 @@ public class Home_screen extends AppCompatActivity {
         }
 
         // default bot responds
-        else if(action == 6){
-            confirmNewsAction(message);
-        }
+        //else if(action == 6){
+            //confirmNewsAction(message);
+        //}
 
         // Launches the Google MapActivity for traffic
         else if (action == 7) {
@@ -279,7 +288,7 @@ public class Home_screen extends AppCompatActivity {
             confirmGamesAction(message);
         } else {
             sendBotMessage(chat.multisentenceRespond(message));
-            if (chat.multisentenceRespond(message).equals("Im not sure about that one.")) {
+            if (chat.multisentenceRespond(message).equals("Im not sure about that one.") || chat.multisentenceRespond(message).contains("Google") || chat.multisentenceRespond(message).contains("search")) {
                 gsearch b = new gsearch();
                 sendBotMessage(b.doInBackground(message));
             }
@@ -322,12 +331,12 @@ public class Home_screen extends AppCompatActivity {
     // Checks for which action to take
     private int checkForAction(String message){
         String[] eventKeywords = {"event","events"};
-        String[] searchKeywords = {"search", "look up"};
-        String[] weatherKeywords = {"weather", "forecast", "temperature"};
+        String[] searchKeywords = {"search", "look up", "news", "headlines"};
+        String[] weatherKeywords = {"weather", "forecast", "temperature", "high", "low", "wind speed", "humidity", "description", "pressure"};
+        //String[] newsKeywords = {"news", "headlines"};
         String[] mapKeywords = {"directions to", "directions"};
-        String[] newsKeywords = {"news", "headlines"};
         String[] trafficKeywords = {"traffic", "show traffic"};
-        String[] gameKeywords = {"game 1", "game 2"};
+        String[] gameKeywords = {"game 1", "rock paper scissors"}; //still need game 1
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
         // Be sure to use the array with the highest length
@@ -350,8 +359,11 @@ public class Home_screen extends AppCompatActivity {
             if (i < searchKeywords.length && message.toLowerCase().contains(searchKeywords[i]))
                 return 3;
 
-            // Weather
-            if (message.toLowerCase().contains(weatherKeywords[i]))
+            // Weather keywords
+            if (message.toLowerCase().contains(weatherKeywords[i]) && (message.toLowerCase().contains("what is") || message.toLowerCase().contains("how is")))
+                return 9;
+
+            if (message.toLowerCase().contains("weather"))
                 return 4;
 
             // Map keywords
@@ -359,127 +371,27 @@ public class Home_screen extends AppCompatActivity {
                 return 5;
 
             // News
-            if (i < newsKeywords.length && message.toLowerCase().contains(newsKeywords[i]))
-                return 6;
+            //if (i < newsKeywords.length && message.toLowerCase().contains(newsKeywords[i]))
+                //return 6;
 
             // Traffic keywords
             if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i]))
                 return 7;
 
             // Games
-            if (i < gameKeywords.length && message.toLowerCase().contains("game 2") || message.toUpperCase().contains("game 2"))
+            if (i < gameKeywords.length && message.toLowerCase().contains(gameKeywords[i]))
                 return 8;
         }
         return 0;
     }
 
-    // This method will confirm if the user request for the right weather location.
-    private boolean isCurrentWeather = true;
-    public int weatherAction = 0;
-    private String info = "";
-    private WeatherFetcher weatherFetcher = new WeatherFetcher();
-    private void confirmWeatherAction(String message){
-        chatFlag = 4; // Lets bot know to keep the conversation going
-        String botMessage = "";
-
-        if (weatherAction == 0) {
-            botMessage += "Did you want the current weather or an 8-day forecast?";
-            weatherAction++;
-
-            sendBotMessage(botMessage);
-        }
-        else if (weatherAction == 1){
-            if (message.toLowerCase().contains("current"))
-                isCurrentWeather = true;
-            else
-                isCurrentWeather = false;
-
-            // Ask user if they would like to know a specific weather topic
-            botMessage += "What weather information would you like to know?" +
-                    "\nType in \"temperature\", \"high\", \"low\", \"wind speed\", \"humidity\", \"description\", or \"all\"";
-            weatherAction++;
-
-            sendBotMessage(botMessage);
-        }
-        else if (weatherAction == 2){
-            if (message.equalsIgnoreCase("temperature")
-                    || message.equalsIgnoreCase("high")
-                    || message.equalsIgnoreCase("low")
-                    || message.equalsIgnoreCase("wind speed")
-                    || message.equalsIgnoreCase("humidity")
-                    || message.equalsIgnoreCase("description")
-                    || message.equalsIgnoreCase("all"))
-                info = message;
-            else{
-                // default to "all" if user does not type any listed
-                botMessage += "Hmm I am not sure about that one, I will default your weather information to \"all\"\n";
-                info = "all";
-            }
-
-            botMessage += "What is your City and State?";
-            weatherAction++;
-
-            sendBotMessage(botMessage);
-        }
-        else{
-            // Filter out user message to find a valid state name
-            String location = message.toUpperCase().replace(",", "");
-            String[] locations = location.split(" "); // split the location by white spaces
-            String temp = "";
-            String validStateName = "";
-            int marker = 0;
-            for(int i = locations.length - 1; i >= 0; i--) {
-                temp = locations[i] + " " + temp;
-                temp = temp.trim(); // trim leading/trailing white spaces
-
-                // checks if temp has a valid state name, if it does, then convert that to abbreviated state name
-                if (!State.stateToAbbr(temp).equalsIgnoreCase("UNKNOWN")) {
-                    validStateName = State.stateToAbbr(temp); // Abbreviated state name
-                    marker = i;
-                    break;
-                }
-                // checks if abbreviated state name is already given by the user
-                else if(!State.abbrToState(temp).toString().equals("UNKNOWN")) {
-                    validStateName = temp; // Already abbreviated state name
-                    marker = i;
-                    break;
-                }
-            }
-
-            // check if we have validStateName
-            if (validStateName.equals("")){
-                botMessage += "Sorry, I cannot find your state :(";
-                sendBotMessage(botMessage);
-            }
-            else{
-                // Now re loop to get the rest of the city name
-                String city = "";
-                for(int i = 0; i < marker; i++){
-                    city = city + " " + locations[i];
-                }
-                city = city.trim().replace(" ", "+");
-
-                // We finally have the right location syntax for openweathermap.org
-                location = city + "," + validStateName + ",US";
-
-                WeatherFetcher weatherFetcher = new WeatherFetcher(); // Create weather fetcher
-                botMessage += weatherFetcher.doInBackground(location,isCurrentWeather,info, this); // Run weather API
-
-                // Check if response is valid
-                if (botMessage.equals(""))
-                    sendBotMessage("Sorry I could not find your city and/or state :(");
-                else
-                    sendBotMessage(botMessage);
-            }
-
-
-            //reset globals
-            weatherAction = 0;
-            chatFlag = 0;
-            info = "";
-        }
+    // Run weather search
+    public void runWeatherSearch(String message){
+        String botMessage = weather.weatherSearch(message);
+        sendBotMessage(botMessage);
+        chatFlag = weather.getChatFlag();
     }
-
+/*
     public int newsAction = 0;
     private void confirmNewsAction(String message){
         chatFlag=6;
@@ -500,7 +412,7 @@ public class Home_screen extends AppCompatActivity {
             sendBotMessage(botMessage);
         }
     }
-
+*/
     // This will take us to which conversation they are currently in
     private void findChatFlag(String message, int num){
         // 1 = show events, 2 = create events, 3 = Google search,
@@ -518,13 +430,13 @@ public class Home_screen extends AppCompatActivity {
 
         }
         else if(num ==4) {
-            confirmWeatherAction(message);
+            runWeatherSearch(message);
         }
         else if(num == 5){
 
         }
         else if(num == 6) {
-            confirmNewsAction(message);
+            //confirmNewsAction(message);
         }
         else if(num == 7){
 
@@ -650,7 +562,7 @@ public class Home_screen extends AppCompatActivity {
             gameAction = 2;
         }
         if (message.equalsIgnoreCase("yes")) {
-            gameAction = 1;
+            gameAction = 0;
         }
         if (gameAction == 0) {
             game2IsOn = true;
@@ -692,7 +604,4 @@ public class Home_screen extends AppCompatActivity {
         Intent intent = new Intent(this, Settings_screen.class);
         startActivity(intent);
     }
-
-
-
 }
