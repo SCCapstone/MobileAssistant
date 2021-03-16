@@ -95,14 +95,14 @@ public class Weather {
         String ret_string = "";
         String cap_weatherType = weatherType.toUpperCase();
 
-        if (cap_weatherType.contains("TEMPERATURE")){
-            ret_string = "TEMPERATURE";
+        if (cap_weatherType.contains("LOW")){
+            ret_string = "LOW";
         }
         else if (cap_weatherType.contains("HIGH"))
             ret_string = "HIGH";
 
-        else if(cap_weatherType.contains("LOW"))
-            ret_string = "LOW";
+        else if(cap_weatherType.contains("TEMPERATURE"))
+            ret_string = "TEMPERATURE";
 
         else if(cap_weatherType.contains("WIND SPEED"))
             ret_string = "WIND SPEED";
