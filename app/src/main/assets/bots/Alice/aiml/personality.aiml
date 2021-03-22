@@ -567,7 +567,7 @@
 <template><condition name="he"><li value="who">Who is he?</li><li><get name="he"/> is going to?</li></condition></template>
 </category>
 <category><pattern>SEARCH GOOGLE</pattern>
-<template>What would you like me to search for?</template>
+<template>Let's try a Google search.</template>
 </category>
 <category><pattern>SEARCH EMAIL FOR *</pattern>
 <template>Sorry, I haven't yet been programmed to search email.</template>

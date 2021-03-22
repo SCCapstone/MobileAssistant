@@ -35,7 +35,7 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
         String location = (String) objects[0];
 
         //Current weather or 8-day forecast?
-        boolean isCurrentWeather = (boolean) objects[1];
+        boolean is8DayForecast = (boolean) objects[1];
 
         // What info do they want?
         String weatherInfo = (String) objects[2];
@@ -79,16 +79,17 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
 
             String trueLocation = getTrueLocation(context, latitude, longitude);
 
-            if (isCurrentWeather) {
+            if (!is8DayForecast) {
                 // Json Main
                 JSONObject json_main = new JSONObject(json.getString("main"));
                 String temperature = json_main.getString("temp") + "°F"; // Temperature
                 String temp_min = json_main.getString("temp_min") + "°F"; // low temperature
                 String temp_max = json_main.getString("temp_max") + "°F"; // high temperature
                 String humidity = json_main.getString("humidity") + "%"; // humidity with percentage
+                String pressure = json_main.getString("pressure") + " hPa"; // pressure in hPa
 
                 JSONObject json_wind = new JSONObject(json.getString("wind")); // wind
-                String wind_speed = json_wind.getString("speed") + "mph"; // wind speed
+                String wind_speed = json_wind.getString("speed") + " mph"; // wind speed
 
                 JSONArray json_weather = json.getJSONArray("weather"); // Weather is an array
                 String description = json_weather.getJSONObject(0).getString("description");// weather description
@@ -109,6 +110,9 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
                 else if(weatherInfo.equalsIgnoreCase("humidity"))
                     ret_response += "The humidity level in " + trueLocation + " is " + humidity;
 
+                else if(weatherInfo.equalsIgnoreCase("pressure"))
+                    ret_response += "The pressure in " + trueLocation + " is " + pressure;
+
                 else if(weatherInfo.equalsIgnoreCase("description"))
                     ret_response += "You can expect " + description + " in " + trueLocation;
 
@@ -119,6 +123,7 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
                             + "\nLow:\t" + temp_min
                             + "\nWind Speed:\t" + wind_speed
                             + "\nHumidity Level:\t" + humidity
+                            + "\nPressure:\t" + pressure
                             + "\nDescription:\t" + description;
                 }
                 //Disconnect the HttpURLConnection stream
@@ -177,6 +182,9 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
                 else if(weatherInfo.equalsIgnoreCase("humidity"))
                     ret_response += "The 8-day humidity level in " + trueLocation + " is:";
 
+                else if(weatherInfo.equalsIgnoreCase("pressure"))
+                    ret_response += "The 8-day pressure in " + trueLocation + " is:";
+
                 else if(weatherInfo.equalsIgnoreCase("description"))
                     ret_response += "The 8-day description in " + trueLocation + " is:";
 
@@ -197,6 +205,7 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
 
                     String wind_speed = json_daily.getJSONObject(i).getString("wind_speed") + "mph"; // wind speed
                     String humidity = json_daily.getJSONObject(i).getString("humidity") + "%"; // humidity
+                    String pressure = json_daily.getJSONObject(i).getString("pressure") + "hPa"; // pressure in hPa
 
                     // Weather Description
                     JSONArray json_weather = json_daily.getJSONObject(i).getJSONArray("weather");
@@ -219,6 +228,9 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
                     else if(weatherInfo.equalsIgnoreCase("humidity"))
                         ret_response += "\n\tHumidity Level: " + humidity;
 
+                    else if(weatherInfo.equalsIgnoreCase("pressure"))
+                        ret_response += "\n\tPressure: " + pressure;
+
                     else if(weatherInfo.equalsIgnoreCase("description"))
                         ret_response += "\n\tDescription: " + description;
 
@@ -228,6 +240,7 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
                                 + "\n\tLow: " + min_temp
                                 + "\n\tWind Speed: " + wind_speed
                                 + "\n\tHumidity Level: " + humidity
+                                + "\n\tPressure: " + pressure
                                 + "\n\tDescription: " + description;
                     }
 
