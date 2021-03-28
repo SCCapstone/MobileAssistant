@@ -16,9 +16,22 @@
         android:clickable="true"
         android:focusableInTouchMode="true">
 
-        <!--To type and send the message-->
+        <!--robotOff animation view-->
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/animationView"
+            android:id="@+id/RobotOffView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/robot_off" />
+
+        <!--talking animation view-->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/talking_animationView"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -26,11 +39,38 @@
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/animation"
+            app:lottie_rawRes="@raw/robot_talk"
+            android:layout_weight="1"/>
+
+        <!--robot start view-->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/robotStartView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/robot_start"
+            android:layout_weight="1"/>
+
+        <!--robot on view-->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/robotOnView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/robot_on"
             android:layout_weight="1"
             android:clickable="false"/>
 
         <!--List view for displaying chat messages-->
+
         <ListView
             android:id="@+id/chatListView"
             android:layout_width="match_parent"

@@ -3,6 +3,9 @@ package com.example.mobileassistant;
 import android.app.Activity;
 
 import android.content.res.AssetManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Bundle;
 
@@ -10,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 
+import android.os.Handler;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -22,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.alicebot.ab.AIMLProcessor;
@@ -42,6 +47,11 @@ import java.util.ArrayList;
 
 
 public class Home_screen extends AppCompatActivity {
+
+    // set up inactivity recording
+    Handler handler;
+    Runnable r;
+    boolean active;
 
     // Attributes used for the buttons to switch between screens
     private Button button_profile;
@@ -81,6 +91,8 @@ public class Home_screen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        if (active == false) {setAnimationView(0); }// default/ off animation view
+        else {setAnimationView(1);}
         //hoping that this fixes network errors for gsearch
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if(SDK_INT > 8)
@@ -116,17 +128,25 @@ public class Home_screen extends AppCompatActivity {
         chatListView = (ListView) findViewById(R.id.chatListView);
         btnSend = (FloatingActionButton) findViewById(R.id.button_send);
         messageEditText = (EditText) findViewById(R.id.messageEditText);
-        messageEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
-            }
-        });
         chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
         chatListView.setAdapter(chatMessageAdapter);
 
+        // change animation view from "off" to "start" then "on"
+        messageEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setAnimationView(3);
+            }
+        });
+
+        messageEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    setAnimationView(3);
+                    hideKeyboard(v);
+            }
+        });
         // Sends the message when the button is clicked
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,6 +197,17 @@ public class Home_screen extends AppCompatActivity {
         chat = new Chat(bot);
         String[] args = null;
         mainFunction(args);
+
+        // set up no activity handler to switch to "sleeping" mode when there is no activity for 30 secs
+        handler = new Handler();
+        r = new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                setAnimationView(0);
+            }
+        };
+        startHandler();
     }
 
     public void hideKeyboard(View view) {
@@ -330,6 +361,7 @@ public class Home_screen extends AppCompatActivity {
 
     // Sends the bot's message to the chatListView
     private void sendBotMessage(String message) {
+        setAnimationView(2);  // talking animation view
         ChatMessage chatMessage = new ChatMessage(message, false);
         chatMessageAdapter.add(chatMessage);
     }
@@ -375,11 +407,11 @@ public class Home_screen extends AppCompatActivity {
             // Show/Create Event keywords
             if (i < eventKeywords.length && message.toLowerCase().contains(eventKeywords[i])) {
                 if (message.toLowerCase().contains("show")) {
-                    System.out.println("show event request! go to action 1");
+                   // System.out.println("show event request! go to action 1");
                     return 1;
                 }
                 else if (message.toLowerCase().contains("create")) {
-                    System.out.println("create event request! go to action 2");
+                   // System.out.println("create event request! go to action 2");
                     return 2;
                 }
             }
@@ -621,6 +653,87 @@ public class Home_screen extends AppCompatActivity {
         sendBotMessage("Do you still want to play? Enter yes or no");
         chatFlag = 0;
     }
+
+    LottieAnimationView talkingAnimationView;
+    LottieAnimationView robotStartAnimationView;
+    LottieAnimationView robotOffAnimationView;
+    LottieAnimationView robotOnAnimationView;
+    // 0: robotOff, 1: robotOn, 2:robotTalking, 3: robotStart
+
+    // Method for pick corresponding animation view
+    private void setAnimationView(int state) {
+        talkingAnimationView = findViewById(R.id.talking_animationView);
+        robotStartAnimationView = findViewById(R.id.robotStartView);
+        robotOffAnimationView = findViewById(R.id.RobotOffView);
+        robotOnAnimationView = findViewById(R.id.robotOnView);
+
+        // chat is active
+        if (state == 2) {
+            talkingAnimationView.setVisibility(View.VISIBLE);  // shows talking animation
+            robotStartAnimationView.setVisibility(View.GONE);  // remove original animation
+            robotOffAnimationView.setVisibility(View.GONE);
+            robotOnAnimationView.setVisibility(View.GONE);
+        }
+        // no activity for 30 secs
+        else if (state == 0){
+            talkingAnimationView.setVisibility(View.GONE);
+            robotStartAnimationView.setVisibility(View.GONE);
+            robotOffAnimationView.setVisibility(View.VISIBLE);
+            robotOnAnimationView.setVisibility(View.GONE);
+        }
+
+        // user click the chat, active the bot
+        else if (state == 3){
+            talkingAnimationView.setVisibility(View.GONE);
+            robotOffAnimationView.setVisibility(View.GONE);
+            countSwitch();
+        }
+
+        // bot is active
+        else if(state == 1){
+            talkingAnimationView.setVisibility(View.GONE);
+            robotStartAnimationView.setVisibility(View.GONE);
+            robotOffAnimationView.setVisibility(View.GONE);
+            robotOnAnimationView.setVisibility(View.VISIBLE);
+        }
+       // countSwitch().cancel();
+    }
+
+    // methods for tracking inactivity
+    @Override
+    public void onUserInteraction() {
+        // TODO Auto-generated method stub
+        super.onUserInteraction();
+        stopHandler();
+        startHandler();
+    }
+
+    public void stopHandler() {
+        handler.removeCallbacks(r);
+    }
+    public void startHandler() {
+        handler.postDelayed(r, 30*1000);
+    }
+
+    // timer methods for switching "robotStart" and "robotOn" animation view
+    // display "robotStart" for 5 seconds then switch to "robotOn" mode
+    public void countSwitch(){
+        CountDownTimer ct = new CountDownTimer(5*1000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                robotStartAnimationView.setVisibility(View.VISIBLE);
+                robotOnAnimationView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFinish() {
+                robotStartAnimationView.setVisibility(View.GONE);
+                robotOnAnimationView.setVisibility(View.VISIBLE);
+            }
+        }.start();
+    }
+
+
     //switch to other screens
     // Method for opening Profile screen
     public void open_Profile_screen () {
