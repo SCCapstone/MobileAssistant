@@ -6,14 +6,22 @@ import androidx.appcompat.app.AppCompatDelegate;
  * We need to import a local database
  */
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText ;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Calendar;
+import java.util.regex.Pattern;
 
 public class Start_screen extends AppCompatActivity {
 
@@ -30,7 +38,8 @@ public class Start_screen extends AppCompatActivity {
     // static if you want to use outside of class
     private static EditText first_name;
     private static EditText last_name;
-    private static EditText date_of_birth;
+    private static TextView date_of_birth;
+    private DatePickerDialog.OnDateSetListener adateSetListener;
     private Button button_confirm;
 
     SharedPreferences sharedPreferences;
@@ -66,18 +75,47 @@ public class Start_screen extends AppCompatActivity {
         // Getting variables from xml
         first_name = findViewById(R.id.first_name);
         last_name = findViewById(R.id.last_name);
-        date_of_birth = findViewById(R.id.date_of_birth);
+        date_of_birth =(TextView)findViewById(R.id.date_of_birth);
         button_confirm = (Button)findViewById(R.id.button_confirm);
+
+        // show the window to pick date when click
+        date_of_birth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DATE);
+
+                // default to current date
+                DatePickerDialog dp = new DatePickerDialog(Start_screen.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth, adateSetListener,
+                        year, month, day);
+                dp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dp.show();
+            }
+        });
+
+        // allow user to pick a date
+        adateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month = month +1;
+                String date = month + "/" +dayOfMonth +"/" + year;
+                date_of_birth.setText(date);
+            }
+        };
 
         // Action to take when the "Confirm" button is pressed
         button_confirm.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
-                // Check if user entered first name, last name, and date of birth
-                if (!first_name.getText().toString().equals("")
-                && !last_name.getText().toString().equals("")
-                && !date_of_birth.getText().toString().equals("")) {
+                String fn = first_name.getText().toString();
+                String ln = last_name.getText().toString();
+
+                // Check if user entered valid first name and last name
+                if (isValid(fn) && isValid(ln)) {
                     // keep the data for account
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
@@ -88,7 +126,7 @@ public class Start_screen extends AppCompatActivity {
                     open_Homescreen();
                 }
                 else{
-                    makeToast("Please Enter All Information");
+                   makeToast("Please Enter Valid Information");
                 }
             }
         });
@@ -131,6 +169,14 @@ public class Start_screen extends AppCompatActivity {
     // Just for debugging
     public void makeToast(String message){
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        //toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
+    // method used to check if entered valid first & last name
+    public boolean isValid(String input) {
+
+        return Pattern.matches("[a-zA-Z]+",input);
+    }
+
 }
