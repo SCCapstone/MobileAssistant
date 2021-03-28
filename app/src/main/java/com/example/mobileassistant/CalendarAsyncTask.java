@@ -508,6 +508,15 @@ public class CalendarAsyncTask extends AsyncTask<Void, Void, List<String>> {
                 ed = year+"0"+mon;
             else ed = year+mon;
         }
+
+        else {
+            Calendar cal = Calendar.getInstance();
+            int mon = cal.get(Calendar.MONTH)+2;
+            int year = cal.get(Calendar.YEAR);
+            if (mon < 10)
+                ed = year+"0"+mon;
+            else ed = Integer.toString(year)+mon;
+        }
         //System.out.println("the end date is: "+ed);
         return ed;
     }
