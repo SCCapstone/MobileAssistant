@@ -3,6 +3,7 @@ package com.example.mobileassistant;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +14,12 @@ import android.widget.Toast;
 
 public class Profile_screen extends AppCompatActivity {
 
-    private Button button_profile;
+    // CONSTANTS for Account Preferences
+    private static final String ACCOUNT_PREFERENCES = "ACCOUNT";
+    private static final String ACCOUNT_FIRST_NAME = "FIRST_NAME";
+    private static final String ACCOUNT_LAST_NAME = "LAST_NAME";
+    private static final String ACCOUNT_DOB = "DOB";
+
     private Button button_home;
     private Button button_settings;
     private EditText first_name;
@@ -23,13 +29,14 @@ public class Profile_screen extends AppCompatActivity {
     private Button button_change_ln;
     private Button button_change_dob;
 
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_screen);
 
         // Getting variables from xml
-        button_profile = findViewById(R.id.button_profile);
         button_home = findViewById(R.id.button_home);
         button_settings = findViewById(R.id.button_settings);
         first_name = findViewById(R.id.first_name);
@@ -39,17 +46,27 @@ public class Profile_screen extends AppCompatActivity {
         button_change_ln = findViewById(R.id.button_change_ln);
         button_change_dob = findViewById(R.id.button_change_dob);
 
-        first_name.setText(Start_screen.getFirst_name());
-        last_name.setText(Start_screen.getLast_name());
-        date_of_birth.setText(Start_screen.getDate_of_birth());
+        // Use ACCOUNT_PREFERENCES to display user information
+        sharedPreferences = getSharedPreferences(ACCOUNT_PREFERENCES, MODE_PRIVATE);
 
-        // TODO NEED TO IMPLEMENT A CHANGE NAME FUNCTIONALITY
-        /*
+        String accountFirstName = sharedPreferences.getString(ACCOUNT_FIRST_NAME, null);
+        first_name.setText(accountFirstName);
+
+        String accountLastName = sharedPreferences.getString(ACCOUNT_LAST_NAME, null);
+        last_name.setText(accountLastName);
+
+        String accountDOB = sharedPreferences.getString(ACCOUNT_DOB, null);
+        date_of_birth.setText(accountDOB);
+
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
         // Button to change first name
         button_change_fn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Start_screen.setFirst_name(first_name.getText().toString());
+                first_name = findViewById(R.id.first_name);
+                editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
+                editor.apply();
             }
         });
 
@@ -57,7 +74,9 @@ public class Profile_screen extends AppCompatActivity {
         button_change_ln.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Start_screen.setLast_name(last_name.getText().toString());
+                last_name = findViewById(R.id.last_name);
+                editor.putString(ACCOUNT_LAST_NAME, last_name.getText().toString());
+                editor.apply();
             }
         });
 
@@ -65,10 +84,12 @@ public class Profile_screen extends AppCompatActivity {
         button_change_dob.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Start_screen.setDate_of_birth(date_of_birth.getText().toString());
+                date_of_birth = findViewById(R.id.date_of_birth);
+                editor.putString(ACCOUNT_DOB, date_of_birth.getText().toString());
+                editor.apply();
             }
         });
-        */
+
 
         // button to swap to Home screen
         button_home.setOnClickListener(new View.OnClickListener(){

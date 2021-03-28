@@ -1,20 +1,25 @@
 package com.example.mobileassistant;
 
+import android.app.Activity;
+
 import android.content.res.AssetManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 
 import android.os.StrictMode;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,8 +39,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class Home_screen extends AppCompatActivity {
@@ -113,6 +116,14 @@ public class Home_screen extends AppCompatActivity {
         chatListView = (ListView) findViewById(R.id.chatListView);
         btnSend = (FloatingActionButton) findViewById(R.id.button_send);
         messageEditText = (EditText) findViewById(R.id.messageEditText);
+        messageEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
         chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
         chatListView.setAdapter(chatMessageAdapter);
 
@@ -138,6 +149,18 @@ public class Home_screen extends AppCompatActivity {
                 messageEditText.setText("");
                 chatListView.setSelection(chatMessageAdapter.getCount() - 1);
 
+                hideKeyboard(messageEditText);
+            }
+        });
+
+        messageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    btnSend.callOnClick();
+                }
+                return false;
             }
         });
 
@@ -154,6 +177,11 @@ public class Home_screen extends AppCompatActivity {
         chat = new Chat(bot);
         String[] args = null;
         mainFunction(args);
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     // Copies assets to the external storage on the device
@@ -214,6 +242,7 @@ public class Home_screen extends AppCompatActivity {
         //System.out.println("Human: "+request);
         //System.out.println("Robot: " + response);
     }
+
     // Sends the user's message to the chatListView
     // To debug, call the bot's message to reply in a default way
     private Weather weather = new Weather(this);
