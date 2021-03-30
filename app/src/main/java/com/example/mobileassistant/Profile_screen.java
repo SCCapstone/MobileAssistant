@@ -51,12 +51,15 @@ public class Profile_screen extends AppCompatActivity {
 
         String accountFirstName = sharedPreferences.getString(ACCOUNT_FIRST_NAME, null);
         first_name.setText(accountFirstName);
+        first_name.setEnabled(false);
 
         String accountLastName = sharedPreferences.getString(ACCOUNT_LAST_NAME, null);
         last_name.setText(accountLastName);
+        last_name.setEnabled(false);
 
         String accountDOB = sharedPreferences.getString(ACCOUNT_DOB, null);
         date_of_birth.setText(accountDOB);
+        date_of_birth.setEnabled(false);
 
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -64,9 +67,14 @@ public class Profile_screen extends AppCompatActivity {
         button_change_fn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                first_name = findViewById(R.id.first_name);
-                editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
-                editor.apply();
+                if(first_name.isEnabled()==false)
+                {
+                    first_name.setEnabled(true);
+                }
+                else if(first_name.isEnabled()==true)
+                {
+                    first_name.setEnabled(false);
+                }
             }
         });
 
@@ -74,9 +82,14 @@ public class Profile_screen extends AppCompatActivity {
         button_change_ln.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                last_name = findViewById(R.id.last_name);
-                editor.putString(ACCOUNT_LAST_NAME, last_name.getText().toString());
-                editor.apply();
+                if(last_name.isEnabled()==false)
+                {
+                    last_name.setEnabled(true);
+                }
+                else if(last_name.isEnabled()==true)
+                {
+                    last_name.setEnabled(false);
+                }
             }
         });
 
@@ -84,9 +97,14 @@ public class Profile_screen extends AppCompatActivity {
         button_change_dob.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                date_of_birth = findViewById(R.id.date_of_birth);
-                editor.putString(ACCOUNT_DOB, date_of_birth.getText().toString());
-                editor.apply();
+                if(date_of_birth.isEnabled()==false)
+                {
+                    date_of_birth.setEnabled(true);
+                }
+                else if(date_of_birth.isEnabled()==true)
+                {
+                    date_of_birth.setEnabled(false);
+                }
             }
         });
 
@@ -95,6 +113,13 @@ public class Profile_screen extends AppCompatActivity {
         button_home.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                first_name = findViewById(R.id.first_name);
+                editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
+                last_name = findViewById(R.id.last_name);
+                editor.putString(ACCOUNT_LAST_NAME, last_name.getText().toString());
+                date_of_birth = findViewById(R.id.date_of_birth);
+                editor.putString(ACCOUNT_DOB, date_of_birth.getText().toString());
+                editor.apply();
                 open_Home_screen(); // opens Home class/screen
             }
         });
@@ -103,6 +128,13 @@ public class Profile_screen extends AppCompatActivity {
         button_settings.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                first_name = findViewById(R.id.first_name);
+                editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
+                last_name = findViewById(R.id.last_name);
+                editor.putString(ACCOUNT_LAST_NAME, last_name.getText().toString());
+                date_of_birth = findViewById(R.id.date_of_birth);
+                editor.putString(ACCOUNT_DOB, date_of_birth.getText().toString());
+                editor.apply();
                 open_Settings_screen(); // switches to Settings class/screen
             }
         });

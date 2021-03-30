@@ -86,6 +86,7 @@ public class Home_screen extends AppCompatActivity {
     static String attend; // event attendees
     static boolean create = false; // create event/ search event
     private int createEventsAction = -1; // used to keep conversation going
+    private int HelpActionIter = -1; //used to discern where the user is in the help command
 
 
     // Global Variables
@@ -388,7 +389,14 @@ public class Home_screen extends AppCompatActivity {
         //starts a new game
         else if (action == 8) {
             confirmGamesAction(message);
-        } else {
+        }
+
+        else if (action == 10){
+            HelpActionIter=0;
+            confirmHelpAction(message);
+        }
+
+        else {
             sendBotMessage(chat.multisentenceRespond(message));
             if (chat.multisentenceRespond(message).equals("Im not sure about that one.") || chat.multisentenceRespond(message).contains("Google") || chat.multisentenceRespond(message).contains("search")) {
                 gsearch b = new gsearch();
@@ -440,20 +448,20 @@ public class Home_screen extends AppCompatActivity {
         String[] mapKeywords = {"directions to", "directions"};
         String[] trafficKeywords = {"traffic", "show traffic"};
         String[] gameKeywords = {"game 1", "rock paper scissors"}; //still need game 1
+        String[] helpKeywords = {"help", "tutorial", "instructions", "command", "commands"};
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
         // Be sure to use the array with the highest length
         // 0 = None, 1 = search events, 2 = create events, 3 = google search, 4 = weather search
-        for(int i = 0; i < weatherKeywords.length; i++){
+        for(int i = 0; i < weatherKeywords.length; i++) {
 
             // Show/Create Event keywords
             if (i < eventKeywords.length && message.toLowerCase().contains(eventKeywords[i])) {
                 if (message.toLowerCase().contains("show")) {
-                   // System.out.println("show event request! go to action 1");
+                    // System.out.println("show event request! go to action 1");
                     return 1;
-                }
-                else if (message.toLowerCase().contains("create")) {
-                   // System.out.println("create event request! go to action 2");
+                } else if (message.toLowerCase().contains("create")) {
+                    // System.out.println("create event request! go to action 2");
                     return 2;
                 }
             }
@@ -475,7 +483,7 @@ public class Home_screen extends AppCompatActivity {
 
             // News
             //if (i < newsKeywords.length && message.toLowerCase().contains(newsKeywords[i]))
-                //return 6;
+            //return 6;
 
             // Traffic keywords
             if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i]))
@@ -484,6 +492,11 @@ public class Home_screen extends AppCompatActivity {
             // Games
             if (i < gameKeywords.length && message.toLowerCase().contains(gameKeywords[i]))
                 return 8;
+
+            if (i < helpKeywords.length && message.toLowerCase().contains(helpKeywords[i]))
+            {
+                return 10;
+            }
         }
         return 0;
     }
@@ -546,6 +559,12 @@ public class Home_screen extends AppCompatActivity {
         }
         else if(num == 8){
             confirmGamesAction(message);
+        }
+        else if(num == 9){
+
+        }
+        else if(num == 10){
+            confirmHelpAction(message);
         }
         }
 
@@ -679,6 +698,60 @@ public class Home_screen extends AppCompatActivity {
             sendBotMessage("Thank you for playing");
             game2IsOn = false;
             gameAction = 0;
+        }
+    }
+
+    private void confirmHelpAction (String message){
+        chatFlag = 10;
+        if(HelpActionIter==0)
+        {
+            String botMessage = "I can help you with understanding what I can do, if you would like. I have a variety of capabilities that you can learn about including event management, weather, news, and many others. For info on events, please type events. For weather, please type weather. For news or general searching, please type search. For traffic and maps, please type map. Finally, if you would like to see the tutorial which you received when you first opened the app, you can type tutorial to open it. When you no longer need help, simply type exit.";
+            HelpActionIter++;
+            sendBotMessage(botMessage);
+            return;
+        }
+        if(HelpActionIter==1)
+        {
+            if(message.toLowerCase().contains("events"))
+            {
+                String botMessage = "I can help you create and check your events within my app! To create an event, type create event. I will then ask you a series of questions about the event you wish to create. To show your already made events, type show event. Make sure that your google account is linked to my app!";
+                sendBotMessage(botMessage);
+            }
+            else if(message.toLowerCase().contains("weather"))
+            {
+                String botMessage = "If you would like information on the weather in your area or in any area, simply type weather or something like \"What is the forecast in Columbia?\" This will trigger my weather protocol and I can help you find specific or general information about any city you wish!";
+                sendBotMessage(botMessage);
+            }
+            else if(message.toLowerCase().contains("search"))
+            {
+                String botMessage = "This is my default response if it does not seem like we are conversing, but I do not understand what you would like me to do. You can manually initiate a search by including the word search in your message. You can also specify the number of results, by including a stipulation such as \"top 5\" or \"5 results\" in your message to me. Asking me for news works in a similar way, you should include the word news, or headlines, in your request.";
+                sendBotMessage(botMessage);
+            }
+            else if(message.toLowerCase().contains("map"))
+            {
+                String botMessage = "You can ask me for directions to a location near (or far from) you. To do so, simply include \"directions to\" in your request, along with the location which you would like to reach. You can also ask for traffic in your area by including \"traffic\" in your request to me.";
+                sendBotMessage(botMessage);
+            }
+            else if(message.toLowerCase().contains("tutorial"))
+            {
+                Intent onboarding = new Intent(this, OnboardingActivity.class);
+                startActivity(onboarding);
+
+                finish();
+                return;
+            }
+            else if(message.toLowerCase().contains("exit"))
+            {
+                String botMessage = "Let me know if you need help again! Just type \"help\" at any time!";
+                HelpActionIter = -1;
+                chatFlag = 0;
+                sendBotMessage(botMessage);
+            }
+            else
+            {
+                String botMessage = "I did not recognize what you are asking for help with, please respond with either \"events\", \"weather\", \"search\", or \"map\". You can also type \"exit\" to exit. Thank you!";
+                sendBotMessage(botMessage);
+            }
         }
     }
 

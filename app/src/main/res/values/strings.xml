@@ -23,55 +23,55 @@
 
     <!-- Text for the fragment. -->
     <string name="commands">You can send any message to the assistant,
-    and it will converse with you,<br/>
+    and it will converse with you,
     but it will default to searching the internet for what you asked it for
-    if it does not understand what you are talking to it about.<br/>
-    If you type in something with the keywords &quot;show event(s)&quot;
-    then you will receive information about your next event.<br/>
-    You can specify the number of events you would like to see by including a number in your message. Examples:<br/>
-    show me next event<br/>
-    show me next 5 events<br/>
-    You can specify which event you would like to see with the &quot;show event&quot; command
-    by including the name of the event in quotations.<br/>
-    Example :<br/>
-    show event &quot;event&quot;<br/>
-    If you send a message with the keywords &quot;create event&quot;
-    then you will create an event on your Google Calender.<br/>
-    You can specify information about the Google Calender when you use the &quot;create event&quot; keyword.<br/>
-    You can create a event with a specific date and time by using a keyword &quot;on&quot; for the date
-    and &quot;am/pm&quot; for the time. <br/>
-    Also, you will be asked if he/she wants to add a location
-    and attendees for the creating event. <br/>
-    Example :<br/>
-    create event for a specific date &amp; time - create event &quot;event&quot; on Feb 27th from 3pm to 4pm<br/>
-    create event for a specific date only (whole day event) - create event "whole" on Feb 28th<br/>
+    if it does not understand what you are talking to it about.\n\n
+    If you type in something with the keywords \"show event(s)\"
+    then you will receive information about your next event.
+    You can specify the number of events you would like to see by including a number in your message. \n\n Examples:\n
+    show me next event\n\n
+    show me next 5 events\n\n
+    You can specify which event you would like to see with the \"show event\" command
+    by including the name of the event in quotations.
+    \n\n Example :\n
+    show event \"event\"\n\n
+    If you send a message with the keywords \"create event\"
+    then you will create an event on your Google Calender.
+    You can specify information about the Google Calender when you use the \"create event\" keyword.\n\n
+    You can create an event with a specific date and time by using the keyword \"on\" for the date
+    and \"am/pm\" for the time.
+    Also, you will be asked if you want to add a location
+    and attendees for the creating event. \n\n
+    Example :\n
+    create event for a specific date and time - create event \"event\" on Feb 27th from 3pm to 4pm\n\n
+    create event for a specific date only (whole day event) - create event "whole" on Feb 28th\n\n
     You can also specify an event that will repeat by specifying a day of the week which the event will occur
-    and a stopping date by using the day of week and the keyword &quot;until&quot; for the end date (month and year).<br/>
-    Example:<br/>
-    create event &quot;Event&quot; repeat every Tuesday and Thursday until April, 2021<br/>
-    You can ask the assistant to search the internet using the &quot;search&quot; keyword or &quot;look up&quot; keyword.
-    This will return a set of links and their HTML titles if you are available. <br/>
-    Example :<br/>
-    search Columbia SC<br/>
+    and a stopping date by using the day of week and the keyword \"until\" for the end date (month and year).\n\n
+    Example:\n\n
+    create event \"Event\" repeat every Tuesday and Thursday until April, 2021\n\n
+    You can ask the assistant to search the internet using the \"search\" keyword or \"look up\" keyword.
+    This will return a set of links and their HTML titles if they are available. \n
+    Example :\n\n
+    search Columbia SC\n\n
     You can also specify the number of results you would like to receive from your search
-    if you include the words &quot;top&quot; or &quot;results&quot; and a number. <br/>
-    Example :<br/>
-    search University of South Carolina top 5 results<br/>
-    You can ask for news by entering the &quot;news&quot; keyword or &quot;headlines&quot; keyword anywhere in your message.<br/>
+    if you include the words \"top\" or \"results\" and a number. \n
+    Example :\n\n
+    search University of South Carolina top 5 results\n\n
+    You can ask for news by entering the \"news\" keyword or \"headlines\" keyword anywhere in your message.\n\n
     You will be prompted for what news you would like to receive and after specifying what news that is,
-    you will receive relevant results about it.<br/>
-    Example :<br/>
-    covid 19 news<br/>
-    Typing &quot;weather&quot;, &quot;forecast&quot;, or &quot;temperature&quot; will initiate a series of questions
+    you will receive relevant results about it.\n\n
+    Example :\n\n
+    covid 19 news\n\n
+    Typing \"weather\", \"forecast\", or \"temperature\" will initiate a series of questions
     to you related to what weather information that you would like to receive,
-    such as the specific information you would like (if any) and the location you would like to know about.<br/>
-    If you asks the assistant for &quot;directions to&quot; a location
-    using the aforementioned keyword Google Maps will open with directions to that location.<br/>
-    If you ask about traffic using the &quot;traffic&quot; keyword,
-    you will receive a map with a traffic information layer in their general vicinity.<br/>
-    If you send &quot;rock paper scissors&quot;,
-    you will open up a text-based &quot;rock, paper, scissors&quot; game.<br/>
-    You then can pick a gesture and press either &quot;yes&quot; or &quot;no&quot; to continue or quit the game, respectively.
+    such as the specific information you would like (if any) and the location you would like to know about.\n\n
+    If you asks the assistant for \"directions to\" a location
+    using the aforementioned keyword Google Maps will open with directions to that location.\n\n
+    If you ask about traffic using the \"traffic\" keyword,
+    you will receive a map with a traffic information layer in your general vicinity.\n\n
+    If you send \"rock paper scissors\",
+    you will open up a text-based \"rock, paper, scissors\" game.
+    You then can pick a gesture and press either \"yes\" or \"no\" to continue or quit the game, respectively.
     </string>
 
     <!-- Text for the button in FragmentExample2. -->
