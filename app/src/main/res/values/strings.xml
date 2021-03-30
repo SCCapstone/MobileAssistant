@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MobileAssistant</string>
     <string name="bots_text">This is the bot\'s text!</string>
-    <string name="user_text">This is the user\'s text!</string>
+    <string name="user_text">This is You\'s text!</string>
     <string name="title_activity_calendar">CalendarActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -14,5 +14,72 @@
     <string name="give_permission">give permission?</string>
     <string name="storagePermission">Storage</string>
     <string name="calendarInfo">MultiAutoCompleteTextView</string>
+
+    <string name="title1">Cry for a Shadow</string>
+    <string name="article1">Many a Beatle fanatic started down the outtake
+        road, like I did, with a first listen to this song. Originally titled “Beatle Bop” and recorded in a single session that yielded four songs (the other three featured Tony Sheridan with the Beatles as a backing band), “Cry for a Shadow” is an instrumental written by Lennon and Harrison, which makes it unique to this day. John Lennon plays rhythm guitar, George Harrison plays lead guitar, Paul McCartney plays bass, and Pete Best plays drums. The sessions were produced by Bert Kaempfert in Hamburg, Germany, during the Beatles’ second visit from April through July of 1961 to play in the Reeperbahn-section clubs.</string>
+    <string name="title2">My Bonnie - Ain’t She Sweet</string>
+    <string name="article2">At the same session, the Beatles played on “My Bonnie” (the first-ever single with Beatles playing), as the backing band for English singer Tony Sheridan, originally a member of the Jets. The popularity of this single in Liverpool brought the Beatles to the attention of Brian Epstein, who worked in the NEMS record store and tried to meet demand for the disc. John Lennon then sings a fine “Ain’t She Sweet” (his first-ever released vocal).</string>
+
+    <!-- Text for the fragment. -->
+    <string name="commands">You can send any message to the assistant,
+    and it will converse with you,<br/>
+    but it will default to searching the internet for what you asked it for
+    if it does not understand what you are talking to it about.<br/>
+    If you type in something with the keywords &quot;show event(s)&quot;
+    then you will receive information about your next event.<br/>
+    You can specify the number of events you would like to see by including a number in your message. Examples:<br/>
+    show me next event<br/>
+    show me next 5 events<br/>
+    You can specify which event you would like to see with the &quot;show event&quot; command
+    by including the name of the event in quotations.<br/>
+    Example :<br/>
+    show event &quot;event&quot;<br/>
+    If you send a message with the keywords &quot;create event&quot;
+    then you will create an event on your Google Calender.<br/>
+    You can specify information about the Google Calender when you use the &quot;create event&quot; keyword.<br/>
+    You can create a event with a specific date and time by using a keyword &quot;on&quot; for the date
+    and &quot;am/pm&quot; for the time. <br/>
+    Also, you will be asked if he/she wants to add a location
+    and attendees for the creating event. <br/>
+    Example :<br/>
+    create event for a specific date &amp; time - create event &quot;event&quot; on Feb 27th from 3pm to 4pm<br/>
+    create event for a specific date only (whole day event) - create event "whole" on Feb 28th<br/>
+    You can also specify an event that will repeat by specifying a day of the week which the event will occur
+    and a stopping date by using the day of week and the keyword &quot;until&quot; for the end date (month and year).<br/>
+    Example:<br/>
+    create event &quot;Event&quot; repeat every Tuesday and Thursday until April, 2021<br/>
+    You can ask the assistant to search the internet using the &quot;search&quot; keyword or &quot;look up&quot; keyword.
+    This will return a set of links and their HTML titles if you are available. <br/>
+    Example :<br/>
+    search Columbia SC<br/>
+    You can also specify the number of results you would like to receive from your search
+    if you include the words &quot;top&quot; or &quot;results&quot; and a number. <br/>
+    Example :<br/>
+    search University of South Carolina top 5 results<br/>
+    You can ask for news by entering the &quot;news&quot; keyword or &quot;headlines&quot; keyword anywhere in your message.<br/>
+    You will be prompted for what news you would like to receive and after specifying what news that is,
+    you will receive relevant results about it.<br/>
+    Example :<br/>
+    covid 19 news<br/>
+    Typing &quot;weather&quot;, &quot;forecast&quot;, or &quot;temperature&quot; will initiate a series of questions
+    to you related to what weather information that you would like to receive,
+    such as the specific information you would like (if any) and the location you would like to know about.<br/>
+    If you asks the assistant for &quot;directions to&quot; a location
+    using the aforementioned keyword Google Maps will open with directions to that location.<br/>
+    If you ask about traffic using the &quot;traffic&quot; keyword,
+    you will receive a map with a traffic information layer in their general vicinity.<br/>
+    If you send &quot;rock paper scissors&quot;,
+    you will open up a text-based &quot;rock, paper, scissors&quot; game.<br/>
+    You then can pick a gesture and press either &quot;yes&quot; or &quot;no&quot; to continue or quit the game, respectively.
+    </string>
+
+    <!-- Text for the button in FragmentExample2. -->
+    <string name="intro">Intro</string>
+
+    <!-- Text for the exception message in FragmentCommunicate. -->
+    <string name="exception_message">must implement OnFragmentInteractionListener</string>
+    <string name="close">Close</string>
+    <string name="done">Done</string>
 
 </resources>

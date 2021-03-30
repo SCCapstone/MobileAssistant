@@ -18,14 +18,17 @@
         android:roundIcon="@mipmap/the_laucher_v_point_five_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <uses-library android:name="android.test.runner"
             android:required="false" />
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
         <activity android:name=".Settings_screen" />
         <activity android:name=".Profile_screen" />
         <activity android:name=".Home_screen"/>
+        <activity android:name=".OnboardingActivity"/>
         <activity android:name=".AccessCalendar" />
         <activity android:name=".Start_screen" >
             <intent-filter>
@@ -33,6 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MapsActivity"
             android:parentActivityName=".Home_screen">
@@ -40,6 +44,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home_screen"/>
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

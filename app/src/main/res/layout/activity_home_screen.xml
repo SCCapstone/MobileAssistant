@@ -66,7 +66,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/robot_on"
-            android:layout_weight="1"
+            android:layout_weight="5"
             android:clickable="false"/>
 
         <!--List view for displaying chat messages-->
@@ -77,8 +77,11 @@
             android:layout_height="fill_parent"
             android:layout_above="@+id/sendMessageLayout"
             android:divider="@null"
-            android:layout_weight="1"
-            android:transcriptMode="alwaysScroll"/>
+            android:layout_weight="5"
+            android:transcriptMode="alwaysScroll">
+
+
+        </ListView>
 
         <LinearLayout
             android:id="@+id/sendMessageLayout"
@@ -151,5 +154,14 @@
         </LinearLayout>
 
     </LinearLayout>
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:name="SimpleFragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_chat"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

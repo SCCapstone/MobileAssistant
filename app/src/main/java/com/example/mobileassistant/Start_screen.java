@@ -2,6 +2,7 @@ package com.example.mobileassistant;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+
 /**
  * We need to import a local database
  */
