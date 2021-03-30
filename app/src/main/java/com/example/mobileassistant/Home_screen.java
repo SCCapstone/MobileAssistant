@@ -55,7 +55,7 @@ public class Home_screen extends AppCompatActivity {
     // set up inactivity recording
     Handler handler;
     Runnable r;
-    boolean active;
+    boolean notTalking = true;
 
     // Attributes used for the buttons to switch between screens
     private Button button_profile;
@@ -120,8 +120,8 @@ public class Home_screen extends AppCompatActivity {
                 mButton.setText(R.string.close);
             }
         }*/
-        if (active == false) {setAnimationView(0); }// default/ off animation view
-        else {setAnimationView(1);}
+        setAnimationView(0); // default/ off animation view
+
         //hoping that this fixes network errors for gsearch
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if(SDK_INT > 8)
@@ -319,6 +319,7 @@ public class Home_screen extends AppCompatActivity {
     // To debug, call the bot's message to reply in a default way
     private Weather weather = new Weather(this);
     private void sendUserMessage(String message) {
+        notTalking = false;
         eventRequest = message;  // used for events commands
         int action = checkForAction(message);
         if (game2IsOn) {
@@ -754,23 +755,21 @@ public class Home_screen extends AppCompatActivity {
 
         // chat is active
         if (state == 2) {
-            talkingAnimationView.setVisibility(View.VISIBLE);  // shows talking animation
             robotStartAnimationView.setVisibility(View.GONE);  // remove original animation
             robotOffAnimationView.setVisibility(View.GONE);
             robotOnAnimationView.setVisibility(View.GONE);
+            talkingAnimationView.setVisibility(View.VISIBLE);  // shows talking animation
         }
         // no activity for 30 secs
         else if (state == 0){
             talkingAnimationView.setVisibility(View.GONE);
             robotStartAnimationView.setVisibility(View.GONE);
-            robotOffAnimationView.setVisibility(View.VISIBLE);
             robotOnAnimationView.setVisibility(View.GONE);
+            robotOffAnimationView.setVisibility(View.VISIBLE);
         }
 
         // user click the chat, active the bot
         else if (state == 3){
-            talkingAnimationView.setVisibility(View.GONE);
-            robotOffAnimationView.setVisibility(View.GONE);
             countSwitch();
         }
 
@@ -806,14 +805,35 @@ public class Home_screen extends AppCompatActivity {
         CountDownTimer ct = new CountDownTimer(5*1000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                robotStartAnimationView.setVisibility(View.VISIBLE);
-                robotOnAnimationView.setVisibility(View.GONE);
+                if (notTalking) {
+                    robotOnAnimationView.setVisibility(View.GONE);
+                    talkingAnimationView.setVisibility(View.GONE);
+                    robotOffAnimationView.setVisibility(View.GONE);
+                    robotStartAnimationView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    robotStartAnimationView.setVisibility(View.GONE);
+                    robotOnAnimationView.setVisibility(View.GONE);
+                    robotOffAnimationView.setVisibility(View.GONE);
+                    talkingAnimationView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void onFinish() {
-                robotStartAnimationView.setVisibility(View.GONE);
-                robotOnAnimationView.setVisibility(View.VISIBLE);
+                if(notTalking) {
+                    robotStartAnimationView.setVisibility(View.GONE);
+                    robotOffAnimationView.setVisibility(View.GONE);
+                    talkingAnimationView.setVisibility(View.GONE);
+                    robotOnAnimationView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    robotStartAnimationView.setVisibility(View.GONE);
+                    robotOffAnimationView.setVisibility(View.GONE);
+                    robotOnAnimationView.setVisibility(View.GONE);
+                    talkingAnimationView.setVisibility(View.VISIBLE);
+                }
+
             }
         }.start();
     }
