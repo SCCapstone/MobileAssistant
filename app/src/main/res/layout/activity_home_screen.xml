@@ -21,7 +21,7 @@
             android:id="@+id/RobotOffView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,7 +40,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/robot_talk"
-            android:layout_weight="1"/>
+            android:layout_weight="5"/>
 
         <!--robot start view-->
         <com.airbnb.lottie.LottieAnimationView
@@ -53,7 +53,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/robot_start"
-            android:layout_weight="1"/>
+            android:layout_weight="5"/>
 
         <!--robot on view-->
         <com.airbnb.lottie.LottieAnimationView
