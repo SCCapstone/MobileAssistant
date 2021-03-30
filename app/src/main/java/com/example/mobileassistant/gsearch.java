@@ -137,13 +137,14 @@ public class gsearch extends AsyncTask<String, String, String> {
             }
         }
         result=result.trim();
+        String retURL = URL.replaceAll(" ","+");
         if(result.length()<=10) //if still empty even after backup plan, apologize and give the URL of the google search
         {
-            result="I'm sorry, my API seems to have been unable to resolve your request. Try this - \n" + URL;
+            result="I'm sorry, my API seems to have been unable to resolve your request. Try this - \n" + retURL;
         }
         if(toolongflag)
         {
-            result="I'm sorry, advertisements seem to be intruding on your google search. Please retry your search.";
+            result="I'm sorry, advertisements seem to be intruding on your google search. Please retry your search or try this link - \n" + retURL;
         }
         return result.trim();
     }
