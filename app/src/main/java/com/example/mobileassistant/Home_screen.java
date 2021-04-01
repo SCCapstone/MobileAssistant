@@ -4,21 +4,16 @@ import android.app.Activity;
 
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 
 import android.os.Handler;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -52,7 +47,6 @@ import java.util.ArrayList;
 
 public class Home_screen extends AppCompatActivity {
 
-    private static final String EXTRA_MESSAGE = "com.example.mobileassistant.MESSAGE";
     // set up inactivity recording
     Handler handler;
     Runnable r;
@@ -89,6 +83,8 @@ public class Home_screen extends AppCompatActivity {
     private int createEventsAction = -1; // used to keep conversation going
     private int HelpActionIter = -1; //used to discern where the user is in the help command
 
+    // Key value for String that is used in the traffic intent setup
+    private static final String EXTRA_MESSAGE = "com.example.mobileassistant.MESSAGE";
 
     // Global Variables
     // chatFlag is used for when the bot is asking the user a question and so that they can keep
@@ -381,9 +377,8 @@ public class Home_screen extends AppCompatActivity {
             //confirmNewsAction(message);
         //}
 
-        // Launches the Google MapActivity for traffic in a place
+        // Launches the Google MapActivity for traffic near the user's last known location
         else if (action == 7) {
-            System.out.println("******* regular intent");
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
 
@@ -398,8 +393,9 @@ public class Home_screen extends AppCompatActivity {
             HelpActionIter=0;
             confirmHelpAction(message);
         }
+
+        // Launches the Google MapsActivity for traffic near a place
         else if (action == 11) {
-            System.out.println("******* putting extra message");
             Intent intent = new Intent(this, MapsActivity.class);
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
@@ -497,11 +493,13 @@ public class Home_screen extends AppCompatActivity {
 
             // Traffic keywords
             if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i])) {
+                // If the keywords contain traffic keywords for a place, return 11 for that intent
                 for (int j=0; j < trafficPlaceKeywords.length; ++j) {
                     if (message.toLowerCase().contains(trafficPlaceKeywords[j])) {
                         return 11;
                     }
                 }
+                // Otherwise, return 7 for the intent for local traffic
                 return 7;
             }
 
