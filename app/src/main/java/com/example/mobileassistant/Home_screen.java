@@ -52,6 +52,7 @@ import java.util.ArrayList;
 
 public class Home_screen extends AppCompatActivity {
 
+    private static final String EXTRA_MESSAGE = "com.example.mobileassistant.MESSAGE";
     // set up inactivity recording
     Handler handler;
     Runnable r;
@@ -380,10 +381,12 @@ public class Home_screen extends AppCompatActivity {
             //confirmNewsAction(message);
         //}
 
-        // Launches the Google MapActivity for traffic
+        // Launches the Google MapActivity for traffic in a place
         else if (action == 7) {
+            System.out.println("******* regular intent");
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
+
         }
 
         //starts a new game
@@ -394,6 +397,12 @@ public class Home_screen extends AppCompatActivity {
         else if (action == 10){
             HelpActionIter=0;
             confirmHelpAction(message);
+        }
+        else if (action == 11) {
+            System.out.println("******* putting extra message");
+            Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
         }
 
         else {
@@ -447,6 +456,7 @@ public class Home_screen extends AppCompatActivity {
         //String[] newsKeywords = {"news", "headlines"};
         String[] mapKeywords = {"directions to", "directions"};
         String[] trafficKeywords = {"traffic", "show traffic"};
+        String[] trafficPlaceKeywords = {"traffic in", "traffic to", "traffic near"};
         String[] gameKeywords = {"game 1", "rock paper scissors"}; //still need game 1
         String[] helpKeywords = {"help", "tutorial", "instructions", "command", "commands"};
 
@@ -486,8 +496,14 @@ public class Home_screen extends AppCompatActivity {
             //return 6;
 
             // Traffic keywords
-            if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i]))
+            if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i])) {
+                for (int j=0; j < trafficPlaceKeywords.length; ++j) {
+                    if (message.toLowerCase().contains(trafficPlaceKeywords[j])) {
+                        return 11;
+                    }
+                }
                 return 7;
+            }
 
             // Games
             if (i < gameKeywords.length && message.toLowerCase().contains(gameKeywords[i]))
@@ -497,6 +513,8 @@ public class Home_screen extends AppCompatActivity {
             {
                 return 10;
             }
+
+
         }
         return 0;
     }
