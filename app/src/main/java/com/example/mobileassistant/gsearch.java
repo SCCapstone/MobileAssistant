@@ -52,6 +52,10 @@ public class gsearch extends AsyncTask<String, String, String> {
             query[0]=query[0].trim();
             int nresultstemp=Integer.parseInt(numresults);
             nresultstemp++;
+            if((query[0].contains("news") || query[0].contains("headlines")) && nresultstemp <= 5)
+            {
+                nresultstemp = 5;
+            }
             numresults=String.valueOf(nresultstemp);
         }
         Document searches;
