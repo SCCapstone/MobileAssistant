@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 public class Settings_screen extends AppCompatActivity {
 
+    static boolean dark;
     // CONSTANTS for account
     private static final String ACCOUNT_PREFERENCES = "ACCOUNT";
 
@@ -45,6 +46,8 @@ public class Settings_screen extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(NIGHT_PREFERENCES, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         final Boolean isDarkModeOn = sharedPreferences.getBoolean(DARK_MODE, false);
+        if (isDarkModeOn) dark = true;
+        else dark = false;
 
         // Light Mode Button
         button_light_mode.setOnClickListener(new View.OnClickListener(){

@@ -16,9 +16,9 @@
         android:clickable="true"
         android:focusableInTouchMode="true">
 
-        <!--robotOff animation view-->
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/RobotOffView"
+        <!--Dark robotOff animation view-->
+       <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/RobotOffViewDark"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="5"
@@ -27,11 +27,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/robot_off" />
+            app:lottie_rawRes="@raw/robot_off_dark" />
 
-        <!--talking animation view-->
+        <!--Dark talking animation view-->
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/talking_animationView"
+            android:id="@+id/talking_animationViewDark"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,12 +39,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/robot_talk"
+            app:lottie_rawRes="@raw/robot_talk_dark"
             android:layout_weight="5"/>
 
-        <!--robot start view-->
+        <!--Dark robot start view-->
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/robotStartView"
+            android:id="@+id/robotStartViewDark"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,12 +52,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/robot_start"
+            app:lottie_rawRes="@raw/robot_start_dark"
             android:layout_weight="5"/>
 
-        <!--robot on view-->
+        <!--Dark robot on view-->
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/robotOnView"
+            android:id="@+id/robotOnViewDark"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,60 @@
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/robot_on"
+            app:lottie_rawRes="@raw/robot_on_dark"
+            android:layout_weight="5"
+            android:clickable="false"/>
+
+        <!--Light robotOff animation view-->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/RobotOffViewLight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/robot_off_light" />
+
+        <!--Light talking animation view-->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/talking_animationViewLight"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/robot_talk_light"
+            android:layout_weight="5"/>
+
+        <!--Light robot start view-->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/robotStartViewLight"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/robot_start_light"
+            android:layout_weight="5"/>
+
+        <!--Light robot on view-->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/robotOnViewLight"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/robot_on_light"
             android:layout_weight="5"
             android:clickable="false"/>
 
