@@ -743,7 +743,7 @@ public class Home_screen extends AppCompatActivity {
             }
             else if(message.toLowerCase().contains("weather"))
             {
-                String botMessage = "If you would like information on the weather in your area or in any area, simply type weather or something like \"What is the forecast in Columbia?\" This will trigger my weather protocol and I can help you find specific or general information about any city you wish!";
+                String botMessage = "If you would like information on the weather in your area or in any area, simply type weather or something like \"What is the forecast in Columbia, South Carolina?\" This will trigger my weather protocol and I can help you find specific or general information about any city you wish!";
                 sendBotMessage(botMessage);
             }
             else if(message.toLowerCase().contains("search"))
