@@ -405,15 +405,9 @@ public class Home_screen extends AppCompatActivity {
         else {
             String ph = chat.multisentenceRespond(message);
             sendBotMessage(ph);
-            System.out.println("response will be : " + ph);
             if (ph.equals("Im not sure about that one.") || ph.contains("Google") || ph.contains("search")) {
                 gsearch b = new gsearch();
-                System.out.println("should be sending a second message, in the if statement");
                 sendBotMessage(b.doInBackground(message));
-            }
-            else
-            {
-                System.out.println("Some weird shit happened, we're in the else statement : " + ph);
             }
         }
     }
