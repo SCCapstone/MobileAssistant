@@ -52,11 +52,11 @@ public class gsearch extends AsyncTask<String, String, String> {
             query[0]=query[0].trim();
             int nresultstemp=Integer.parseInt(numresults);
             nresultstemp++;
-            if((query[0].contains("news") || query[0].contains("headlines")) && nresultstemp <= 5)
-            {
-                nresultstemp = 5;
-            }
             numresults=String.valueOf(nresultstemp);
+        }
+        if((query[0].contains("news") || query[0].contains("headlines")) && Integer.parseInt(numresults) <= 5)
+        {
+            numresults = "6";
         }
         Document searches;
         String URL = "https://www.google.com/search?q="+query[0]+"&num="+numresults;//this is currently hard-coded to output just 1 result but I can change that
