@@ -51,6 +51,7 @@ public class Home_screen extends AppCompatActivity {
     Handler handler;
     Runnable r;
     boolean notTalking = true;
+    boolean darkMode = Settings_screen.dark;
 
     // Attributes used for the buttons to switch between screens
     private Button button_profile;
@@ -404,15 +405,9 @@ public class Home_screen extends AppCompatActivity {
         else {
             String ph = chat.multisentenceRespond(message);
             sendBotMessage(ph);
-            System.out.println("response will be : " + ph);
             if (ph.equals("Im not sure about that one.") || ph.contains("Google") || ph.contains("search")) {
                 gsearch b = new gsearch();
-                System.out.println("should be sending a second message, in the if statement");
                 sendBotMessage(b.doInBackground(message));
-            }
-            else
-            {
-                System.out.println("Some weird shit happened, we're in the else statement : " + ph);
             }
         }
     }
@@ -742,7 +737,7 @@ public class Home_screen extends AppCompatActivity {
             }
             else if(message.toLowerCase().contains("weather"))
             {
-                String botMessage = "If you would like information on the weather in your area or in any area, simply type weather or something like \"What is the forecast in Columbia?\" This will trigger my weather protocol and I can help you find specific or general information about any city you wish!";
+                String botMessage = "If you would like information on the weather in your area or in any area, simply type weather or something like \"What is the forecast in Columbia, South Carolina?\" This will trigger my weather protocol and I can help you find specific or general information about any city you wish!";
                 sendBotMessage(botMessage);
             }
             else if(message.toLowerCase().contains("search"))
@@ -752,7 +747,7 @@ public class Home_screen extends AppCompatActivity {
             }
             else if(message.toLowerCase().contains("map"))
             {
-                String botMessage = "You can ask me for directions to a location near (or far from) you. To do so, simply include \"directions to\" in your request, along with the location which you would like to reach. You can also ask for traffic in your area by including \"traffic\" in your request to me.";
+                String botMessage = "You can ask me for directions to a location near (or far from) you. To do so, simply include \"directions to\" in your request, along with the location which you would like to reach. You can also ask for traffic in your area by just including \"traffic\" or traffic around a certain place by asking for \"traffic near/to/in\" a place.";
                 sendBotMessage(botMessage);
             }
             else if(message.toLowerCase().contains("tutorial"))
@@ -836,32 +831,60 @@ public class Home_screen extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
     }*/
 
-    LottieAnimationView talkingAnimationView;
-    LottieAnimationView robotStartAnimationView;
-    LottieAnimationView robotOffAnimationView;
-    LottieAnimationView robotOnAnimationView;
+    LottieAnimationView talkingAnimationView_dark;
+    LottieAnimationView robotStartAnimationView_dark;
+    LottieAnimationView robotOffAnimationView_dark;
+    LottieAnimationView robotOnAnimationView_dark;
+    LottieAnimationView talkingAnimationView_light;
+    LottieAnimationView robotStartAnimationView_light;
+    LottieAnimationView robotOffAnimationView_light;
+    LottieAnimationView robotOnAnimationView_light;
     // 0: robotOff, 1: robotOn, 2:robotTalking, 3: robotStart
 
     // Method for pick corresponding animation view
     private void setAnimationView(int state) {
-        talkingAnimationView = findViewById(R.id.talking_animationView);
-        robotStartAnimationView = findViewById(R.id.robotStartView);
-        robotOffAnimationView = findViewById(R.id.RobotOffView);
-        robotOnAnimationView = findViewById(R.id.robotOnView);
+        talkingAnimationView_dark = findViewById(R.id.talking_animationViewDark);
+        robotStartAnimationView_dark = findViewById(R.id.robotStartViewDark);
+        robotOffAnimationView_dark = findViewById(R.id.RobotOffViewDark);
+        robotOnAnimationView_dark = findViewById(R.id.robotOnViewDark);
+        talkingAnimationView_light = findViewById(R.id.talking_animationViewLight);
+        robotStartAnimationView_light = findViewById(R.id.robotStartViewLight);
+        robotOffAnimationView_light = findViewById(R.id.RobotOffViewLight);
+        robotOnAnimationView_light = findViewById(R.id.robotOnViewLight);
 
         // chat is active
         if (state == 2) {
-            robotStartAnimationView.setVisibility(View.GONE);  // remove original animation
-            robotOffAnimationView.setVisibility(View.GONE);
-            robotOnAnimationView.setVisibility(View.GONE);
-            talkingAnimationView.setVisibility(View.VISIBLE);  // shows talking animation
+            robotStartAnimationView_dark.setVisibility(View.GONE);  // remove original animation
+            robotOffAnimationView_dark.setVisibility(View.GONE);
+            robotOnAnimationView_dark.setVisibility(View.GONE);
+            robotStartAnimationView_light.setVisibility(View.GONE);
+            robotOffAnimationView_light.setVisibility(View.GONE);
+            robotOnAnimationView_light.setVisibility(View.GONE);
+            if (darkMode) {
+                talkingAnimationView_light.setVisibility(View.GONE);
+                talkingAnimationView_dark.setVisibility(View.VISIBLE);  // shows talking animation
+            }
+            else {
+                talkingAnimationView_dark.setVisibility(View.GONE);
+                talkingAnimationView_light.setVisibility(View.VISIBLE);  // shows talking animation
+            }
         }
         // no activity for 30 secs
         else if (state == 0){
-            talkingAnimationView.setVisibility(View.GONE);
-            robotStartAnimationView.setVisibility(View.GONE);
-            robotOnAnimationView.setVisibility(View.GONE);
-            robotOffAnimationView.setVisibility(View.VISIBLE);
+            talkingAnimationView_dark.setVisibility(View.GONE);
+            robotStartAnimationView_dark.setVisibility(View.GONE);
+            robotOnAnimationView_dark.setVisibility(View.GONE);
+            talkingAnimationView_light.setVisibility(View.GONE);
+            robotStartAnimationView_light.setVisibility(View.GONE);
+            robotOnAnimationView_light.setVisibility(View.GONE);
+            if (darkMode) {
+                robotOffAnimationView_light.setVisibility(View.GONE);
+                robotOffAnimationView_dark.setVisibility(View.VISIBLE);
+            }
+            else {
+                robotOffAnimationView_dark.setVisibility(View.GONE);
+                robotOffAnimationView_light.setVisibility(View.VISIBLE);
+            }
         }
 
         // user click the chat, active the bot
@@ -871,10 +894,21 @@ public class Home_screen extends AppCompatActivity {
 
         // bot is active
         else if(state == 1){
-            talkingAnimationView.setVisibility(View.GONE);
-            robotStartAnimationView.setVisibility(View.GONE);
-            robotOffAnimationView.setVisibility(View.GONE);
-            robotOnAnimationView.setVisibility(View.VISIBLE);
+            talkingAnimationView_dark.setVisibility(View.GONE);
+            robotStartAnimationView_dark.setVisibility(View.GONE);
+            robotOffAnimationView_dark.setVisibility(View.GONE);
+            talkingAnimationView_light.setVisibility(View.GONE);
+            robotStartAnimationView_light.setVisibility(View.GONE);
+            robotOffAnimationView_light.setVisibility(View.GONE);
+            if (darkMode) {
+                robotOnAnimationView_light.setVisibility(View.GONE);
+                robotOnAnimationView_dark.setVisibility(View.VISIBLE);
+            }
+            else {
+                robotOnAnimationView_dark.setVisibility(View.GONE);
+                robotOnAnimationView_light.setVisibility(View.VISIBLE);
+            }
+
         }
        // countSwitch().cancel();
     }
@@ -898,36 +932,71 @@ public class Home_screen extends AppCompatActivity {
     // timer methods for switching "robotStart" and "robotOn" animation view
     // display "robotStart" for 5 seconds then switch to "robotOn" mode
     public void countSwitch(){
+        robotOffAnimationView_dark.setVisibility(View.GONE);
+        robotOffAnimationView_light.setVisibility(View.GONE);
         CountDownTimer ct = new CountDownTimer(5*1000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 if (notTalking) {
-                    robotOnAnimationView.setVisibility(View.GONE);
-                    talkingAnimationView.setVisibility(View.GONE);
-                    robotOffAnimationView.setVisibility(View.GONE);
-                    robotStartAnimationView.setVisibility(View.VISIBLE);
+                    robotOnAnimationView_dark.setVisibility(View.GONE);
+                    talkingAnimationView_dark.setVisibility(View.GONE);
+                    robotOnAnimationView_light.setVisibility(View.GONE);
+                    talkingAnimationView_light.setVisibility(View.GONE);
+                    if (darkMode) {
+                        robotStartAnimationView_light.setVisibility(View.GONE);
+                        robotStartAnimationView_dark.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        robotStartAnimationView_dark.setVisibility(View.GONE);
+                        robotStartAnimationView_light.setVisibility(View.VISIBLE);
+                    }
                 }
                 else {
-                    robotStartAnimationView.setVisibility(View.GONE);
-                    robotOnAnimationView.setVisibility(View.GONE);
-                    robotOffAnimationView.setVisibility(View.GONE);
-                    talkingAnimationView.setVisibility(View.VISIBLE);
+                    robotStartAnimationView_dark.setVisibility(View.GONE);
+                    robotOnAnimationView_dark.setVisibility(View.GONE);
+                    robotStartAnimationView_light.setVisibility(View.GONE);
+                    robotOnAnimationView_light.setVisibility(View.GONE);
+                    if (darkMode) {
+                        talkingAnimationView_light.setVisibility(View.GONE);
+                        talkingAnimationView_dark.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        talkingAnimationView_dark.setVisibility(View.GONE);
+                        talkingAnimationView_light.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
             @Override
             public void onFinish() {
                 if(notTalking) {
-                    robotStartAnimationView.setVisibility(View.GONE);
-                    robotOffAnimationView.setVisibility(View.GONE);
-                    talkingAnimationView.setVisibility(View.GONE);
-                    robotOnAnimationView.setVisibility(View.VISIBLE);
+                    robotStartAnimationView_dark.setVisibility(View.GONE);
+                    robotStartAnimationView_light.setVisibility(View.GONE);
+                    talkingAnimationView_dark.setVisibility(View.GONE);
+                    talkingAnimationView_light.setVisibility(View.GONE);
+                    if (darkMode) {
+                        robotOnAnimationView_light.setVisibility(View.GONE);
+                        robotOnAnimationView_dark.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        robotOnAnimationView_dark.setVisibility(View.GONE);
+                        robotOnAnimationView_light.setVisibility(View.VISIBLE);
+                    }
+
                 }
                 else {
-                    robotStartAnimationView.setVisibility(View.GONE);
-                    robotOffAnimationView.setVisibility(View.GONE);
-                    robotOnAnimationView.setVisibility(View.GONE);
-                    talkingAnimationView.setVisibility(View.VISIBLE);
+                    robotStartAnimationView_dark.setVisibility(View.GONE);
+                    robotOnAnimationView_dark.setVisibility(View.GONE);
+                    robotStartAnimationView_light.setVisibility(View.GONE);
+                    robotOnAnimationView_light.setVisibility(View.GONE);
+                    if (darkMode) {
+                        talkingAnimationView_light.setVisibility(View.GONE);
+                        talkingAnimationView_dark.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        talkingAnimationView_dark.setVisibility(View.GONE);
+                        talkingAnimationView_light.setVisibility(View.VISIBLE);
+                    }
                 }
 
             }
