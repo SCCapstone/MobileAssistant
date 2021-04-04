@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".Profile_screen">
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_gravity="center|center_horizontal|center_vertical"
+        android:background="@null"
+        android:contentDescription="@string/placeholder"
+        app:layout_constraintBottom_toTopOf="@+id/first_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/user_icon" />
+
     <EditText
         android:id="@+id/first_name"
         android:layout_width="0dp"
