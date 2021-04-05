@@ -22,9 +22,9 @@ Running the app from within Android Studio
 2. Open AVD Manager
 3. Create Virtual Device (recommended to use Google Pixel 3 API 30, R system image)
 4. Click Launch this AVD in the emulator
-5. The emulator automatically denies location access so go into the Settings of the emulated phone and give 'MobileAssistant' the location permission 'Always allow'.
+5. Ensure that you have given the 'MobileAssistant' app location permissions. The app should ask if you have not given it permissions and you ask for a location-related function, however if crashes occur when using mapping functions, this may be why.
 6. The location the emulator says it is at is the Googleplex in California, but you can manually change your emulator location using the "extended controls" menu for the emulator.
-7. If the app had been installed on this emulator from last semester(fall 2020), it has to be uninstalled first before install this new release use the apk file, because the "sha-1 certificate fingerprint" has been changed this semester and will cause a problem when running commands that will access Google Calendar. (note. if using Android Studio, do not install the app use the "run" button instead run the emulator only and install the app use the apk file instead of using the repo from github.)
+7. If the app had been installed on this emulator from last semester(fall 2020), it has to be uninstalled first before installing the new release using the apk file, because the "sha-1 certificate fingerprint" has been changed this semester and will cause a problem when running commands that will access Google Calendar. (note. if using Android Studio, do not install the app use the "run" button instead run the emulator only and install the app use the apk file instead of using the repo from github.)
 
 ## Commands
 
@@ -55,12 +55,15 @@ You can send any message to the assistant, and it will converse with you, but it
 * search Columbia SC
 6. The user can also specify the number of results you would like to receive from your search if you include the words 'top' or 'results' and a number. Example :
 * search University of South Carolina top 5 results
-7. The user can ask for news by entering the "news" keyword or "headlines" keyword anywhere in your message. You will be prompted for what news you would like to receive and after specifying what news that is, you will receive relevant results about it. Example :
+7. The user can ask for news by entering the "news" keyword or "headlines" keyword anywhere in your message. The first time the user asks for news, they will be informed that they can ask for news relating to a specific/topic or area, by specifying the subject or location they would like in their request. Example :
 * covid 19 news
 8. Typing "weather", "forecast", or "temperature" will initiate a series of questions to the user related to what weather information that they would like to receive, such as the specific information they would like (if any) and the location they would like to know about.
-9. If the user asks the assistant for "directions to" a location using the aforementioned keyword Google Maps will open with directions to that location.
-10. If the user asks about traffic using the "traffic" keyword, they will receive a map with a traffic information layer in their general vicinity or a nearby location that they can choose by inputting a phrase such as "traffic in X".
-11. If the user sends "game 2", they will open up a text-based "rock, paper, scissors" game. The user then can pick a gesture and press either "yes" or "no" to continue or quit the game, respectively.
+9. If the user asks for certain weather information by stating "what is" or "how is" along with one of the above weather related terms and the location they would like to know about, they will not need to go through the prompts to ascertain their location and request. For example :
+* what is the forecast in Philadelphia PA
+11. If the user asks the assistant for "directions to" a location using the aforementioned keyword Google Maps will open with directions to that location.
+12. If the user asks about traffic using the "traffic" keyword, they will receive a map with a traffic information layer in their general vicinity. The user can also specify where they would like to see traffic by inputting a phrase such as "traffic in X".
+13. If the user requests "rock paper scissors", they will open up a text-based "rock, paper, scissors" game. The user then can pick a gesture and press either "yes" or "no" to continue or quit the game, respectively.
+14. (Bonus Feature) When the user first opens the app, information relating to the usage of the app will be displayed. This is the full set of instructions for the app. If the user types "help" or various other keywords into the chat box, the assistant will prompt them with a set of inputs that will reiterate methods by which the user can use the app, though not all at once. The user can also use this prompt and type "tutorial" to re-open the introductory tutorial if they so wish.
 
 ## Testing
 Unit Tests can be found in MobileAssistant/app/src/test/java/com/example/mobileassistant
