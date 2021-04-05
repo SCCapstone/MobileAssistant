@@ -30,16 +30,27 @@ Running the app from within Android Studio
 
 You can send any message to the assistant, and it will converse with you, but it will default to searching the internet for what you asked it for if it does not understand what you are talking to it about. 
 
-1. If the user types in something with the keywords "show event(s)" then you will receive information about your next event. You can specify the number of events you would like to see by including a number in your message. Examples:
+**In order to access your google calender to edit or get information about events, user would have to give the app permission to access the calendar. When commands about events entered in the chat, the app will ask the user to either login into your gmail or to pick an existing gmail and ask for permissions. (Please note: The app is still under "testing", so if you would like to test the app please give us your gmail address because we have to add your gmail into the "testers" list for the Google API Console, otherwise you won't have the permission to use the Google Calendar API and will cause error when run commands relate to events.)**
+
+1. If the user types in something with the keywords "show event(s)" then by default you will receive information about your next event.Or you can specify the number of events you would like to see by including a number in your message. Example Commands:
 * show me next event
 * show me next 5 events
-2. The user can specify which event they would like to see with the "show event" command by including the name of the event in quotations. Example :
+2. The user can specify which event they would like to see with the "show event" command by including the name of the event in quotations. Example commands :
 * show event "event"
-3. If the user sends a message with the keywords "create event" then you will create an event on your Google Calender. You can specify information about the Google Calender when you use the "create event" keyword. You can create a event with a specific date and time by using a keyword "on" for the date and "am/pm" for the time. Also, the user will be asked if he/she wants to add a location and attendees for the creating event. Example :
+
+**(Please note: event label has to be between double quotes.)**
+
+3. If the user sends a message with the keywords "create event" then you will create an event on your Google Calender. You can specify information about the Google Calender when you use the "create event" keyword. You can create a event with a specific date and time by using a keyword "on" for the date and "am/pm" for the time. Also, the user will be asked if he/she wants to add a location and attendees for the creating event. Example Commands:
 * create event for a specific date & time     -    create event "event" on Feb 27th from 3pm to 4pm   
 * create event for a specific date only (whole day event)    - create event "whole" on Feb 28th
-4. The user can also specify an event that will repeat by specifying a day of the week which the event will occur and a stopping date by using the day of week and the keyword "until" for the end date (month and year). Example:
+
+**(Please note: the event label has to be within double quotes and date has to be after the keyword "on", time has to be followed by either "am" or "pm")**
+
+4. The user can also create recurring events by specifying the day of the week when the event will occur and a stop date by using the keyword "until" follow by the end date (month and year). Example commands:
 * create event "Event" repeat every Tuesday and Thursday until April, 2021
+
+**(Please note: Reccuring events must have a stop date! the event label has to be within double quotes, time has to be followed by either "am" or "pm", end date has to be after the keyword "until" with the format "month, year")**
+
 5. The user can ask the assistant to search the internet using the "search" keyword or "look up" keyword. This will return a set of links and their HTML titles if they are available. Example :
 * search Columbia SC
 6. The user can also specify the number of results you would like to receive from your search if you include the words 'top' or 'results' and a number. Example :
