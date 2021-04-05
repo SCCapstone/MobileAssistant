@@ -81,5 +81,6 @@
     <string name="exception_message">must implement OnFragmentInteractionListener</string>
     <string name="close">Close</string>
     <string name="done">Done</string>
+    <string name="placeholder">placeholder</string>
 
 </resources>

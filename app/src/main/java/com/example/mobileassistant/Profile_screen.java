@@ -4,22 +4,30 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
+import android.widget.ImageButton;
 import android.widget.Toast;
+
+import java.util.Random;
 
 public class Profile_screen extends AppCompatActivity {
 
     // CONSTANTS for Account Preferences
     private static final String ACCOUNT_PREFERENCES = "ACCOUNT";
+    public static final String  ACCOUNT_PROFILE_PHOTO = "PROFILE_PHOTO";
     private static final String ACCOUNT_FIRST_NAME = "FIRST_NAME";
     private static final String ACCOUNT_LAST_NAME = "LAST_NAME";
     private static final String ACCOUNT_DOB = "DOB";
 
+    //CONSTANTS for changing photos
+    private static final int NUM_PHOTOS = 5 ;
+    int[] images;
+
+    private ImageButton change_photo;
     private Button button_home;
     private Button button_settings;
     private EditText first_name;
@@ -37,6 +45,7 @@ public class Profile_screen extends AppCompatActivity {
         setContentView(R.layout.activity_profile_screen);
 
         // Getting variables from xml
+        change_photo = findViewById(R.id.imageButton);
         button_home = findViewById(R.id.button_home);
         button_settings = findViewById(R.id.button_settings);
         first_name = findViewById(R.id.first_name);
@@ -48,6 +57,12 @@ public class Profile_screen extends AppCompatActivity {
 
         // Use ACCOUNT_PREFERENCES to display user information
         sharedPreferences = getSharedPreferences(ACCOUNT_PREFERENCES, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if (sharedPreferences.contains(ACCOUNT_PROFILE_PHOTO)) {
+            int accountImageRId = sharedPreferences.getInt(ACCOUNT_PROFILE_PHOTO, -1);
+            change_photo.setImageResource(accountImageRId);
+        }
 
         String accountFirstName = sharedPreferences.getString(ACCOUNT_FIRST_NAME, null);
         first_name.setText(accountFirstName);
@@ -61,7 +76,16 @@ public class Profile_screen extends AppCompatActivity {
         date_of_birth.setText(accountDOB);
         date_of_birth.setEnabled(false);
 
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+
+        // ImageButton to change profile photo
+        change_photo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                changeIcon(view);
+            }
+        });
 
         // Button to change first name
         button_change_fn.setOnClickListener(new View.OnClickListener(){
@@ -138,6 +162,17 @@ public class Profile_screen extends AppCompatActivity {
                 open_Settings_screen(); // switches to Settings class/screen
             }
         });
+    }
+
+    //change user icon
+    public void changeIcon(View view) {
+        images = new int[]{R.drawable.user_icon_0, R.drawable.user_icon_1, R.drawable.user_icon_2, R.drawable.user_icon_3, R.drawable.user_icon_4};
+        Random random = new Random();
+        int rNum = random.nextInt(NUM_PHOTOS);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(ACCOUNT_PROFILE_PHOTO, images[rNum]);
+        editor.apply();
+        change_photo.setImageDrawable(getResources().getDrawable(images[rNum]));
     }
 
     // method for opening Settings screen
