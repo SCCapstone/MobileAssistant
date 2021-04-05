@@ -405,7 +405,7 @@ public class Home_screen extends AppCompatActivity {
         else {
             String ph = chat.multisentenceRespond(message);
             sendBotMessage(ph);
-            if (ph.equals("Im not sure about that one.") || ph.contains("Google") || ph.contains("search")) {
+            if (ph.equals("Im not sure about that one.") || ((ph.contains("Google") || ph.contains("search")) && !ph.startsWith("I can help you create"))) {
                 gsearch b = new gsearch();
                 sendBotMessage(b.doInBackground(message));
             }
@@ -456,7 +456,7 @@ public class Home_screen extends AppCompatActivity {
         String[] trafficKeywords = {"traffic", "show traffic"};
         String[] trafficPlaceKeywords = {"traffic in", "traffic to", "traffic near"};
         String[] gameKeywords = {"game 1", "rock paper scissors"}; //still need game 1
-        String[] helpKeywords = {"help", "tutorial", "instructions", "command", "commands"};
+        String[] helpKeywords = {"help", "tutorial", "instructions", "what can you do", "commands", "functions"};
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
         // Be sure to use the array with the highest length
@@ -481,8 +481,7 @@ public class Home_screen extends AppCompatActivity {
             // Weather keywords
             if (message.toLowerCase().contains(weatherKeywords[i]) && (message.toLowerCase().contains("what is") || message.toLowerCase().contains("how is")))
                 return 9;
-
-            if (message.toLowerCase().contains("weather"))
+            else if (message.toLowerCase().contains("weather") || message.toLowerCase().contains("forecast"))
                 return 4;
 
             // Map keywords
