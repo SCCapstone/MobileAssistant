@@ -1,34 +1,39 @@
 package com.example.mobileassistant;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import android.widget.DatePicker;
-import android.widget.TextView;
-import android.app.DatePickerDialog;
 
-import java.util.Calendar;
-import java.util.Random;
 
 public class Profile_screen extends AppCompatActivity {
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+    };
 
     // CONSTANTS for Account Preferences
     private static final String ACCOUNT_PREFERENCES = "ACCOUNT";
     public static final String  ACCOUNT_PROFILE_PHOTO = "PROFILE_PHOTO";
+    public static final int GET_FROM_GALLERY = 0;
     private static final String ACCOUNT_FIRST_NAME = "FIRST_NAME";
     private static final String ACCOUNT_LAST_NAME = "LAST_NAME";
     private static final String ACCOUNT_DOB = "DOB";
-    private DatePickerDialog.OnDateSetListener adateSetListener;
 
     //CONSTANTS for changing photos
     private static final int NUM_PHOTOS = 5 ;
@@ -39,13 +44,28 @@ public class Profile_screen extends AppCompatActivity {
     private Button button_settings;
     private EditText first_name;
     private EditText last_name;
-    private TextView date_of_birth;
+    private EditText date_of_birth;
     private Button button_change_fn;
     private Button button_change_ln;
     private Button button_change_dob;
 
+
     SharedPreferences sharedPreferences;
 
+    //used for the onClick for the image button
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have read permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,23 +77,27 @@ public class Profile_screen extends AppCompatActivity {
         button_settings = findViewById(R.id.button_settings);
         first_name = findViewById(R.id.first_name);
         last_name = findViewById(R.id.last_name);
-        date_of_birth = (TextView)findViewById(R.id.date_of_birth);
+        date_of_birth = findViewById(R.id.date_of_birth);
         button_change_fn = findViewById(R.id.button_change_fn);
         button_change_ln = findViewById(R.id.button_change_ln);
         button_change_dob = findViewById(R.id.button_change_dob);
 
+        change_photo.setImageResource(R.drawable.user_icon);
         // Use ACCOUNT_PREFERENCES to display user information
+
         sharedPreferences = getSharedPreferences(ACCOUNT_PREFERENCES, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if (sharedPreferences.contains(ACCOUNT_PROFILE_PHOTO)) {
-            int accountImageRId = sharedPreferences.getInt(ACCOUNT_PROFILE_PHOTO, -1);
-            change_photo.setImageResource(accountImageRId);
-        }
 
         String accountFirstName = sharedPreferences.getString(ACCOUNT_FIRST_NAME, null);
         first_name.setText(accountFirstName);
         first_name.setEnabled(false);
+
+        String accountProfilePhoto = sharedPreferences.getString(ACCOUNT_PROFILE_PHOTO,null);
+        if(accountProfilePhoto != null){
+            change_photo.setImageBitmap(BitmapFactory.decodeFile(accountProfilePhoto));
+        }
+
+
 
         String accountLastName = sharedPreferences.getString(ACCOUNT_LAST_NAME, null);
         last_name.setText(accountLastName);
@@ -82,6 +106,9 @@ public class Profile_screen extends AppCompatActivity {
         String accountDOB = sharedPreferences.getString(ACCOUNT_DOB, null);
         date_of_birth.setText(accountDOB);
         date_of_birth.setEnabled(false);
+
+
+
 
         // ImageButton to change profile photo
         change_photo.setOnClickListener(new View.OnClickListener(){
@@ -136,31 +163,6 @@ public class Profile_screen extends AppCompatActivity {
             }
         });
 
-        date_of_birth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DATE);
-
-                // default to current date
-                DatePickerDialog dp = new DatePickerDialog(Profile_screen.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth, adateSetListener,
-                        year, month, day);
-                dp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dp.show();
-            }
-        });
-        // allow user to pick a date
-        adateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month +1;
-                String date = month + "/" +dayOfMonth +"/" + year;
-                date_of_birth.setText(date);
-            }
-        };
 
         // button to swap to Home screen
         button_home.setOnClickListener(new View.OnClickListener(){
@@ -170,7 +172,7 @@ public class Profile_screen extends AppCompatActivity {
                 editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
                 last_name = findViewById(R.id.last_name);
                 editor.putString(ACCOUNT_LAST_NAME, last_name.getText().toString());
-                date_of_birth = (TextView)findViewById(R.id.date_of_birth);
+                date_of_birth = findViewById(R.id.date_of_birth);
                 editor.putString(ACCOUNT_DOB, date_of_birth.getText().toString());
                 editor.apply();
                 open_Home_screen(); // opens Home class/screen
@@ -185,7 +187,7 @@ public class Profile_screen extends AppCompatActivity {
                 editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
                 last_name = findViewById(R.id.last_name);
                 editor.putString(ACCOUNT_LAST_NAME, last_name.getText().toString());
-                date_of_birth = (TextView)findViewById(R.id.date_of_birth);
+                date_of_birth = findViewById(R.id.date_of_birth);
                 editor.putString(ACCOUNT_DOB, date_of_birth.getText().toString());
                 editor.apply();
                 open_Settings_screen(); // switches to Settings class/screen
@@ -193,17 +195,40 @@ public class Profile_screen extends AppCompatActivity {
         });
     }
 
+
     //change user icon
     public void changeIcon(View view) {
-        images = new int[]{R.drawable.user_icon_0, R.drawable.user_icon_1, R.drawable.user_icon_2, R.drawable.user_icon_3, R.drawable.user_icon_4};
-        Random random = new Random();
-        int rNum = random.nextInt(NUM_PHOTOS);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(ACCOUNT_PROFILE_PHOTO, images[rNum]);
-        editor.apply();
-        change_photo.setImageDrawable(getResources().getDrawable(images[rNum]));
+            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            startActivityForResult(intent,GET_FROM_GALLERY);
+            verifyStoragePermissions(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Detects request codes
+        if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            if (selectedImage != null) {
+                Cursor cursor = getApplicationContext().getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                if (cursor != null) {
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    ImageButton imageButton = findViewById(R.id.imageButton);
+                    imageButton.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(ACCOUNT_PROFILE_PHOTO, picturePath);
+                    editor.apply();
+                    cursor.close();
+                }
+            }
+        }
+    }
     // method for opening Settings screen
     public void open_Settings_screen(){
         Intent intent = new Intent(this, Settings_screen.class);
