@@ -1,5 +1,6 @@
 package com.example.mobileassistant;
 
+import android.app.ActionBar;
 import android.app.Activity;
 
 import android.content.SharedPreferences;
@@ -21,6 +22,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +49,7 @@ import java.util.ArrayList;
 
 public class Home_screen extends AppCompatActivity {
 
-    // set up inactivity recording
+    // set up inactivity recording && animation view
     Handler handler;
     Runnable r;
     boolean notTalking = true;
@@ -244,6 +246,16 @@ public class Home_screen extends AppCompatActivity {
             @Override
             public void run() {
                 // TODO Auto-generated method stub
+                // resize sleeping animation view to a smaller size while there is a chat
+                LinearLayout.LayoutParams param= new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        10.0f
+                );
+                if (darkMode) {
+                    robotOffAnimationView_dark.setLayoutParams(param);
+                }
+                else robotOffAnimationView_light.setLayoutParams(param);
                 setAnimationView(0);
             }
         };
@@ -851,6 +863,15 @@ public class Home_screen extends AppCompatActivity {
         robotOffAnimationView_light = findViewById(R.id.RobotOffViewLight);
         robotOnAnimationView_light = findViewById(R.id.robotOnViewLight);
 
+        // resize talking animation view to a smaller size
+        LinearLayout.LayoutParams param= new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                10.0f
+        );
+        talkingAnimationView_light.setLayoutParams(param);
+        talkingAnimationView_dark.setLayoutParams(param);
+
         // chat is active
         if (state == 2) {
             robotStartAnimationView_dark.setVisibility(View.GONE);  // remove original animation
@@ -868,7 +889,7 @@ public class Home_screen extends AppCompatActivity {
                 talkingAnimationView_light.setVisibility(View.VISIBLE);  // shows talking animation
             }
         }
-        // no activity for 30 secs
+        // no activity for 30 secs or robot is sleeping
         else if (state == 0){
             talkingAnimationView_dark.setVisibility(View.GONE);
             robotStartAnimationView_dark.setVisibility(View.GONE);

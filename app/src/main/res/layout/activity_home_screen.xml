@@ -17,23 +17,22 @@
         android:focusableInTouchMode="true">
 
         <!--Dark robotOff animation view-->
-       <com.airbnb.lottie.LottieAnimationView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/RobotOffViewDark"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/robot_off_dark" />
-
+            app:lottie_rawRes="@raw/robot_off_dark"
+            android:layout_weight="5"/>
         <!--Dark talking animation view-->
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/talking_animationViewDark"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
