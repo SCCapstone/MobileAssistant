@@ -47,20 +47,29 @@ public class Weather {
     public String weatherSearch(String message){
         String ret_string = "";
 
-        if (message.equalsIgnoreCase("weather") && isDefaultWeather == false){
+        /**
+         * Goes here if user just types in "weather" in chat
+         */
+        if (message.equalsIgnoreCase("weather")  && isDefaultWeather == false){
             isDefaultWeather = true;
             ret_string += defaultWeatherSearch(message);
             return ret_string;
         }
 
+        /**
+         * if statement if for default weather asking questions and user answers back
+         */
         if (isDefaultWeather){
             ret_string += defaultWeatherSearch(message);
         }
         else{
+            /**
+             * Tries to parse out correct information
+             */
             String cap_message = message.toUpperCase();
 
             // Regex info
-            Pattern pattern = Pattern.compile("((?<=WHAT IS THE )|(?<=HOW IS THE ))(.+) IN (.+)"); // Create a Pattern object
+            Pattern pattern = Pattern.compile("((?<=WHAT IS THE )|(?<=HOW IS THE )|(?<=WHAT WILL ))(.+) IN (.+)"); // Create a Pattern object
 
             // Now create matcher object.
             Matcher matcher = pattern.matcher(cap_message);
@@ -70,11 +79,15 @@ public class Weather {
                 String weatherType = matcher.group(2);
                 info = findWeatherType(weatherType);
 
+                if (cap_message.contains("TOMORROW") || cap_message.contains("DAYS"))
+                    is8DayForecast = true;
+
                 String location = matcher.group(3); // Should be location
                 ret_string = parseWeatherInformation(location);
                 info = "";
             }
-            else { // Could not parse information correctly, default to asking questions
+            else { // Could not parse information correctly, default to asking question
+
                 ret_string += "Sorry I could not get the correct information. ";
                 isDefaultWeather = true;
 
@@ -214,6 +227,8 @@ public class Weather {
         String validStateName = "";
         int marker = 0;
         for (int i = locations.length - 1; i >= 0; i--) {
+            if(locations[i].equals("TOMORROW"))
+                continue;
             temp = locations[i] + " " + temp;
             temp = temp.trim(); // trim leading/trailing white spaces
 
@@ -253,6 +268,13 @@ public class Weather {
             if (ret_string.equals(""))
                 ret_string += "Sorry, I could not find your city and/or state :(";
         }
+
+        //reset globals
+        weatherAction = 0;
+        chatFlag = 0;
+        info = "";
+        is8DayForecast = false;
+        isDefaultWeather = false;
 
         return ret_string;
     }

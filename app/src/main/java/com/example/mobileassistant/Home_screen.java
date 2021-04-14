@@ -491,7 +491,9 @@ public class Home_screen extends AppCompatActivity {
                 return 3;
 
             // Weather keywords
-            if (message.toLowerCase().contains(weatherKeywords[i]) && (message.toLowerCase().contains("what is") || message.toLowerCase().contains("how is")))
+            if (message.toLowerCase().contains(weatherKeywords[i]) && (message.toLowerCase().contains("what is")
+                    || message.toLowerCase().contains("how is")
+                    || message.toLowerCase().contains("what will")))
                 return 9;
             else if (message.toLowerCase().contains("weather") || message.toLowerCase().contains("forecast"))
                 return 4;
