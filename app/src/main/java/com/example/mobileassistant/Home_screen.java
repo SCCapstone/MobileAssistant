@@ -53,7 +53,9 @@ public class Home_screen extends AppCompatActivity {
     Handler handler;
     Runnable r;
     boolean notTalking = true;
-    boolean darkMode = Settings_screen.dark;
+    //boolean darkMode = Settings_screen.dark;
+    SharedPreferences sharedPreferences;
+    boolean darkMode;
 
     // Attributes used for the buttons to switch between screens
     private Button button_profile;
@@ -111,6 +113,9 @@ public class Home_screen extends AppCompatActivity {
             finish();
             return;
         }
+
+        sharedPreferences = getSharedPreferences("NIGHT", MODE_PRIVATE);
+        darkMode = sharedPreferences.getBoolean("isDarkModeOn", false);
         //used for the intro:
         //if returning from a configuration change, get the
         // fragment state and set the button text.
