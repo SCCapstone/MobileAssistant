@@ -618,9 +618,13 @@ public class Home_screen extends AppCompatActivity {
                     newStr.append(c);
                 }
             }
-            // by default, just show the next upcoming event
-            if (newStr.toString().isEmpty())
+            // search for event, by default, just show the next upcoming event
+            if (newStr.toString().isEmpty() && message.toLowerCase().contains("events"))
+                number = 5;
+            // search for events, by default, show the next 5 upcoming events
+            else if (newStr.toString().isEmpty() && message.toLowerCase().contains("event"))
                 number = 1;
+            // get the number of events request
             else number = Integer.parseInt(newStr.toString());
         }
         //System.out.println("The id is: "+id);
