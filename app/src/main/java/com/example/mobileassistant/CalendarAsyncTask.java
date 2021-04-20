@@ -245,14 +245,14 @@ public class CalendarAsyncTask extends AsyncTask<Void, Void, List<String>> {
              newEvent.setLocation(location); // set up event location
 
          // set up event start time
-         DateTime startTime = new DateTime(year+"-"+date+"T"+startT+"-05:00");
+         DateTime startTime = new DateTime(year+"-"+date+"T"+startT+"-04:00");
          EventDateTime start = new EventDateTime()
                  .setDateTime(startTime)
                  .setTimeZone("America/Los_Angeles");
          newEvent.setStart(start);
 
          // set up event end time
-         DateTime endTime = new DateTime(year+"-"+date+"T"+endT+"-05:00");
+         DateTime endTime = new DateTime(year+"-"+date+"T"+endT+"-04:00");
          EventDateTime end = new EventDateTime()
                  .setDateTime(endTime)
                  .setTimeZone("America/Los_Angeles");
@@ -297,14 +297,18 @@ public class CalendarAsyncTask extends AsyncTask<Void, Void, List<String>> {
 
     // parse time to correct format
     public String convertTime(String st){
-        Calendar ca = Calendar.getInstance();
-        int hrs = ca.get(Calendar.HOUR_OF_DAY); // current hour
-        int mins = ca.get(Calendar.MINUTE); // current minutes
+        /* use current time as event start time*/
+        // Calendar ca = Calendar.getInstance();
+        //int hrs = ca.get(Calendar.HOUR_OF_DAY); // current hour
+       // int mins = ca.get(Calendar.MINUTE); // current minutes
         String h, m;
 
         // convert time to correct format used for creating events
-        if (hrs < 10) h = "0"+hrs; else h = Integer.toString(hrs);
-        if (mins < 10) m = "0"+mins; else m = Integer.toString(mins);
+       // if (hrs < 10) h = "0"+hrs; else h = Integer.toString(hrs);
+       // if (mins < 10) m = "0"+mins; else m = Integer.toString(mins);
+        /*actual whole day event start time*/
+        h = "00";
+        m = "00";
         String ret = h+":"+m+":"+"00";
 
         // search inside of user's input to get time info and convert to correct format
