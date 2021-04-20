@@ -1,4 +1,4 @@
 # MobileAssistant
 
 ## Demo Video
-{% include youtubePlayer.html id=page.NpEaa2P7qZI %}
+{% include youtubePlayer.html id="NpEaa2P7qZI" %}
