@@ -114,9 +114,16 @@ public class Start_screen extends AppCompatActivity {
             public void onClick(View view) {
                 String fn = first_name.getText().toString();
                 String ln = last_name.getText().toString();
+                String dob = date_of_birth.getText().toString();
 
-                // Check if user entered valid first name and last name
-                if (isValid(fn) && isValid(ln)) {
+                // Check if user entered valid first name and last name and date of birth
+                if (!isValid(fn))
+                    makeToast("Please Enter a Valid First Name, no numbers should be included!");
+                else if (!isValid(ln))
+                    makeToast("Please Enter a Valid Last Name, no numbers should be included!");
+                else if (!validDOB(dob))
+                    makeToast("Please Enter a Valid Date of Birth, no future dates or current date");
+                else {
                     // keep the data for account
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
@@ -126,9 +133,7 @@ public class Start_screen extends AppCompatActivity {
 
                     open_Homescreen();
                 }
-                else{
-                   makeToast("Please Enter Valid Information");
-                }
+
             }
         });
     }
@@ -178,6 +183,34 @@ public class Start_screen extends AppCompatActivity {
     public boolean isValid(String input) {
 
         return Pattern.matches("[a-zA-Z]+",input);
+    }
+
+    // method used to check if user picked a valid DOB (no future days)
+    public boolean validDOB(String input) {
+        input = getDate_of_birth();
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int mon = cal.get(Calendar.MONTH)+1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        String valid = mon+"/"+day+"/"+year;
+        if (input.equals(valid)) {
+            return false;
+        }
+        else {
+            String[] splitSt = input.split("/");
+            int m = Integer.parseInt(splitSt[0]);
+            int d = Integer.parseInt(splitSt[1]);
+            int y = Integer.parseInt(splitSt[2]);
+
+            if (y > year)
+                return false;
+            else if (year == y && mon == m && d > day)
+                return false;
+            else if (year == y && m > mon)
+                return false;
+            else
+                return true;
+        }
     }
 
 }
