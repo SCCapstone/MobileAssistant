@@ -202,7 +202,7 @@ public class Home_screen extends AppCompatActivity {
                 ChatMessage chatMessage = new ChatMessage(message, true);
                 chatMessageAdapter.add(chatMessage);
 
-                if (TextUtils.isEmpty(message)) {
+                if (messageEditText.getText().toString()=="") {
                     return;
                 }
 
@@ -423,8 +423,15 @@ public class Home_screen extends AppCompatActivity {
             String ph = chat.multisentenceRespond(message);
             sendBotMessage(ph);
             if (ph.equals("Im not sure about that one.") || ((ph.contains("Google") || ph.contains("search")) && !ph.startsWith("I can help you create"))) {
-                gsearch b = new gsearch();
-                sendBotMessage(b.doInBackground(message));
+                if(ph.startsWith("I might be a") || ph.startsWith("I can help you"))
+                {
+
+                }
+                else
+                {
+                    gsearch b = new gsearch();
+                    sendBotMessage(b.doInBackground(message));
+                }
             }
         }
     }

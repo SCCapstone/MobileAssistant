@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ChangeTextBehaviorTest extends TestCase {
+public class SettingsScreenBehaviorTest extends TestCase {
     private String exampleString;
     private String exampleString2;
 
@@ -46,9 +46,16 @@ public class ChangeTextBehaviorTest extends TestCase {
     @Test
     public void intent() {
         try{
+            Thread.sleep(2000);
+            Espresso.onView(withId(R.id.button_settings)).perform(click());
+            Espresso.onView(withId(R.id.button_dark_mode)).perform(click());
             Thread.sleep(5000);
-            Espresso.pressBack();
-            Espresso.pressBack();
+            Espresso.onView(withId(R.id.button_settings)).perform(click());
+            Espresso.onView(withId(R.id.button_light_mode)).perform(click());
+            Thread.sleep(5000);
+            Espresso.onView(withId(R.id.button_settings)).perform(click());
+            Espresso.onView(withId(R.id.button_signout)).perform(click());
+            Thread.sleep(5000);
             Espresso.onView(withId(R.id.first_name)).perform(typeText(exampleString), closeSoftKeyboard()).check(matches(withText(exampleString)));
             Espresso.onView(withId(R.id.last_name)).perform(typeText(exampleString2), closeSoftKeyboard()).check(matches(withText(exampleString2)));
             Espresso.onView(withId(R.id.date_of_birth)).perform(click());

@@ -2,6 +2,7 @@ package com.example.mobileassistant;
 
 import androidx.test.espresso.Espresso;
 
+import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -30,7 +31,7 @@ import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ChangeTextBehaviorTest extends TestCase {
+public class ProfileScreenBehaviorTest extends TestCase {
     private String exampleString;
     private String exampleString2;
 
@@ -46,15 +47,24 @@ public class ChangeTextBehaviorTest extends TestCase {
     @Test
     public void intent() {
         try{
-            Thread.sleep(5000);
-            Espresso.pressBack();
-            Espresso.pressBack();
+            Espresso.onView(withId(R.id.button_profile)).perform(click());
+            Espresso.onView(withId(R.id.button_change_fn)).perform(click());
+            Espresso.onView(withId(R.id.first_name)).perform(clearText());
             Espresso.onView(withId(R.id.first_name)).perform(typeText(exampleString), closeSoftKeyboard()).check(matches(withText(exampleString)));
+            Espresso.onView(withId(R.id.button_change_fn)).perform(click());
+            Thread.sleep(2000);
+            Espresso.onView(withId(R.id.button_change_ln)).perform(click());
+            Espresso.onView(withId(R.id.last_name)).perform(clearText());
             Espresso.onView(withId(R.id.last_name)).perform(typeText(exampleString2), closeSoftKeyboard()).check(matches(withText(exampleString2)));
+            Espresso.onView(withId(R.id.button_change_ln)).perform(click());
+            Thread.sleep(2000);
+            Espresso.onView(withId(R.id.button_change_dob)).perform(click());
             Espresso.onView(withId(R.id.date_of_birth)).perform(click());
             Espresso.onView(withText("OK")).perform(click());
+            Espresso.onView(withId(R.id.button_change_dob)).perform(click());
+            Thread.sleep(2000);
 
-            Espresso.onView(withId(R.id.button_confirm)).perform(click());
+            Espresso.onView(withId(R.id.button_home)).perform(click());
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();

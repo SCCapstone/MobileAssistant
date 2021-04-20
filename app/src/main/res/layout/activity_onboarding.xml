@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:background="@color/buttonColor"
+        android:background="@color/backgroundColor"
         android:text="@string/done"
         android:textColor="@color/textColor"
         android:layout_alignParentEnd="true" />

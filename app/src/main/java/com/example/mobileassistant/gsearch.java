@@ -27,7 +27,7 @@ public class gsearch extends AsyncTask<String, String, String> {
             query[0] = query[0].replace("look up","");
             query[0]=query[0].trim();
         }
-        if(query[0].contains("top") || query[0].contains("results") && query[0].contains("1") || query[0].contains("2") || query[0].contains("3") || query[0].contains("4") || query[0].contains("5") || query[0].contains("6") || query[0].contains("7") || query[0].contains("8") || query[0].contains("9") || query[0].contains("0"))
+        if((query[0].contains("top") || query[0].contains("results")) && (query[0].contains("1") || query[0].contains("2") || query[0].contains("3") || query[0].contains("4") || query[0].contains("5") || query[0].contains("6") || query[0].contains("7") || query[0].contains("8") || query[0].contains("9") || query[0].contains("0")))
         {
             query[0] = query[0].replace("top ","");
             query[0] = query[0].replace("results ","");
@@ -42,7 +42,18 @@ public class gsearch extends AsyncTask<String, String, String> {
                     {
                         if(piece.charAt(0)=='1'||piece.charAt(0)=='2'||piece.charAt(0)=='3'||piece.charAt(0)=='4'||piece.charAt(0)=='5'||piece.charAt(0)=='6'||piece.charAt(0)=='7'||piece.charAt(0)=='8'||piece.charAt(0)=='9'||piece.charAt(0)=='0')
                         {
-                            numresults=piece;
+                            String ph = "";
+                            while(piece.charAt(0)=='1'||piece.charAt(0)=='2'||piece.charAt(0)=='3'||piece.charAt(0)=='4'||piece.charAt(0)=='5'||piece.charAt(0)=='6'||piece.charAt(0)=='7'||piece.charAt(0)=='8'||piece.charAt(0)=='9'||piece.charAt(0)=='0')
+                            {
+                                ph=ph+piece.charAt(0);
+                                piece = piece.substring(1);
+                                if(piece.length()==0)
+                                {
+                                    break;
+                                }
+                            }
+                            numresults=ph;
+                            break;
                         }
                     }
                 }

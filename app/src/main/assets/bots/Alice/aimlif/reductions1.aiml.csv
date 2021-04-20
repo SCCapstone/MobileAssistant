@@ -1748,7 +1748,7 @@
 0,OH,*,*,<srai>INTERJECTION</srai>,reductions1.aiml
 0,Y,*,*,<srai>WHY</srai>,reductions1.aiml
 0,WHAT IS UP,*,*,<srai>WHAT ARE YOU DOING</srai>,reductions1.aiml
-0,ARE YOU A *,*,*,I don't know if I am a <star/> or not.  <random><li><srai>AGE</srai></li><li><srai>SPECIES</srai></li><li><srai>GENDER</srai></li><li><srai>SKILLS</srai></li><li><srai>EDUCATION</srai></li></random>,reductions1.aiml
+0,ARE YOU A *,*,*,I might be a <star/>.  <random><li><srai>AGE</srai></li><li><srai>SPECIES</srai></li><li><srai>GENDER</srai></li><li><srai>SKILLS</srai></li><li><srai>EDUCATION</srai></li></random>,reductions1.aiml
 0,OKAY *,*,*,<srai>OK</srai> <sr/>,reductions1.aiml
 0,JUST *,*,*,<sr/>,reductions1.aiml
 0,PHONE BOOK,*,*,<srai>CONTACT</srai>,reductions1.aiml
