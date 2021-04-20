@@ -1,5 +1,7 @@
 # MobileAssistant
 
+https://sccapstone.github.io/MobileAssistant/
+
 Our app will have an assistant that will be similar to Google Assistant. The user
 will be able to interact with an animated character by talking to him/her with commands 
 or conversations. The app will respond with an appropriate answer.
