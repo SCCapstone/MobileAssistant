@@ -1,6 +1,6 @@
 package com.example.mobileassistant;
 
-import android.app.ActionBar;
+
 import android.app.Activity;
 
 import android.content.SharedPreferences;
@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 
 import android.os.Handler;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -49,6 +51,8 @@ import java.util.ArrayList;
 
 public class Home_screen extends AppCompatActivity {
 
+
+    // set up inactivity recording
     // set up inactivity recording && animation view
     Handler handler;
     Runnable r;
@@ -62,10 +66,7 @@ public class Home_screen extends AppCompatActivity {
     private Button button_home;
     private Button button_settings;
 
-    //variables used for the chat intro
-    /*private boolean isFragmentDisplayed = false;
-    static final String STATE_FRAGMENT = "state_of_fragment";
-*/
+
     // Attributes used for sending messages
     private ListView chatListView;
     private FloatingActionButton btnSend;
@@ -105,7 +106,7 @@ public class Home_screen extends AppCompatActivity {
         SharedPreferences preferences =
                 getSharedPreferences("my_preferences", MODE_PRIVATE);
 
-        if(!preferences.getBoolean("onboarding_complete",false)){
+        if (!preferences.getBoolean("onboarding_complete", false)) {
 
             Intent onboarding = new Intent(this, OnboardingActivity.class);
             startActivity(onboarding);
@@ -130,8 +131,7 @@ public class Home_screen extends AppCompatActivity {
 
         //hoping that this fixes network errors for gsearch
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
-        if(SDK_INT > 8)
-        {
+        if (SDK_INT > 8) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
@@ -142,7 +142,7 @@ public class Home_screen extends AppCompatActivity {
         button_settings = findViewById(R.id.button_settings);
 
         // Button to swap to Profile screen
-        button_profile.setOnClickListener(new View.OnClickListener(){
+        button_profile.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -151,7 +151,7 @@ public class Home_screen extends AppCompatActivity {
         });
 
         // Button to swap to Settings screen
-        button_settings.setOnClickListener(new View.OnClickListener(){
+        button_settings.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -175,7 +175,10 @@ public class Home_screen extends AppCompatActivity {
         chatListView = (ListView) findViewById(R.id.chatListView);
         btnSend = (FloatingActionButton) findViewById(R.id.button_send);
         messageEditText = (EditText) findViewById(R.id.messageEditText);
-        chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
+        if (savedInstanceState != null) {
+            ArrayList<ChatMessage> chatHistory = (ArrayList<ChatMessage>) savedInstanceState.getParcelable("chatMessageAdapter");
+            chatMessageAdapter = new ChatMessageAdapter(this, chatHistory);
+        } else chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
         chatListView.setAdapter(chatMessageAdapter);
 
         // change animation view from "off" to "start" then "on"
@@ -191,7 +194,7 @@ public class Home_screen extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus)
                     setAnimationView(3);
-                    hideKeyboard(v);
+                hideKeyboard(v);
             }
         });
         // Sends the message when the button is clicked
@@ -202,14 +205,13 @@ public class Home_screen extends AppCompatActivity {
                 ChatMessage chatMessage = new ChatMessage(message, true);
                 chatMessageAdapter.add(chatMessage);
 
-                if (messageEditText.getText().toString()=="") {
+                if (messageEditText.getText().toString() == "") {
                     return;
                 }
 
-                if (chatFlag == 0){
+                if (chatFlag == 0) {
                     sendUserMessage(message);
-                }
-                else{
+                } else {
                     findChatFlag(message, chatFlag);
                 }
 
@@ -238,7 +240,7 @@ public class Home_screen extends AppCompatActivity {
         // The external storage directory leads to a virtual SD card where the AIML assets are copied to
         MagicStrings.root_path = Environment.getExternalStorageDirectory().toString() + "/Android/data/com.example.mobileassistant/files";
         System.out.println("Working Directory = " + MagicStrings.root_path);
-        AIMLProcessor.extension =  new PCAIMLProcessorExtension();
+        AIMLProcessor.extension = new PCAIMLProcessorExtension();
         //Assign the AIML files to bot for processing
         bot = new Bot("Alice", MagicStrings.root_path, "chat");
         chat = new Chat(bot);
@@ -252,15 +254,14 @@ public class Home_screen extends AppCompatActivity {
             public void run() {
                 // TODO Auto-generated method stub
                 // resize sleeping animation view to a smaller size while there is a chat
-                LinearLayout.LayoutParams param= new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         10.0f
                 );
                 if (darkMode) {
                     robotOffAnimationView_dark.setLayoutParams(param);
-                }
-                else robotOffAnimationView_light.setLayoutParams(param);
+                } else robotOffAnimationView_light.setLayoutParams(param);
                 setAnimationView(0);
             }
         };
@@ -268,7 +269,7 @@ public class Home_screen extends AppCompatActivity {
     }
 
     public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
@@ -334,6 +335,7 @@ public class Home_screen extends AppCompatActivity {
     // Sends the user's message to the chatListView
     // To debug, call the bot's message to reply in a default way
     private Weather weather = new Weather(this);
+
     private void sendUserMessage(String message) {
         notTalking = false;
         eventRequest = message;  // used for events commands
@@ -358,8 +360,7 @@ public class Home_screen extends AppCompatActivity {
                 id = eventInfo[1];
                 createEventsAction = 0;
                 createEvents(message);
-            }
-            else {
+            } else {
                 sendBotMessage("Please re-enter the request with the event label inside double quotes");
                 createEventsAction = -1;
                 id = null;
@@ -367,12 +368,10 @@ public class Home_screen extends AppCompatActivity {
         }
 
         // google search
-        else if(action == 3)
-        {
+        else if (action == 3) {
             gsearch a = new gsearch();
             sendBotMessage(a.doInBackground(message));
-            if((message.contains("news") || message.contains("headlines")) && firstNews == 0)
-            {
+            if ((message.contains("news") || message.contains("headlines")) && firstNews == 0) {
                 String botMessage = "Your results are above. You can search for specific news or general news. For example, if you would like news about Columbia SC, simply type in Columbia SC News. You can also specify the number of results by including something like 'top 5' or '5 results' in your message.";
                 sendBotMessage(botMessage);
                 firstNews = 1;
@@ -380,19 +379,19 @@ public class Home_screen extends AppCompatActivity {
         }
 
         // weather
-        else if (action == 4 || action == 9){
+        else if (action == 4 || action == 9) {
             runWeatherSearch(message);
         }
 
         // Opens the Google Maps app at the directions page to a certain location
-        else if (action == 5){
+        else if (action == 5) {
             MapLauncher mapLauncher = new MapLauncher(Home_screen.this);
             mapLauncher.openDirections(message);
         }
 
         // default bot responds
         //else if(action == 6){
-            //confirmNewsAction(message);
+        //confirmNewsAction(message);
         //}
 
         // Launches the Google MapActivity for traffic near the user's last known location
@@ -405,10 +404,8 @@ public class Home_screen extends AppCompatActivity {
         //starts a new game
         else if (action == 8) {
             confirmGamesAction(message);
-        }
-
-        else if (action == 10){
-            HelpActionIter=0;
+        } else if (action == 10) {
+            HelpActionIter = 0;
             confirmHelpAction(message);
         }
 
@@ -417,18 +414,13 @@ public class Home_screen extends AppCompatActivity {
             Intent intent = new Intent(this, MapsActivity.class);
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
-        }
-
-        else {
+        } else {
             String ph = chat.multisentenceRespond(message);
             sendBotMessage(ph);
             if (ph.equals("Im not sure about that one.") || ((ph.contains("Google") || ph.contains("search")) && !ph.startsWith("I can help you create"))) {
-                if(ph.startsWith("I might be a") || ph.startsWith("I can help you"))
-                {
+                if (ph.startsWith("I might be a") || ph.startsWith("I can help you")) {
 
-                }
-                else
-                {
+                } else {
                     gsearch b = new gsearch();
                     sendBotMessage(b.doInBackground(message));
                 }
@@ -436,8 +428,8 @@ public class Home_screen extends AppCompatActivity {
         }
     }
 
-        // Add an else if and check if user replies with "weather"
-        //chatMessage.getContent().toLowerCase().contains(("weather"))
+    // Add an else if and check if user replies with "weather"
+    //chatMessage.getContent().toLowerCase().contains(("weather"))
 
 
     // Sends the bot's message to the chatListView
@@ -458,12 +450,11 @@ public class Home_screen extends AppCompatActivity {
         // if request for access calendar, check for result and if result is correct
         // then get result from AccessCalendar activity by using the keyname "feedback"
         if (requestCode == LAUNCH_CALENDAR) {
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 result = data.getStringExtra("feedback");
                 // send the result into the chat box
                 sendBotMessage(result);
-            }
-            else {
+            } else {
                 // if cannot get the result, gives user feedback
                 Toast.makeText(this, "Something is not right", Toast.LENGTH_LONG).show();
             }
@@ -471,8 +462,8 @@ public class Home_screen extends AppCompatActivity {
     }
 
     // Checks for which action to take
-    private int checkForAction(String message){
-        String[] eventKeywords = {"event","events"};
+    private int checkForAction(String message) {
+        String[] eventKeywords = {"event", "events"};
         String[] searchKeywords = {"search", "look up", "news", "headlines"};
         String[] weatherKeywords = {"weather", "forecast", "temperature", "high", "low", "wind speed", "humidity", "description", "pressure"};
         //String[] newsKeywords = {"news", "headlines"};
@@ -485,7 +476,7 @@ public class Home_screen extends AppCompatActivity {
         // I put them all in one for loop because I did not want to have 3 separate for loops
         // Be sure to use the array with the highest length
         // 0 = None, 1 = search events, 2 = create events, 3 = google search, 4 = weather search
-        for(int i = 0; i < weatherKeywords.length; i++) {
+        for (int i = 0; i < weatherKeywords.length; i++) {
 
             // Show/Create Event keywords
             if (i < eventKeywords.length && message.toLowerCase().contains(eventKeywords[i])) {
@@ -521,7 +512,7 @@ public class Home_screen extends AppCompatActivity {
             // Traffic keywords
             if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i])) {
                 // If the keywords contain traffic keywords for a place, return 11 for that intent
-                for (int j=0; j < trafficPlaceKeywords.length; ++j) {
+                for (int j = 0; j < trafficPlaceKeywords.length; ++j) {
                     if (message.toLowerCase().contains(trafficPlaceKeywords[j])) {
                         return 11;
                     }
@@ -534,8 +525,7 @@ public class Home_screen extends AppCompatActivity {
             if (i < gameKeywords.length && message.toLowerCase().contains(gameKeywords[i]))
                 return 8;
 
-            if (i < helpKeywords.length && message.toLowerCase().contains(helpKeywords[i]))
-            {
+            if (i < helpKeywords.length && message.toLowerCase().contains(helpKeywords[i])) {
                 return 10;
             }
 
@@ -545,71 +535,63 @@ public class Home_screen extends AppCompatActivity {
     }
 
     // Run weather search
-    public void runWeatherSearch(String message){
+    public void runWeatherSearch(String message) {
         String botMessage = weather.weatherSearch(message);
         sendBotMessage(botMessage);
         chatFlag = weather.getChatFlag();
     }
-/*
-    public int newsAction = 0;
-    private void confirmNewsAction(String message){
-        chatFlag=6;
-        String botMessage="";
 
-        if(newsAction==0)
-        {
-            botMessage="What type of news would you like? If you would like to know the news for a city, Columbia SC for example, then say Columbia SC News. You can also specify the number of results by including something like 'top 5' or '5 results' in your message.";
-            newsAction++;
-            sendBotMessage(botMessage);
+    /*
+        public int newsAction = 0;
+        private void confirmNewsAction(String message){
+            chatFlag=6;
+            String botMessage="";
+
+            if(newsAction==0)
+            {
+                botMessage="What type of news would you like? If you would like to know the news for a city, Columbia SC for example, then say Columbia SC News. You can also specify the number of results by including something like 'top 5' or '5 results' in your message.";
+                newsAction++;
+                sendBotMessage(botMessage);
+            }
+            else
+            {
+                newsAction=0;
+                chatFlag=0;
+                gsearch c = new gsearch();
+                botMessage = c.doInBackground(message);
+                sendBotMessage(botMessage);
+            }
         }
-        else
-        {
-            newsAction=0;
-            chatFlag=0;
-            gsearch c = new gsearch();
-            botMessage = c.doInBackground(message);
-            sendBotMessage(botMessage);
-        }
-    }
-*/
+    */
     // This will take us to which conversation they are currently in
-    private void findChatFlag(String message, int num){
+    private void findChatFlag(String message, int num) {
         // 1 = show events, 2 = create events, 3 = Google search,
         // 4 = weather, 5 = map search, 6 = news
 
-        if (num == 1){
+        if (num == 1) {
             //System.out.println("the chatFlag is: "+num+" go to search event");
             searchEvents(message);
-        }
-        else if(num == 2){
+        } else if (num == 2) {
             //  System.out.println("the chatFlag is: "+num+" go to create event");
             createEvents(message);
-        }
-        else if(num ==3) {
+        } else if (num == 3) {
 
-        }
-        else if(num ==4) {
+        } else if (num == 4) {
             runWeatherSearch(message);
-        }
-        else if(num == 5){
+        } else if (num == 5) {
 
-        }
-        else if(num == 6) {
+        } else if (num == 6) {
             //confirmNewsAction(message);
-        }
-        else if(num == 7){
+        } else if (num == 7) {
 
-        }
-        else if(num == 8){
+        } else if (num == 8) {
             confirmGamesAction(message);
-        }
-        else if(num == 9){
+        } else if (num == 9) {
 
-        }
-        else if(num == 10){
+        } else if (num == 10) {
             confirmHelpAction(message);
         }
-        }
+    }
 
     // Method for show events
     private void searchEvents(String message) {
@@ -633,10 +615,10 @@ public class Home_screen extends AppCompatActivity {
             // search for event, by default, just show the next upcoming event
             if (newStr.toString().isEmpty() && message.toLowerCase().contains("events"))
                 number = 5;
-            // search for events, by default, show the next 5 upcoming events
+                // search for events, by default, show the next 5 upcoming events
             else if (newStr.toString().isEmpty() && message.toLowerCase().contains("event"))
                 number = 1;
-            // get the number of events request
+                // get the number of events request
             else number = Integer.parseInt(newStr.toString());
         }
         //System.out.println("The id is: "+id);
@@ -670,12 +652,11 @@ public class Home_screen extends AppCompatActivity {
                 botMessage = "Please enter the location";
                 createEventsAction++;  // goes to to ask for attendees
                 sendBotMessage(botMessage);
-            }
-            else {
+            } else {
                 //loca = false;
                 location = null;
                 botMessage = "Do you want to add attendees? yes/no";
-                createEventsAction = createEventsAction+2;
+                createEventsAction = createEventsAction + 2;
                 //System.out.println("in 1:" + createEventsAction);
                 sendBotMessage(botMessage);
             }
@@ -696,19 +677,18 @@ public class Home_screen extends AppCompatActivity {
         // if yes, ask to enter attendees, goes to last one
         // if no, create events
         else if (createEventsAction == 3) {
-            if(message.equalsIgnoreCase("yes")) {
+            if (message.equalsIgnoreCase("yes")) {
                 botMessage = "Please enter list of attendees' emails, separate by comma";
                 createEventsAction++;
                 sendBotMessage(botMessage);
-            }
-            else {
+            } else {
                 attend = null;
                 //reset globals
                 createEventsAction = 0;
                 chatFlag = 0;
 
-                Intent intent = new Intent(this,AccessCalendar.class);
-                startActivityForResult(intent,LAUNCH_CALENDAR);
+                Intent intent = new Intent(this, AccessCalendar.class);
+                startActivityForResult(intent, LAUNCH_CALENDAR);
             }
         }
 
@@ -720,12 +700,14 @@ public class Home_screen extends AppCompatActivity {
             createEventsAction = 0;
             chatFlag = 0;
 
-            Intent intent = new Intent(this,AccessCalendar.class);
-            startActivityForResult(intent,LAUNCH_CALENDAR);
+            Intent intent = new Intent(this, AccessCalendar.class);
+            startActivityForResult(intent, LAUNCH_CALENDAR);
         }
     }
+
     public int gameAction = 0;
-    private void confirmGamesAction (String message){
+
+    private void confirmGamesAction(String message) {
         chatFlag = 8;
         if (message.equalsIgnoreCase("no")) {
             gameAction = 2;
@@ -748,61 +730,46 @@ public class Home_screen extends AppCompatActivity {
         }
     }
 
-    private void confirmHelpAction (String message){
+    private void confirmHelpAction(String message) {
         chatFlag = 10;
-        if(HelpActionIter==0)
-        {
+        if (HelpActionIter == 0) {
             String botMessage = "I can help you with understanding what I can do, if you would like. I have a variety of capabilities that you can learn about including event management, weather, news, and many others. For info on events, please type events. For weather, please type weather. For news or general searching, please type search. For traffic and maps, please type map. Finally, if you would like to see the tutorial which you received when you first opened the app, you can type tutorial to open it. When you no longer need help, simply type exit.";
             HelpActionIter++;
             sendBotMessage(botMessage);
             return;
         }
-        if(HelpActionIter==1)
-        {
-            if(message.toLowerCase().contains("events"))
-            {
+        if (HelpActionIter == 1) {
+            if (message.toLowerCase().contains("events")) {
                 String botMessage = "I can help you create and check your events within my app! To create an event, type create event. I will then ask you a series of questions about the event you wish to create. To show your already made events, type show event. Make sure that your google account is linked to my app!";
                 sendBotMessage(botMessage);
-            }
-            else if(message.toLowerCase().contains("weather"))
-            {
+            } else if (message.toLowerCase().contains("weather")) {
                 String botMessage = "If you would like information on the weather in your area or in any area, simply type weather or something like \"What is the forecast in Columbia, South Carolina?\" This will trigger my weather protocol and I can help you find specific or general information about any city you wish!";
                 sendBotMessage(botMessage);
-            }
-            else if(message.toLowerCase().contains("search"))
-            {
+            } else if (message.toLowerCase().contains("search")) {
                 String botMessage = "This is my default response if it does not seem like we are conversing, but I do not understand what you would like me to do. You can manually initiate a search by including the word search in your message. You can also specify the number of results, by including a stipulation such as \"top 5\" or \"5 results\" in your message to me. Asking me for news works in a similar way, you should include the word news, or headlines, in your request.";
                 sendBotMessage(botMessage);
-            }
-            else if(message.toLowerCase().contains("map"))
-            {
+            } else if (message.toLowerCase().contains("map")) {
                 String botMessage = "You can ask me for directions to a location near (or far from) you. To do so, simply include \"directions to\" in your request, along with the location which you would like to reach. You can also ask for traffic in your area by just including \"traffic\" or traffic around a certain place by asking for \"traffic near/to/in\" a place.";
                 sendBotMessage(botMessage);
-            }
-            else if(message.toLowerCase().contains("tutorial"))
-            {
+            } else if (message.toLowerCase().contains("tutorial")) {
                 Intent onboarding = new Intent(this, OnboardingActivity.class);
                 startActivity(onboarding);
 
                 finish();
                 return;
-            }
-            else if(message.toLowerCase().contains("exit"))
-            {
+            } else if (message.toLowerCase().contains("exit")) {
                 String botMessage = "Let me know if you need help again! Just type \"help\" at any time!";
                 HelpActionIter = -1;
                 chatFlag = 0;
                 sendBotMessage(botMessage);
-            }
-            else
-            {
+            } else {
                 String botMessage = "I did not recognize what you are asking for help with, please respond with either \"events\", \"weather\", \"search\", or \"map\". You can also type \"exit\" to exit. Thank you!";
                 sendBotMessage(botMessage);
             }
         }
     }
 
-    public void rockPaperScissors () {
+    public void rockPaperScissors() {
         RockPaperScissors rps = new RockPaperScissors();
         String message = rps.checkUserGesture(messageEditText.getText().toString());
         if (message.equalsIgnoreCase("Invalid input")) {
@@ -816,49 +783,6 @@ public class Home_screen extends AppCompatActivity {
         chatFlag = 0;
     }
 
-    //for intro
-    /*public void displayFragment() {
-        // Instantiate the fragment.
-        ChatFragment simpleFragment = ChatFragment.newInstance();
-        // Get the FragmentManager and start a transaction.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        androidx.fragment.app.FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction();
-
-        // Add the SimpleFragment.
-        fragmentTransaction.add(R.id.fragment_container,
-                simpleFragment).addToBackStack(null).commit();
-
-        // Update the Button text.
-        mButton.setText(R.string.close);
-        // Set boolean flag to indicate fragment is open.
-        isFragmentDisplayed = true;
-    }
-
-    // for intro
-    public void closeFragment() {
-        // Get the FragmentManager.
-        androidx.fragment.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        // Check to see if the fragment is already showing.
-        ChatFragment chatFragment = (ChatFragment) fragmentManager
-                .findFragmentById(R.id.fragment_container);
-        if (chatFragment != null) {
-            // Create and commit the transaction to remove the fragment.
-            FragmentTransaction fragmentTransaction =
-                    fragmentManager.beginTransaction();
-            fragmentTransaction.remove(chatFragment).commit();
-        }
-        // Update the Button text.
-        mButton.setText(R.string.intro);
-        // Set boolean flag to indicate fragment is closed.
-        isFragmentDisplayed = false;
-    }*/
-
-    /*public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the state of the fragment (true=open, false=closed).
-        savedInstanceState.putBoolean(STATE_FRAGMENT, isFragmentDisplayed);
-        super.onSaveInstanceState(savedInstanceState);
-    }*/
 
     LottieAnimationView talkingAnimationView_dark;
     LottieAnimationView robotStartAnimationView_dark;
@@ -882,7 +806,7 @@ public class Home_screen extends AppCompatActivity {
         robotOnAnimationView_light = findViewById(R.id.robotOnViewLight);
 
         // resize talking animation view to a smaller size
-        LinearLayout.LayoutParams param= new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 10.0f
@@ -901,14 +825,13 @@ public class Home_screen extends AppCompatActivity {
             if (darkMode) {
                 talkingAnimationView_light.setVisibility(View.GONE);
                 talkingAnimationView_dark.setVisibility(View.VISIBLE);  // shows talking animation
-            }
-            else {
+            } else {
                 talkingAnimationView_dark.setVisibility(View.GONE);
                 talkingAnimationView_light.setVisibility(View.VISIBLE);  // shows talking animation
             }
         }
         // no activity for 30 secs or robot is sleeping
-        else if (state == 0){
+        else if (state == 0) {
             talkingAnimationView_dark.setVisibility(View.GONE);
             robotStartAnimationView_dark.setVisibility(View.GONE);
             robotOnAnimationView_dark.setVisibility(View.GONE);
@@ -918,20 +841,19 @@ public class Home_screen extends AppCompatActivity {
             if (darkMode) {
                 robotOffAnimationView_light.setVisibility(View.GONE);
                 robotOffAnimationView_dark.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 robotOffAnimationView_dark.setVisibility(View.GONE);
                 robotOffAnimationView_light.setVisibility(View.VISIBLE);
             }
         }
 
         // user click the chat, active the bot
-        else if (state == 3){
+        else if (state == 3) {
             countSwitch();
         }
 
         // bot is active
-        else if(state == 1){
+        else if (state == 1) {
             talkingAnimationView_dark.setVisibility(View.GONE);
             robotStartAnimationView_dark.setVisibility(View.GONE);
             robotOffAnimationView_dark.setVisibility(View.GONE);
@@ -941,14 +863,13 @@ public class Home_screen extends AppCompatActivity {
             if (darkMode) {
                 robotOnAnimationView_light.setVisibility(View.GONE);
                 robotOnAnimationView_dark.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 robotOnAnimationView_dark.setVisibility(View.GONE);
                 robotOnAnimationView_light.setVisibility(View.VISIBLE);
             }
 
         }
-       // countSwitch().cancel();
+        // countSwitch().cancel();
     }
 
     // methods for tracking inactivity
@@ -963,16 +884,17 @@ public class Home_screen extends AppCompatActivity {
     public void stopHandler() {
         handler.removeCallbacks(r);
     }
+
     public void startHandler() {
-        handler.postDelayed(r, 30*1000);
+        handler.postDelayed(r, 30 * 1000);
     }
 
     // timer methods for switching "robotStart" and "robotOn" animation view
     // display "robotStart" for 5 seconds then switch to "robotOn" mode
-    public void countSwitch(){
+    public void countSwitch() {
         robotOffAnimationView_dark.setVisibility(View.GONE);
         robotOffAnimationView_light.setVisibility(View.GONE);
-        CountDownTimer ct = new CountDownTimer(5*1000,1000) {
+        CountDownTimer ct = new CountDownTimer(5 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 if (notTalking) {
@@ -983,13 +905,11 @@ public class Home_screen extends AppCompatActivity {
                     if (darkMode) {
                         robotStartAnimationView_light.setVisibility(View.GONE);
                         robotStartAnimationView_dark.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         robotStartAnimationView_dark.setVisibility(View.GONE);
                         robotStartAnimationView_light.setVisibility(View.VISIBLE);
                     }
-                }
-                else {
+                } else {
                     robotStartAnimationView_dark.setVisibility(View.GONE);
                     robotOnAnimationView_dark.setVisibility(View.GONE);
                     robotStartAnimationView_light.setVisibility(View.GONE);
@@ -997,8 +917,7 @@ public class Home_screen extends AppCompatActivity {
                     if (darkMode) {
                         talkingAnimationView_light.setVisibility(View.GONE);
                         talkingAnimationView_dark.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         talkingAnimationView_dark.setVisibility(View.GONE);
                         talkingAnimationView_light.setVisibility(View.VISIBLE);
                     }
@@ -1007,7 +926,7 @@ public class Home_screen extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                if(notTalking) {
+                if (notTalking) {
                     robotStartAnimationView_dark.setVisibility(View.GONE);
                     robotStartAnimationView_light.setVisibility(View.GONE);
                     talkingAnimationView_dark.setVisibility(View.GONE);
@@ -1015,14 +934,12 @@ public class Home_screen extends AppCompatActivity {
                     if (darkMode) {
                         robotOnAnimationView_light.setVisibility(View.GONE);
                         robotOnAnimationView_dark.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         robotOnAnimationView_dark.setVisibility(View.GONE);
                         robotOnAnimationView_light.setVisibility(View.VISIBLE);
                     }
 
-                }
-                else {
+                } else {
                     robotStartAnimationView_dark.setVisibility(View.GONE);
                     robotOnAnimationView_dark.setVisibility(View.GONE);
                     robotStartAnimationView_light.setVisibility(View.GONE);
@@ -1030,8 +947,7 @@ public class Home_screen extends AppCompatActivity {
                     if (darkMode) {
                         talkingAnimationView_light.setVisibility(View.GONE);
                         talkingAnimationView_dark.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         talkingAnimationView_dark.setVisibility(View.GONE);
                         talkingAnimationView_light.setVisibility(View.VISIBLE);
                     }
@@ -1044,14 +960,22 @@ public class Home_screen extends AppCompatActivity {
 
     //switch to other screens
     // Method for opening Profile screen
-    public void open_Profile_screen () {
+    public void open_Profile_screen() {
         Intent intent = new Intent(this, Profile_screen.class);
         startActivity(intent);
     }
 
     // Method for opening Settings screen
-    public void open_Settings_screen () {
+    public void open_Settings_screen() {
         Intent intent = new Intent(this, Settings_screen.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        ArrayList<ChatMessage> chatHistory = chatMessageAdapter.getAllItems();
+        state.putParcelableArrayList("chatMessageAdapter", chatHistory);
+        super.onSaveInstanceState(state);
+    }
+
 }
