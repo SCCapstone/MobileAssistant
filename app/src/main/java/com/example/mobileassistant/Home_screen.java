@@ -2,7 +2,7 @@ package com.example.mobileassistant;
 
 
 import android.app.Activity;
-
+import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.CountDownTimer;
@@ -14,8 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 
 import android.os.Handler;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -52,7 +50,6 @@ import java.util.ArrayList;
 public class Home_screen extends AppCompatActivity {
 
 
-    // set up inactivity recording
     // set up inactivity recording && animation view
     Handler handler;
     Runnable r;
@@ -175,10 +172,7 @@ public class Home_screen extends AppCompatActivity {
         chatListView = (ListView) findViewById(R.id.chatListView);
         btnSend = (FloatingActionButton) findViewById(R.id.button_send);
         messageEditText = (EditText) findViewById(R.id.messageEditText);
-        if (savedInstanceState != null) {
-            ArrayList<ChatMessage> chatHistory = (ArrayList<ChatMessage>) savedInstanceState.getParcelable("chatMessageAdapter");
-            chatMessageAdapter = new ChatMessageAdapter(this, chatHistory);
-        } else chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
+        chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
         chatListView.setAdapter(chatMessageAdapter);
 
         // change animation view from "off" to "start" then "on"
@@ -970,12 +964,4 @@ public class Home_screen extends AppCompatActivity {
         Intent intent = new Intent(this, Settings_screen.class);
         startActivity(intent);
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle state) {
-        ArrayList<ChatMessage> chatHistory = chatMessageAdapter.getAllItems();
-        state.putParcelableArrayList("chatMessageAdapter", chatHistory);
-        super.onSaveInstanceState(state);
-    }
-
 }

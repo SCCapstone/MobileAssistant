@@ -48,7 +48,6 @@ public class ChangeTextBehaviorTest extends TestCase {
         try{
             Thread.sleep(5000);
             Espresso.pressBack();
-            Espresso.pressBack();
             Espresso.onView(withId(R.id.first_name)).perform(typeText(exampleString), closeSoftKeyboard()).check(matches(withText(exampleString)));
             Espresso.onView(withId(R.id.last_name)).perform(typeText(exampleString2), closeSoftKeyboard()).check(matches(withText(exampleString2)));
             Espresso.onView(withId(R.id.date_of_birth)).perform(click());
