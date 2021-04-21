@@ -21,6 +21,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.regex.Pattern;
+
 
 public class Profile_screen extends AppCompatActivity {
 
@@ -121,13 +123,24 @@ public class Profile_screen extends AppCompatActivity {
         button_change_fn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                /**
+                 * Add a String temp variable for first name
+                 * Check if modified name is not empty
+                 * If it is, then makeToast to user and let them know and reassign
+                 *      first name to temp variable
+                 * else continue
+                 */
+
                 if(first_name.isEnabled()==false)
                 {
                     first_name.setEnabled(true);
                 }
                 else if(first_name.isEnabled()==true)
                 {
-                    first_name.setEnabled(false);
+                    if (!isValid(first_name.getText().toString()))
+                        makeToast("Please enter a valid first name!");
+                    else
+                        first_name.setEnabled(false);
                 }
             }
         });
@@ -142,7 +155,10 @@ public class Profile_screen extends AppCompatActivity {
                 }
                 else if(last_name.isEnabled()==true)
                 {
-                    last_name.setEnabled(false);
+                    if (!isValid(first_name.getText().toString()))
+                        makeToast("Please enter a valid last name!");
+                    else
+                        first_name.setEnabled(false);
                 }
             }
         });
@@ -167,14 +183,24 @@ public class Profile_screen extends AppCompatActivity {
         button_home.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                first_name = findViewById(R.id.first_name);
-                editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
-                last_name = findViewById(R.id.last_name);
-                editor.putString(ACCOUNT_LAST_NAME, last_name.getText().toString());
-                date_of_birth = findViewById(R.id.date_of_birth);
-                editor.putString(ACCOUNT_DOB, date_of_birth.getText().toString());
-                editor.apply();
-                open_Home_screen(); // opens Home class/screen
+                if (first_name.isEnabled() && !isValid(first_name.getText().toString())){
+                    makeToast("Please enter a valid first name!");
+                }
+                else if (last_name.isEnabled() && !isValid(first_name.getText().toString())){
+                    makeToast("Please enter a valid last name!");
+                }
+                else {
+                    first_name.setEnabled(false);
+                    last_name.setEnabled(false);
+                    first_name = findViewById(R.id.first_name);
+                    editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
+                    last_name = findViewById(R.id.last_name);
+                    editor.putString(ACCOUNT_LAST_NAME, last_name.getText().toString());
+                    date_of_birth = findViewById(R.id.date_of_birth);
+                    editor.putString(ACCOUNT_DOB, date_of_birth.getText().toString());
+                    editor.apply();
+                    open_Home_screen(); // opens Home class/screen
+                }
             }
         });
 
@@ -182,14 +208,24 @@ public class Profile_screen extends AppCompatActivity {
         button_settings.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                first_name = findViewById(R.id.first_name);
-                editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
-                last_name = findViewById(R.id.last_name);
-                editor.putString(ACCOUNT_LAST_NAME, last_name.getText().toString());
-                date_of_birth = findViewById(R.id.date_of_birth);
-                editor.putString(ACCOUNT_DOB, date_of_birth.getText().toString());
-                editor.apply();
-                open_Settings_screen(); // switches to Settings class/screen
+                if (first_name.isEnabled() && first_name.getText().toString().trim().equals("")){
+                    makeToast("Please enter first name!");
+                }
+                else if (last_name.isEnabled() && last_name.getText().toString().trim().equals("")){
+                    makeToast("Please enter last name!");
+                }
+                else {
+                    first_name.setEnabled(false);
+                    last_name.setEnabled(false);
+                    first_name = findViewById(R.id.first_name);
+                    editor.putString(ACCOUNT_FIRST_NAME, first_name.getText().toString());
+                    last_name = findViewById(R.id.last_name);
+                    editor.putString(ACCOUNT_LAST_NAME, last_name.getText().toString());
+                    date_of_birth = findViewById(R.id.date_of_birth);
+                    editor.putString(ACCOUNT_DOB, date_of_birth.getText().toString());
+                    editor.apply();
+                    open_Settings_screen(); // switches to Settings class/screen
+                }
             }
         });
     }
@@ -245,5 +281,9 @@ public class Profile_screen extends AppCompatActivity {
     public void makeToast(String message){
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    public boolean isValid(String input) {
+        return Pattern.matches("[a-zA-Z-. ]+",input);
     }
 }

@@ -182,7 +182,7 @@ public class Start_screen extends AppCompatActivity {
     // method used to check if entered valid first & last name
     public boolean isValid(String input) {
 
-        return Pattern.matches("[a-zA-Z]+",input);
+        return Pattern.matches("[a-zA-Z-. ]+",input);
     }
 
     // method used to check if user picked a valid DOB (no future days)
