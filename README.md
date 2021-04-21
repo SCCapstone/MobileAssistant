@@ -72,10 +72,11 @@ Unit Tests can be found in MobileAssistant/app/src/test/java/com/example/mobilea
 
 Behvavioral Tests can be found in MobileAssistant/app/src/androidTest/java/com/example/mobileassistant
 
-1. Complete the above steps in the Running section of the ReadMe to a point where the app has successfully launched at least to the Start Screen once.
-2. Close the Virtual Device and navigate in Android Studio to either app/src/androidTest/java/com/example/mobileassistant (Behavioral Tests) or app/src/test/java/com/example/mobileassistant (Unit Tests) in the Project View.
-3. Right click whatever test the user wishes to run and then left click Run 'TestName' where TestName is the name of whatever test the user wishes to run.
-4. If the test is a Behavioral Test, the Virtual Device will pop up and the user will be able to spectate the test and the results (pass or fail) will be displayed in the command line window of Android Studio. If the test is a Unit Test, the Virtual Device will not pop up but the test results will be visible in the command line window of Android Studio.
+1. Complete the above steps in the Running section of the ReadMe to a point where the app has successfully launched at least to the Home Screen once. This means the user should fill the start screen information out once before they test the app.
+2. Ensure that at least one command utilizing your Google account has been run, such as an "event" command. If you have successfully logged into your google account and linked it to the MobileAssistant app on the emulator, that should be sufficient.
+3. Close the Virtual Device and navigate in Android Studio to either app/src/androidTest/java/com/example/mobileassistant (Behavioral Tests) or app/src/test/java/com/example/mobileassistant (Unit Tests) in the Project View.
+4. Right click whatever test the user wishes to run and then left click Run 'TestName' where TestName is the name of whatever test the user wishes to run.
+5. If the test is a Behavioral Test, the Virtual Device will pop up and the user will be able to spectate the test and the results (pass or fail) will be displayed in the command line window of Android Studio. If the test is a Unit Test, the Virtual Device will not pop up but the test results will be visible in the command line window of Android Studio.
 
 # Authors
 
