@@ -155,7 +155,7 @@ public class Profile_screen extends AppCompatActivity {
                 }
                 else if(last_name.isEnabled()==true)
                 {
-                    if (!isValid(first_name.getText().toString()))
+                    if (!isValid(last_name.getText().toString()))
                         makeToast("Please enter a valid last name!");
                     else
                         first_name.setEnabled(false);
@@ -186,7 +186,7 @@ public class Profile_screen extends AppCompatActivity {
                 if (first_name.isEnabled() && !isValid(first_name.getText().toString())){
                     makeToast("Please enter a valid first name!");
                 }
-                else if (last_name.isEnabled() && !isValid(first_name.getText().toString())){
+                else if (last_name.isEnabled() && !isValid(last_name.getText().toString())){
                     makeToast("Please enter a valid last name!");
                 }
                 else {
