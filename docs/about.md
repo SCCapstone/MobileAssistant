@@ -1,5 +1,0 @@
-* [Cameron](https://github.com/SCCapstone/MobileAssistant/wiki/Cameron-Brandenburg-Log)
-* [Cooper](https://github.com/SCCapstone/MobileAssistant/wiki/Cooper-Gregory-Log)
-* [Dongyu](https://github.com/SCCapstone/MobileAssistant/wiki/Dongyu-Chen-Log)
-* [Henry](https://github.com/SCCapstone/MobileAssistant/wiki/Henry-Vy-Log)
-* [Hui](https://github.com/SCCapstone/MobileAssistant/wiki/Hui-Wang-Log)
