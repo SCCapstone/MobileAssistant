@@ -24,7 +24,6 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
     @Override
     protected String doInBackground(Object... objects)
     {
-        //System.out.println("*******************************");
 
         // CONSTANTS
         String BASE_URL = "https://api.openweathermap.org/data/2.5/weather?q=";
@@ -186,7 +185,7 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
                     ret_response += "The 8-day pressure in " + trueLocation + " is:";
 
                 else if(weatherInfo.equalsIgnoreCase("description"))
-                    ret_response += "The 8-day description in " + trueLocation + " is:";
+                    ret_response += "The 8-day weather description in " + trueLocation + " is:";
 
                 else
                     ret_response += "The 8-day forecast in " + trueLocation + " is:";
@@ -253,7 +252,6 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
             e.printStackTrace();
         }
 
-        //System.out.println("*******************************");
         return ret_response;
     }
 
