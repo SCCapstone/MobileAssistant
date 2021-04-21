@@ -1,1 +1,6 @@
+title: MobileAssistant
+
+header_pages: 
+ - about.md
+
 theme: minima
