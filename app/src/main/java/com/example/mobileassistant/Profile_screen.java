@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -35,16 +36,13 @@ public class Profile_screen extends AppCompatActivity {
     private static final String ACCOUNT_LAST_NAME = "LAST_NAME";
     private static final String ACCOUNT_DOB = "DOB";
 
-    //CONSTANTS for changing photos
-    private static final int NUM_PHOTOS = 5 ;
-    int[] images;
 
     private ImageButton change_photo;
     private Button button_home;
     private Button button_settings;
     private EditText first_name;
     private EditText last_name;
-    private EditText date_of_birth;
+    private TextView date_of_birth;
     private Button button_change_fn;
     private Button button_change_ln;
     private Button button_change_dob;
