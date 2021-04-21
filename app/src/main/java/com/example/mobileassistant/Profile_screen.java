@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -217,8 +218,9 @@ public class Profile_screen extends AppCompatActivity {
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     String picturePath = cursor.getString(columnIndex);
+                    Bitmap resized = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(picturePath), 85, 85, true);
                     ImageButton imageButton = findViewById(R.id.imageButton);
-                    imageButton.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                    imageButton.setImageBitmap(resized);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(ACCOUNT_PROFILE_PHOTO, picturePath);
                     editor.apply();

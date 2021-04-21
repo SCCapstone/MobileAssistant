@@ -175,10 +175,11 @@ public class Home_screen extends AppCompatActivity {
         chatListView = (ListView) findViewById(R.id.chatListView);
         btnSend = (FloatingActionButton) findViewById(R.id.button_send);
         messageEditText = (EditText) findViewById(R.id.messageEditText);
-        if (savedInstanceState != null) {
+       /* if (savedInstanceState != null) {
             ArrayList<ChatMessage> chatHistory = (ArrayList<ChatMessage>) savedInstanceState.getParcelable("chatMessageAdapter");
             chatMessageAdapter = new ChatMessageAdapter(this, chatHistory);
-        } else chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
+        } else chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());*/
+        chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
         chatListView.setAdapter(chatMessageAdapter);
 
         // change animation view from "off" to "start" then "on"
