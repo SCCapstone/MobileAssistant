@@ -86,8 +86,8 @@ public class Home_screen extends AppCompatActivity {
     static String location; // event location
     static String attend; // event attendees
     static boolean create = false; // create event/ search event
-    private int createEventsAction = -1; // used to keep conversation going
-    private int HelpActionIter = -1; //used to discern where the user is in the help command
+    public int createEventsAction = -1; // used to keep conversation going
+    public int HelpActionIter = -1; //used to discern where the user is in the help command
 
     // Key value for String that is used in the traffic intent setup
     private static final String EXTRA_MESSAGE = "com.example.mobileassistant.MESSAGE";
@@ -336,7 +336,7 @@ public class Home_screen extends AppCompatActivity {
     // To debug, call the bot's message to reply in a default way
     private Weather weather = new Weather(this);
 
-    private void sendUserMessage(String message) {
+    public void sendUserMessage(String message) {
         notTalking = false;
         eventRequest = message;  // used for events commands
         int action = checkForAction(message);
@@ -433,7 +433,7 @@ public class Home_screen extends AppCompatActivity {
 
 
     // Sends the bot's message to the chatListView
-    private void sendBotMessage(String message) {
+    public void sendBotMessage(String message) {
         setAnimationView(2);  // talking animation view
         ChatMessage chatMessage = new ChatMessage(message, false);
         chatMessageAdapter.add(chatMessage);
@@ -462,7 +462,7 @@ public class Home_screen extends AppCompatActivity {
     }
 
     // Checks for which action to take
-    private int checkForAction(String message) {
+    public int checkForAction(String message) {
         String[] eventKeywords = {"event", "events"};
         String[] searchKeywords = {"search", "look up", "news", "headlines"};
         String[] weatherKeywords = {"weather", "forecast", "temperature", "high", "low", "wind speed", "humidity", "description", "pressure"};
@@ -495,7 +495,9 @@ public class Home_screen extends AppCompatActivity {
 
             // Weather keywords
             if (message.toLowerCase().contains(weatherKeywords[i]) && (message.toLowerCase().contains("what is")
+                    || message.toLowerCase().contains("what's")
                     || message.toLowerCase().contains("how is")
+                    || message.toLowerCase().contains("how's")
                     || message.toLowerCase().contains("what will")))
                 return 9;
             else if (message.toLowerCase().contains("weather") || message.toLowerCase().contains("forecast"))
@@ -564,7 +566,7 @@ public class Home_screen extends AppCompatActivity {
         }
     */
     // This will take us to which conversation they are currently in
-    private void findChatFlag(String message, int num) {
+    public void findChatFlag(String message, int num) {
         // 1 = show events, 2 = create events, 3 = Google search,
         // 4 = weather, 5 = map search, 6 = news
 
@@ -594,7 +596,7 @@ public class Home_screen extends AppCompatActivity {
     }
 
     // Method for show events
-    private void searchEvents(String message) {
+    public void searchEvents(String message) {
         create = false;
         //System.out.println("search request is: "+message);
         //System.out.println("searching event");
@@ -630,7 +632,7 @@ public class Home_screen extends AppCompatActivity {
     //private int createEventsAction = 0;
     //private boolean loca = false;
     // Method for create events
-    private void createEvents(String message) {
+    public void createEvents(String message) {
         chatFlag = 2; // Lets bot know to keep the conversation going
         String botMessage = "";
         create = true;
@@ -667,7 +669,7 @@ public class Home_screen extends AppCompatActivity {
         else if (createEventsAction == 2) {
             location = message;
             createEventsAction++;
-            botMessage = "Do you want to add attendees?";
+            botMessage = "Do you want to add attendees? yes/no";
             // createEventsAction++;
             // System.out.println("in 2:" +createEventsAction);
             sendBotMessage(botMessage);
@@ -707,7 +709,7 @@ public class Home_screen extends AppCompatActivity {
 
     public int gameAction = 0;
 
-    private void confirmGamesAction(String message) {
+    public void confirmGamesAction(String message) {
         chatFlag = 8;
         if (message.equalsIgnoreCase("no")) {
             gameAction = 2;
@@ -730,7 +732,7 @@ public class Home_screen extends AppCompatActivity {
         }
     }
 
-    private void confirmHelpAction(String message) {
+    public void confirmHelpAction(String message) {
         chatFlag = 10;
         if (HelpActionIter == 0) {
             String botMessage = "I can help you with understanding what I can do, if you would like. I have a variety of capabilities that you can learn about including event management, weather, news, and many others. For info on events, please type events. For weather, please type weather. For news or general searching, please type search. For traffic and maps, please type map. Finally, if you would like to see the tutorial which you received when you first opened the app, you can type tutorial to open it. When you no longer need help, simply type exit.";
@@ -795,7 +797,7 @@ public class Home_screen extends AppCompatActivity {
     // 0: robotOff, 1: robotOn, 2:robotTalking, 3: robotStart
 
     // Method for pick corresponding animation view
-    private void setAnimationView(int state) {
+    public void setAnimationView(int state) {
         talkingAnimationView_dark = findViewById(R.id.talking_animationViewDark);
         robotStartAnimationView_dark = findViewById(R.id.robotStartViewDark);
         robotOffAnimationView_dark = findViewById(R.id.RobotOffViewDark);
