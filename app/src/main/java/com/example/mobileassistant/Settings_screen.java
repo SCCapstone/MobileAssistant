@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class Settings_screen extends AppCompatActivity {
 
     // CONSTANTS for account
@@ -124,6 +126,8 @@ public class Settings_screen extends AppCompatActivity {
     // method for opening Home screen
     public void open_Home_screen(){
         Intent intent = new Intent(this, Home_screen.class);
+        ArrayList<ChatMessage> chatMessages = getIntent().getParcelableArrayListExtra("chatMessages");
+        intent.putExtra("chatMessages", chatMessages);
         startActivity(intent);
     }
 

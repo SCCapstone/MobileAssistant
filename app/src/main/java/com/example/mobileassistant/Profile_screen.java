@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.DatePicker;
 import android.app.DatePickerDialog;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 import android.graphics.Color;
@@ -257,6 +259,8 @@ public class Profile_screen extends AppCompatActivity {
                 }
             }
         });
+
+
     }
 
 
@@ -302,7 +306,10 @@ public class Profile_screen extends AppCompatActivity {
 
     // method for opening Home screen
     public void open_Home_screen(){
+        //get chatMessage arraylist
+        ArrayList<ChatMessage> chatMessages = getIntent().getParcelableArrayListExtra("chatMessages");
         Intent intent = new Intent(this, Home_screen.class);
+        intent.putExtra("chatMessages", chatMessages);
         startActivity(intent);
     }
 

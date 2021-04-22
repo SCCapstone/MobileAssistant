@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.common.data.DataHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.alicebot.ab.AIMLProcessor;
@@ -47,7 +48,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 
-public class Home_screen extends AppCompatActivity {
+public class  Home_screen extends AppCompatActivity {
 
 
     // set up inactivity recording && animation view
@@ -62,7 +63,6 @@ public class Home_screen extends AppCompatActivity {
     private Button button_profile;
     private Button button_home;
     private Button button_settings;
-
 
     // Attributes used for sending messages
     private ListView chatListView;
@@ -156,25 +156,18 @@ public class Home_screen extends AppCompatActivity {
                 open_Settings_screen(); // opens Settings class/screen
             }
         });
-
-        // Button to get the intro
-       /* mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!isFragmentDisplayed) {
-                    displayFragment();
-                } else {
-                    closeFragment();
-                }
-            }
-        });*/
-
+        
         // Getting variables for attributes to send messages
-        chatListView = (ListView) findViewById(R.id.chatListView);
-        btnSend = (FloatingActionButton) findViewById(R.id.button_send);
-        messageEditText = (EditText) findViewById(R.id.messageEditText);
+        chatListView = findViewById(R.id.chatListView);
+        btnSend = findViewById(R.id.button_send);
+        messageEditText = findViewById(R.id.messageEditText);
+
        if (savedInstanceState == null) {
-           chatMessages = new ArrayList();
+           if(getIntent().getParcelableArrayListExtra("chatMessages") != null){
+               chatMessages = getIntent().getParcelableArrayListExtra("chatMessages");
+           }else {
+               chatMessages = new ArrayList();
+           }
         } else{
            chatMessages = savedInstanceState.getParcelableArrayList("chatMessages");
        }
@@ -959,18 +952,31 @@ public class Home_screen extends AppCompatActivity {
         }.start();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(getApplicationContext(), "onResumed called", Toast.LENGTH_LONG).show();
+    }
+
 
     //switch to other screens
     // Method for opening Profile screen
     public void open_Profile_screen() {
         Intent intent = new Intent(this, Profile_screen.class);
+        intent.putExtra("chatMessages", chatMessages);
         startActivity(intent);
     }
 
     // Method for opening Settings screen
     public void open_Settings_screen() {
         Intent intent = new Intent(this, Settings_screen.class);
+        intent.putExtra("chatMessages", chatMessages);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        chatMessages = savedInstanceState.getParcelableArrayList("chatMessages");
     }
 
     @Override
