@@ -60,8 +60,9 @@ public class SettingsScreenBehaviorTest extends TestCase {
             Espresso.onView(withId(R.id.last_name)).perform(typeText(exampleString2), closeSoftKeyboard()).check(matches(withText(exampleString2)));
             Espresso.onView(withId(R.id.date_of_birth)).perform(click());
             Espresso.onView(withText("OK")).perform(click());
-
+            Thread.sleep(2000);
             Espresso.onView(withId(R.id.button_confirm)).perform(click());
+            Thread.sleep(1000);
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();

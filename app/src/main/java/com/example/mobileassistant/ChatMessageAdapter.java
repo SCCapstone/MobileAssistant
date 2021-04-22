@@ -1,19 +1,18 @@
 package com.example.mobileassistant;
 
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 // A class that extends Android's ArrayAdapter and is used to display chat messages in the chatListView on the Home Screen
-public class ChatMessageAdapter extends ArrayAdapter<ChatMessage>{
+public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 
     private static final int USER_MESSAGE = 0, BOT_MESSAGE = 1;
 
@@ -59,13 +58,5 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage>{
             }
         });
         return convertView;
-    }
-
-    public ArrayList<ChatMessage> getAllItems(){
-        ArrayList<ChatMessage> result = new ArrayList<>();
-        for (int i = 0; i < getCount(); i++) {
-            result.add(getItem(i));
-        }
-        return result;
     }
 }

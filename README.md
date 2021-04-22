@@ -59,7 +59,7 @@ You can send any message to the assistant, and it will converse with you, but it
 * search University of South Carolina top 5 results
 7. The user can ask for news by entering the "news" keyword or "headlines" keyword anywhere in your message. The first time the user asks for news, they will be informed that they can ask for news relating to a specific/topic or area, by specifying the subject or location they would like in their request. Example :
 * covid 19 news
-8. Typing "weather", "forecast", or "temperature" will initiate a series of questions to the user related to what weather information that they would like to receive, such as the specific information they would like (if any) and the location they would like to know about.
+8. Typing "weather" or "forecast" will initiate a series of questions to the user related to what weather information that they would like to receive, such as the specific information they would like (if any) and the location they would like to know about.
 9. If the user asks for certain weather information by stating "what is" or "how is" along with one of the above weather related terms and the location they would like to know about, they will not need to go through the prompts to ascertain their location and request. For example :
 * what is the forecast in Philadelphia PA
 11. If the user asks the assistant for "directions to" a location using the aforementioned keyword Google Maps will open with directions to that location.

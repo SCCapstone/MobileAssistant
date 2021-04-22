@@ -38,7 +38,7 @@ public class RockPaperScissors {
             return "It's a tie!";
         } else if ((message.equalsIgnoreCase("rock")
                 && botMove.equalsIgnoreCase("scissors"))
-                || (botMove.equalsIgnoreCase("scissors")
+                || (message.equalsIgnoreCase("scissors")
                 && botMove.equalsIgnoreCase("paper"))
                 || (message.equalsIgnoreCase("paper")
                 && botMove.equalsIgnoreCase("rock"))) {

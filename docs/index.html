@@ -7,6 +7,7 @@
     </head>
     <body>
         <nav id="main-nav">
+            <a id="gh-button" href="https://github.com/SCCapstone/MobileAssistant">View on GitHub</a>
             <ul id="main-nav-items">
                 <li id="main-page"><a href="index.html">MobileAssistant</a></li>
                 <li id="about-page"><a href="about.html">About</a></li>
@@ -14,7 +15,7 @@
         </nav>
 
         <div id="main-content">
-          <h2>Demo Video</h2>
+          <h2 class="subheader">Demo Video</h2>
           
           <div id="video-container">
             <iframe src="https://www.youtube.com/embed/NpEaa2P7qZI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -26,20 +27,68 @@
 
             <div class="mySlides fade">
               <div class="numbertext">1 / 3</div>
-              <img src="images/placeholder.jpg" style="width:100%">
-              <div class="text">Caption One</div>
+              <img src="images/home-screen-text.PNG" style="width:100%">
+              <div class="text">Home Screen</div>
             </div>
             
             <div class="mySlides fade">
               <div class="numbertext">2 / 3</div>
-              <img src="images/placeholder.jpg" style="width:100%">
-              <div class="text">Caption Two</div>
+              <img src="images/home-screen-no-text.PNG" style="width:100%">
+              <div class="text">Home Screen with no text</div>
             </div>
             
             <div class="mySlides fade">
               <div class="numbertext">3 / 3</div>
-              <img src="images/placeholder.jpg"style="width:100%">
-              <div class="text">Caption Three</div>
+              <img src="images/start-screen.PNG"style="width:100%">
+              <div class="text">Start Screen</div>
+            </div>
+
+            <div class="mySlides fade">
+              <div class="numbertext">3 / 3</div>
+              <img src="images/profile-screen.PNG"style="width:100%">
+              <div class="text">Profile Screen</div>
+            </div>
+
+            <div class="mySlides fade">
+              <div class="numbertext">3 / 3</div>
+              <img src="images/settings-screen.PNG"style="width:100%">
+              <div class="text">Settings Screen</div>
+            </div>
+
+            <div class="mySlides fade">
+              <div class="numbertext">3 / 3</div>
+              <img src="images/forecast.PNG"style="width:100%">
+              <div class="text">Weather Forecast</div>
+            </div>
+
+            <div class="mySlides fade">
+              <div class="numbertext">3 / 3</div>
+              <img src="images/create-event.PNG"style="width:100%">
+              <div class="text">Creating Events</div>
+            </div>
+
+            <div class="mySlides fade">
+              <div class="numbertext">3 / 3</div>
+              <img src="images/traffic-screen.PNG"style="width:100%">
+              <div class="text">Traffic Screen</div>
+            </div>
+
+            <div class="mySlides fade">
+              <div class="numbertext">3 / 3</div>
+              <img src="images/search.PNG"style="width:100%">
+              <div class="text">Searching</div>
+            </div>
+
+            <div class="mySlides fade">
+              <div class="numbertext">3 / 3</div>
+              <img src="images/news.PNG"style="width:100%">
+              <div class="text">Searching News</div>
+            </div>
+
+            <div class="mySlides fade">
+              <div class="numbertext">3 / 3</div>
+              <img src="images/dark-mode.PNG"style="width:100%">
+              <div class="text">Dark Mode</div>
             </div>
             
             <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
@@ -51,7 +100,15 @@
             <div style="text-align:center">
               <span class="dot" onclick="currentSlide(1)"></span> 
               <span class="dot" onclick="currentSlide(2)"></span> 
-              <span class="dot" onclick="currentSlide(3)"></span> 
+              <span class="dot" onclick="currentSlide(3)"></span>
+              <span class="dot" onclick="currentSlide(4)"></span>
+              <span class="dot" onclick="currentSlide(5)"></span>
+              <span class="dot" onclick="currentSlide(6)"></span>
+              <span class="dot" onclick="currentSlide(7)"></span>
+              <span class="dot" onclick="currentSlide(8)"></span>
+              <span class="dot" onclick="currentSlide(9)"></span>
+              <span class="dot" onclick="currentSlide(10)"></span>
+              <span class="dot" onclick="currentSlide(11)"></span>
             </div>
 
           <h2>Why Use MobileAssistant?</h2>
@@ -64,6 +121,7 @@
 
             <p><strong>In order to access your google calender to edit or get information about events, user would have to give the app permission to access the calendar. When commands about events entered in the chat, the app will ask the user to either login into your gmail or to pick an existing gmail and ask for permissions. (Please note: The app is still under “testing”, so if you would like to test the app please give us your gmail address because we have to add your gmail into the “testers” list for the Google API Console, otherwise you won’t have the permission to use the Google Calendar API and will cause error when run commands relate to events.)</strong></p>
 
+          <h2>Commands</h2>
             <ul>
               <li>If the user types in something with the keywords “show event(s)” then by default you will receive information about your next event.Or you can specify the number of events you would like to see by including a number in your message. Example Commands:
                 <ul>
@@ -74,34 +132,22 @@
               <li>The user can specify which event they would like to see with the “show event” command by including the name of the event in quotations. Example commands :
                 <ul>
                   <li>show event “event”</li>
+                  <li><strong>(Please note: event label has to be between double quotes.)</strong></li>
                 </ul>
               </li>
-            </ul>
-
-            <p><strong>(Please note: event label has to be between double quotes.)</strong></p>
-
-            <ul>
               <li>If the user sends a message with the keywords “create event” then you will create an event on your Google Calender. You can specify information about the Google Calender when you use the “create event” keyword. You can create a event with a specific date and time by using a keyword “on” for the date and “am/pm” for the time. Also, the user will be asked if he/she wants to add a location and attendees for the creating event. Example Commands:
                 <ul>
                   <li>create event for a specific date &amp; time     -    create event “event” on Feb 27th from 3pm to 4pm</li>
                   <li>create event for a specific date only (whole day event)    - create event “whole” on Feb 28th</li>
+                  <li><strong>(Please note: the event label has to be within double quotes and date has to be after the keyword “on”, time has to be followed by either “am” or “pm”)</strong></li>
                 </ul>
               </li>
-            </ul>
-
-            <p><strong>(Please note: the event label has to be within double quotes and date has to be after the keyword “on”, time has to be followed by either “am” or “pm”)</strong></p>
-
-            <ul>
               <li>The user can also create recurring events by specifying the day of the week when the event will occur and a stop date by using the keyword “until” follow by the end date (month and year). Example commands:
                 <ul>
                   <li>create event “Event” repeat every Tuesday and Thursday until April, 2021</li>
+                  <li><strong>(Please note: Reccuring events must have a stop date! the event label has to be within double quotes, time has to be followed by either “am” or “pm”, end date has to be after the keyword “until” with the format “month, year”)</strong></li>
                 </ul>
               </li>
-            </ul>
-
-            <p><strong>(Please note: Reccuring events must have a stop date! the event label has to be within double quotes, time has to be followed by either “am” or “pm”, end date has to be after the keyword “until” with the format “month, year”)</strong></p>
-
-            <ul>
               <li>The user can ask the assistant to search the internet using the “search” keyword or “look up” keyword. This will return a set of links and their HTML titles if they are available. Example :
                 <ul>
                   <li>search Columbia SC</li>

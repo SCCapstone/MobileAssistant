@@ -10,45 +10,42 @@
 
     <Button
         android:id="@+id/button_dark_mode"
-        android:layout_width="150dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginBottom="350dp"
         android:background="@color/buttonColor"
         android:text="Dark Mode"
         android:textColor="@color/textColor"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/screenButtonLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_signout"
-        android:layout_width="150dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginBottom="100dp"
         android:background="@color/buttonColor"
         android:text="Sign Out"
         android:textColor="@color/design_default_color_error"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/screenButtonLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_light_mode"
-        android:layout_width="150dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginBottom="450dp"
         android:background="@color/buttonColor"
         android:text="Light Mode"
         android:textColor="@color/textColor"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/screenButtonLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/screenButtonLayout"

@@ -122,7 +122,7 @@ public class Start_screen extends AppCompatActivity {
                 else if (!isValid(ln))
                     makeToast("Please Enter a Valid Last Name, no numbers should be included!");
                 else if (!validDOB(dob))
-                    makeToast("Please Enter a Valid Date of Birth, no future dates or current date");
+                    makeToast("Please Enter a Valid Date of Birth, no future dates");
                 else {
                     // keep the data for account
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -182,7 +182,7 @@ public class Start_screen extends AppCompatActivity {
     // method used to check if entered valid first & last name
     public boolean isValid(String input) {
 
-        return Pattern.matches("[a-zA-Z]+",input);
+        return Pattern.matches("[a-zA-Z-. ]+",input);
     }
 
     // method used to check if user picked a valid DOB (no future days)
@@ -192,11 +192,7 @@ public class Start_screen extends AppCompatActivity {
         int year = cal.get(Calendar.YEAR);
         int mon = cal.get(Calendar.MONTH)+1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        String valid = mon+"/"+day+"/"+year;
-        if (input.equals(valid)) {
-            return false;
-        }
-        else {
+        //String valid = mon+"/"+day+"/"+year;
             String[] splitSt = input.split("/");
             int m = Integer.parseInt(splitSt[0]);
             int d = Integer.parseInt(splitSt[1]);
@@ -210,7 +206,6 @@ public class Start_screen extends AppCompatActivity {
                 return false;
             else
                 return true;
-        }
     }
 
 }

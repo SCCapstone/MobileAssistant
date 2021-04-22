@@ -35,7 +35,7 @@ public class RockPaperScissorsTest extends TestCase {
 
     @Test
     public void testCheckUserGestureScissors() {
-        String expectedScissors = "Scissors";
+        String expectedScissors = "scissors";
         String returnedGesture = rps.checkUserGesture(expectedScissors);
         assertEquals(expectedScissors,returnedGesture);
     }
