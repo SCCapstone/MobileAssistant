@@ -126,8 +126,15 @@ h3 {
   margin: 10px;
 }
 
-.mySlides {display: none}
-img {vertical-align: middle;}
+.mySlides {
+  display: none;
+  width: 75%;
+  margin: auto;
+}
+
+img {
+  vertical-align: middle;
+}
 
 /* Slideshow container */
 .slideshow-container {
@@ -168,7 +175,7 @@ img {vertical-align: middle;}
   color: rgba(0,0,0,0.8);
   font-size: 15px;
   position: absolute;
-  width: 100%;
+  width: 75%;
   text-align: center;
 }
 
