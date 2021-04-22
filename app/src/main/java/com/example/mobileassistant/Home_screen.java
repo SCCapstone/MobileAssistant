@@ -69,6 +69,7 @@ public class Home_screen extends AppCompatActivity {
     private FloatingActionButton btnSend;
     private EditText messageEditText;
     private ChatMessageAdapter chatMessageAdapter;
+    private ArrayList<ChatMessage> chatMessages;
 
     //set up the bot
     public Bot bot;
@@ -172,7 +173,12 @@ public class Home_screen extends AppCompatActivity {
         chatListView = (ListView) findViewById(R.id.chatListView);
         btnSend = (FloatingActionButton) findViewById(R.id.button_send);
         messageEditText = (EditText) findViewById(R.id.messageEditText);
-        chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
+       if (savedInstanceState == null) {
+           chatMessages = new ArrayList();
+        } else{
+           chatMessages = savedInstanceState.getParcelableArrayList("chatMessages");
+       }
+        chatMessageAdapter = new ChatMessageAdapter(this,chatMessages);
         chatListView.setAdapter(chatMessageAdapter);
 
         // change animation view from "off" to "start" then "on"
@@ -211,7 +217,7 @@ public class Home_screen extends AppCompatActivity {
 
                 messageEditText.setText("");
                 chatListView.setSelection(chatMessageAdapter.getCount() - 1);
-
+                chatMessageAdapter.notifyDataSetChanged();
                 hideKeyboard(messageEditText);
             }
         });
@@ -966,4 +972,11 @@ public class Home_screen extends AppCompatActivity {
         Intent intent = new Intent(this, Settings_screen.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putParcelableArrayList("chatMessages", chatMessages);
+    }
+
 }
