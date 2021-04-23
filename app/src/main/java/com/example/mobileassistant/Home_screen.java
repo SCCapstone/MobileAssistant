@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class Home_screen extends AppCompatActivity {
@@ -63,6 +64,11 @@ public class Home_screen extends AppCompatActivity {
     private Button button_home;
     private Button button_settings;
 
+    // ACCOUNT PREFERENCES
+    private static final String ACCOUNT_PREFERENCES = "ACCOUNT";
+    private static final String ACCOUNT_FIRST_NAME = "FIRST_NAME";
+    private static final String ACCOUNT_LAST_NAME = "LAST_NAME";
+    private static final String ACCOUNT_DOB = "DOB";
 
     // Attributes used for sending messages
     private ListView chatListView;
@@ -266,6 +272,26 @@ public class Home_screen extends AppCompatActivity {
             }
         };
         startHandler();
+
+        // Set first/last name through bot
+        SharedPreferences accPref = getSharedPreferences(ACCOUNT_PREFERENCES, MODE_PRIVATE);
+        String accountFirstName = accPref.getString(ACCOUNT_FIRST_NAME, null);
+        String accountLastName = accPref.getString(ACCOUNT_LAST_NAME, null);
+        String accountDOB = accPref.getString(ACCOUNT_DOB, null);
+
+        // Get age
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int birthYear = Integer.parseInt(accountDOB.substring(accountDOB.length()-4));
+
+        // Send to bot
+        chat.multisentenceRespond("my first name is " + accountFirstName);
+        chat.multisentenceRespond("my last name is " + accountLastName);
+        chat.multisentenceRespond("my name is " + accountFirstName + " " + accountLastName);
+        chat.multisentenceRespond("my birthday is " + accountDOB.replace("/", " "));
+        chat.multisentenceRespond("I was born on " + accountDOB.replace("/", " "));
+        chat.multisentenceRespond("my age is " + (year - birthYear));
+
     }
 
     public void hideKeyboard(View view) {
