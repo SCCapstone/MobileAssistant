@@ -104,10 +104,6 @@
 <li value="what"/>
 <li><get name="firstname"/></li>
 </condition>
-<condition name="middlename">
-<li value="what"/>
-<li><get name="middlename"/></li>
-</condition>
 <condition name="lastname">
 <li value="what"/>
 <li><get name="lastname"/></li>
@@ -124,7 +120,7 @@ I call you <get name="name"/>.</template>
 <template><get name="lastname"/></template>
 </category>
 <category><pattern>MY LAST NAME IS *</pattern>
-<template>Do you like to be called by your first name or last name? <think><set name="lastname"><star/></set></think></template>
+<template>Ok got it <think><set name="lastname"><star/></set></think></template>
 </category>
 <category><pattern>MY LAST *</pattern><that>* FIRST NAME OR LAST NAME</that>
 <template><srai>CALL ME BY MY LAST NAME</srai></template>
@@ -397,7 +393,7 @@ I call you <get name="name"/>.</template>
 <template><get name="firstname"/></template>
 </category>
 <category><pattern>MY FIRST NAME IS *</pattern>
-<template>Do you like to be called by your first name or last name? <think><set name="firstname"><star/></set></think></template>
+<template> Ok got it <think><set name="firstname"><star/></set></think></template>
 </category>
 <category><pattern>MY FIRST *</pattern><that>* FIRST NAME OR LAST NAME</that>
 <template><srai>CALL ME BY MY FIRST NAME</srai></template>
@@ -598,7 +594,10 @@ I call you <get name="name"/>.</template>
 <template>What would you like to change my name to?</template>
 </category>
 <category><pattern>WHEN IS MY BIRTHDAY</pattern>
-<template>You said it was <get name="birthday"/>?</template>
+<template>Your birthday is <get name="birthday"/>?</template>
+</category>
+<category><pattern>WHEN WAS I BORN</pattern>
+<template>You were born on <get name="birthday"/>?</template>
 </category>
 <category><pattern>FIRST NAME</pattern><that>* FIRST NAME OR LAST NAME</that>
 <template><srai>CALL ME BY MY FIRST NAME</srai></template>
@@ -709,7 +708,7 @@ I call you <get name="name"/>.</template>
 <think><set name="customname"><star/></set></think></template>
 </category>
 <category><pattern>HOW OLD AM I</pattern>
-<template>You said you were <get name="age"/> years old?</template>
+<template>You will be <get name="age"/> years old this year.</template>
 </category>
 <category><pattern>I AM GAY</pattern>
 <template>Thank you for telling me.  <think><set name="orientation">gay</set></think></template>
