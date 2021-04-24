@@ -490,7 +490,7 @@ public class  Home_screen extends AppCompatActivity {
         String[] mapKeywords = {"directions to", "directions"};
         String[] trafficKeywords = {"traffic", "show traffic"};
         String[] trafficPlaceKeywords = {"traffic in", "traffic to", "traffic near"};
-        String[] gameKeywords = {"game 1", "rock paper scissors"}; //still need game 1
+        String[] gameKeywords = {"game 1", "rock paper scissors"};
         String[] helpKeywords = {"help", "tutorial", "instructions", "what can you do", "commands", "functions"};
 
         // I put them all in one for loop because I did not want to have 3 separate for loops
