@@ -204,7 +204,10 @@ public class Profile_screen extends AppCompatActivity {
                 }
                 else if(date_of_birth.isEnabled()==true)
                 {
-                    date_of_birth.setEnabled(false);
+                    if (validDOB(date_of_birth.getText().toString()))
+                        date_of_birth.setEnabled(false);
+                    else
+                        makeToast("Please pick a valid date (no future date allowed)");
                 }
             }
         });
@@ -298,6 +301,7 @@ public class Profile_screen extends AppCompatActivity {
             }
         }
     }
+
     // method for opening Settings screen
     public void open_Settings_screen(){
         Intent intent = new Intent(this, Settings_screen.class);
@@ -320,5 +324,27 @@ public class Profile_screen extends AppCompatActivity {
     }
     public boolean isValid(String input) {
         return Pattern.matches("[a-zA-Z-. ]+",input);
+    }
+
+    // method used to check if user picked a valid DOB (no future days)
+    public boolean validDOB(String input) {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int mon = cal.get(Calendar.MONTH)+1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        //String valid = mon+"/"+day+"/"+year;
+        String[] splitSt = input.split("/");
+        int m = Integer.parseInt(splitSt[0]);
+        int d = Integer.parseInt(splitSt[1]);
+        int y = Integer.parseInt(splitSt[2]);
+
+        if (y > year)
+            return false;
+        else if (year == y && mon == m && d > day)
+            return false;
+        else if (year == y && m > mon)
+            return false;
+        else
+            return true;
     }
 }
