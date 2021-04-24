@@ -180,6 +180,9 @@ public class  Home_screen extends AppCompatActivity {
        }
         chatMessageAdapter = new ChatMessageAdapter(this,chatMessages);
         chatListView.setAdapter(chatMessageAdapter);
+        if(chatMessageAdapter.getCount() > 0) {
+            chatListView.setSelection(chatMessageAdapter.getCount() - 1);
+        }
 
         // change animation view from "off" to "start" then "on"
         messageEditText.setOnClickListener(new View.OnClickListener() {
