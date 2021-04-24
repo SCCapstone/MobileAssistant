@@ -117,6 +117,7 @@ public class Profile_screen extends AppCompatActivity {
         date_of_birth.setText(accountDOB);
         date_of_birth.setEnabled(false);
 
+        //this sets up the date picker when the user clicks on the
         date_of_birth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

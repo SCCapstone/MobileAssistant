@@ -755,6 +755,7 @@ public class  Home_screen extends AppCompatActivity {
         }
     }
 
+    //the chat will continue to return to this command so long as the help action has not been ended.
     public void confirmHelpAction(String message) {
         chatFlag = 10;
         if (HelpActionIter == 0) {
@@ -763,6 +764,7 @@ public class  Home_screen extends AppCompatActivity {
             sendBotMessage(botMessage);
             return;
         }
+        //if this is not the first message, one of the responses will be one of these.
         if (HelpActionIter == 1) {
             if (message.toLowerCase().contains("events")) {
                 String botMessage = "I can help you create and check your events within my app! To create an event, type create event. I will then ask you a series of questions about the event you wish to create. To show your already made events, type show event. Make sure that your google account is linked to my app!";

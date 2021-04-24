@@ -9,12 +9,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-
+//this class contains one method which allows the input of a String, the search query,
+ //it then condenses this search query down to exclude the words which distinguished it as a query, isolates the number of results requested,
+ //and then returns those results corresponding to the query
 public class gsearch extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... query)
     {
+        //first this class reduces the input query down to only the portions which are intended to be searched for. it excludes the search terms which distinguish it as well as isolating the number of results
         String numresults = "1";
         boolean toolongflag = false;
         if(query[0].contains("search") || query[0].contains("Google") || query[0].contains("look up"))
@@ -69,8 +72,9 @@ public class gsearch extends AsyncTask<String, String, String> {
         {
             numresults = "6";
         }
+        //next we access the search results of the query
         Document searches;
-        String URL = "https://www.google.com/search?q="+query[0]+"&num="+numresults;//this is currently hard-coded to output just 1 result but I can change that
+        String URL = "https://www.google.com/search?q="+query[0]+"&num="+numresults;
         try
         {
             searches = Jsoup.connect(URL).get();
@@ -83,6 +87,7 @@ public class gsearch extends AsyncTask<String, String, String> {
         String result = "";
         Elements outputs = searches.select("a[href]");
         int numresultsint = Integer.parseInt(numresults);
+        //now that we have retrieved the URL of the search results, we read through this information and isolate the links and titles of the results
         for(int i=9;i<9+numresultsint;i++)
         {
             Element output=outputs.get(i);
@@ -157,7 +162,7 @@ public class gsearch extends AsyncTask<String, String, String> {
         {
             result="I'm sorry, my API seems to have been unable to resolve your request. Try this - \n" + retURL;
         }
-        if(toolongflag)
+        if(toolongflag) //if somehow this is still empty, it is because the results were too long, which is likely because the google targeted advertisements overflowed the search results
         {
             result="I'm sorry, advertisements seem to be intruding on your google search. Please retry your search or try this link - \n" + retURL;
         }
