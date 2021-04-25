@@ -31,6 +31,7 @@ public class CalendarUnitTest extends TestCase{
 
     @Test
     public void testFindNumber() {
+        // tests to get correct requested number of events
         String str = "show me next 5 events";
         assertEquals("5",cal.findNum(str));
 
@@ -40,6 +41,7 @@ public class CalendarUnitTest extends TestCase{
 
     @Test
     public void testGetEventTime() {
+        // tests to pick up correct event time from user message
         String str = "2021-05-28T09:00:00-05:00";
         String ret = Arrays.toString(cal.getInfo(str));
         assertEquals("[2021-05-28, 9:00am]",ret);
@@ -51,6 +53,8 @@ public class CalendarUnitTest extends TestCase{
 
     @Test
     public void testGetEventDetails() {
+        // tests for getting correct date, start time, end time, and summary/label of event
+        // and converted to more user friendly format
         DateTime sDT = new DateTime("2021-05-28T09:00:00-05:00");
         DateTime eDT = new DateTime("2021-05-28T13:00:00-05:00");
         EventDateTime start = new EventDateTime()
@@ -81,6 +85,7 @@ public class CalendarUnitTest extends TestCase{
 
     @Test
     public void testConvertTime() {
+        // tests for converting time to correct format for google calendar
         String str = "3:30pm";
         assertEquals("15:30:00",cal.convertTime(str));
         str = "9am";
@@ -93,6 +98,8 @@ public class CalendarUnitTest extends TestCase{
 
     @Test
     public void testStartEndT() {
+        // tests for getting correct start and end time of event from user input
+        // and convert to correct format for google calendar
         Home_screen.eventRequest = "create event on May 3rd from 9am to 10 am";
         String ret = Arrays.toString(cal.startEndT());
         assertEquals("[09:00:00, 10:00:00]",ret);
@@ -104,6 +111,7 @@ public class CalendarUnitTest extends TestCase{
 
     @Test
     public void testGetDate() throws ParseException {
+        // tests to get correct date for event from user input and convert to correct format for google calendar
         Home_screen.eventRequest = "create event on May 3rd";
         assertEquals("05-03",cal.getDate());
 
@@ -113,6 +121,8 @@ public class CalendarUnitTest extends TestCase{
 
     @Test
     public void testGetWeek() {
+        // tests for getting correct day of the week from user input
+        // and convert to correct format for future uses
         Home_screen.eventRequest = "create event every monday and Wed";
         assertEquals(Arrays.asList(2,4),cal.getWeek());
 
@@ -125,6 +135,7 @@ public class CalendarUnitTest extends TestCase{
 
     @Test
     public void testEndDate() throws ParseException {
+        // tests for getting correct end day for recurring events and convert into correct format for google calendar
         Home_screen.eventRequest = "create event every mon and tues until May, 2021";
         assertEquals("202105",cal.endDate());
 

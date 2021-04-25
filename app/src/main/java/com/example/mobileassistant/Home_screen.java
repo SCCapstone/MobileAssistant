@@ -56,7 +56,7 @@ public class  Home_screen extends AppCompatActivity {
     Handler handler;
     Runnable r;
     boolean notTalking = true;
-    //boolean darkMode = Settings_screen.dark;
+    // sharedPreferences used to save light or dark mode
     SharedPreferences sharedPreferences;
     boolean darkMode;
 
@@ -120,6 +120,7 @@ public class  Home_screen extends AppCompatActivity {
             return;
         }
 
+        // get mode of the app night/light
         sharedPreferences = getSharedPreferences("NIGHT", MODE_PRIVATE);
         darkMode = sharedPreferences.getBoolean("isDarkModeOn", false);
         //used for the intro:
@@ -132,7 +133,7 @@ public class  Home_screen extends AppCompatActivity {
                 mButton.setText(R.string.close);
             }
         }*/
-        setAnimationView(0); // default/ off animation view
+        setAnimationView(0); // default off animation view
 
         //hoping that this fixes network errors for gsearch
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -360,7 +361,7 @@ public class  Home_screen extends AppCompatActivity {
     private Weather weather = new Weather(this);
 
     public void sendUserMessage(String message) {
-        notTalking = false;
+        notTalking = false; // used to set up corresponding animation mode
         eventRequest = message;  // used for events commands
         int action = checkForAction(message);
         if (game2IsOn) {
@@ -823,6 +824,7 @@ public class  Home_screen extends AppCompatActivity {
 
     // Method for pick corresponding animation view
     public void setAnimationView(int state) {
+        // get all the animation views
         talkingAnimationView_dark = findViewById(R.id.talking_animationViewDark);
         robotStartAnimationView_dark = findViewById(R.id.robotStartViewDark);
         robotOffAnimationView_dark = findViewById(R.id.RobotOffViewDark);
@@ -843,18 +845,21 @@ public class  Home_screen extends AppCompatActivity {
 
         // chat is active
         if (state == 2) {
-            robotStartAnimationView_dark.setVisibility(View.GONE);  // remove original animation
+            // Hide unnecessary animation views
+            robotStartAnimationView_dark.setVisibility(View.GONE);
             robotOffAnimationView_dark.setVisibility(View.GONE);
             robotOnAnimationView_dark.setVisibility(View.GONE);
             robotStartAnimationView_light.setVisibility(View.GONE);
             robotOffAnimationView_light.setVisibility(View.GONE);
             robotOnAnimationView_light.setVisibility(View.GONE);
             if (darkMode) {
+                // shows dark talking animation view
                 talkingAnimationView_light.setVisibility(View.GONE);
-                talkingAnimationView_dark.setVisibility(View.VISIBLE);  // shows talking animation
+                talkingAnimationView_dark.setVisibility(View.VISIBLE);
             } else {
+                // shows light talking animation view
                 talkingAnimationView_dark.setVisibility(View.GONE);
-                talkingAnimationView_light.setVisibility(View.VISIBLE);  // shows talking animation
+                talkingAnimationView_light.setVisibility(View.VISIBLE);
             }
         }
         // no activity for 30 secs or robot is sleeping

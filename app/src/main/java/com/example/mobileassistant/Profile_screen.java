@@ -205,6 +205,7 @@ public class Profile_screen extends AppCompatActivity {
                 }
                 else if(date_of_birth.isEnabled()==true)
                 {
+                    // check for valid date of birth (no future dates are allowed)
                     if (validDOB(date_of_birth.getText().toString()))
                         date_of_birth.setEnabled(false);
                     else

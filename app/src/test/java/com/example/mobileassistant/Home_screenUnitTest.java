@@ -17,14 +17,17 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class Home_screenUnitTest extends TestCase {
-    private Home_screen mockHs;
+    private Home_screen mockHs;  // a Home_screen activity mock up
     @Before
     public void setUp() {
         mockHs = mock(Home_screen.class);
     }
+
     @Test
     public void testCheckForAction() {
+        // actually run the mock up activity when checkForAction method got called
         doCallRealMethod().when(mockHs).checkForAction(anyString());
+
         // events
         assertEquals(1,mockHs.checkForAction("show me event"));
         assertEquals(1,mockHs.checkForAction("show me events"));
@@ -98,19 +101,24 @@ public class Home_screenUnitTest extends TestCase {
     @Test
     public void testSearchEvents() {
         doCallRealMethod().when(mockHs).searchEvents(anyString());
+
+        // test for getting correct event id
         String events = "show me \"event\" event";
         String id = "event";
         mockHs.searchEvents(events);
         assertEquals(id,mockHs.id);
 
+        // test for getting correct default number of event (1)
         events = "show me event";
         mockHs.searchEvents(events);
         assertEquals(1,mockHs.number);
 
+        // test for getting correct default number of events(5)
         events = "show me upcoming events";
         mockHs.searchEvents(events);
         assertEquals(5,mockHs.number);
 
+        // test for getting correct number of events that requested by the user
         events = "show me next 12 events";
         mockHs.searchEvents(events);
         assertEquals(12,mockHs.number);
@@ -224,6 +232,8 @@ public class Home_screenUnitTest extends TestCase {
         doCallRealMethod().when(mockHs).confirmHelpAction(anyString());
         int count = 1;
         //mockHs.HelpActionIter = 0;
+
+        // tests for getting corresponding bot responds
         mockHs.confirmHelpAction("help");
         verify(mockHs, times(1))
                 .sendBotMessage("I can help you with understanding what I can do," +
