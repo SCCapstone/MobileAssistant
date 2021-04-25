@@ -52,7 +52,6 @@ public class Start_screen extends AppCompatActivity {
 
         // Keeps track of Light/Night Mode, saves the state of Light/Dark mode when reopened
         sharedPreferences = getSharedPreferences(NIGHT_PREFERENCES, MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
         final Boolean isDarkModeOn = sharedPreferences.getBoolean(DARK_MODE, false);
 
         // Saves the current state when user exits app for Light/Dark Mode

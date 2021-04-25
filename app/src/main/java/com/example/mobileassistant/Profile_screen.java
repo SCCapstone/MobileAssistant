@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 
 public class Profile_screen extends AppCompatActivity {
 
+    //requests storage permission for higher sdk versions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -61,7 +62,8 @@ public class Profile_screen extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
 
-    //used for the onClick for the image button
+    //checks whether the app is allowed to read phone file system files;
+    // used for the onClick for the image button
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have read permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -75,6 +77,7 @@ public class Profile_screen extends AppCompatActivity {
             );
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,9 +94,11 @@ public class Profile_screen extends AppCompatActivity {
         button_change_ln = findViewById(R.id.button_change_ln);
         button_change_dob = findViewById(R.id.button_change_dob);
 
+        //sets the default icon
         change_photo.setImageResource(R.drawable.user_icon);
-        // Use ACCOUNT_PREFERENCES to display user information
 
+
+        // Use ACCOUNT_PREFERENCES to display user information
         sharedPreferences = getSharedPreferences(ACCOUNT_PREFERENCES, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -277,6 +282,7 @@ public class Profile_screen extends AppCompatActivity {
             verifyStoragePermissions(this);
     }
 
+    //picks an image and set it as the profile photo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

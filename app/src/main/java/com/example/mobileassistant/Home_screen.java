@@ -123,16 +123,7 @@ public class  Home_screen extends AppCompatActivity {
         // get mode of the app night/light
         sharedPreferences = getSharedPreferences("NIGHT", MODE_PRIVATE);
         darkMode = sharedPreferences.getBoolean("isDarkModeOn", false);
-        //used for the intro:
-        //if returning from a configuration change, get the
-        // fragment state and set the button text.
-    /*  if (savedInstanceState != null) {
-            isFragmentDisplayed = savedInstanceState.getBoolean(STATE_FRAGMENT);
-            if (isFragmentDisplayed) {
-                // If the fragment is displayed, change button to "close".
-                mButton.setText(R.string.close);
-            }
-        }*/
+
         setAnimationView(0); // default off animation view
 
         //hoping that this fixes network errors for gsearch
@@ -170,6 +161,10 @@ public class  Home_screen extends AppCompatActivity {
         btnSend = findViewById(R.id.button_send);
         messageEditText = findViewById(R.id.messageEditText);
 
+        //check to see whether there are any previous chat history;
+        // if not, initialize a new instance of an arraylist to store chat messages
+        //get intent extra is used when another intent starts this one
+        //saved instance state is used when the activity is destroyed and restarted
        if (savedInstanceState == null) {
            if(getIntent().getParcelableArrayListExtra("chatMessages") != null){
                chatMessages = getIntent().getParcelableArrayListExtra("chatMessages");
@@ -179,8 +174,12 @@ public class  Home_screen extends AppCompatActivity {
         } else{
            chatMessages = savedInstanceState.getParcelableArrayList("chatMessages");
        }
+
+       //tie together the listview with chat messages
         chatMessageAdapter = new ChatMessageAdapter(this,chatMessages);
         chatListView.setAdapter(chatMessageAdapter);
+
+        //if there are more than 0 chat messages, then set the last message as the one just above the input box
         if(chatMessageAdapter.getCount() > 0) {
             chatListView.setSelection(chatMessageAdapter.getCount() - 1);
         }
@@ -201,6 +200,7 @@ public class  Home_screen extends AppCompatActivity {
                 hideKeyboard(v);
             }
         });
+
         // Sends the message when the button is clicked
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,8 +248,7 @@ public class  Home_screen extends AppCompatActivity {
         //Assign the AIML files to bot for processing
         bot = new Bot("Alice", MagicStrings.root_path, "chat");
         chat = new Chat(bot);
-        String[] args = null;
-        mainFunction(args);
+
 
         // set up no activity handler to switch to "sleeping" mode when there is no activity for 30 secs
         handler = new Handler();
@@ -343,27 +342,18 @@ public class  Home_screen extends AppCompatActivity {
         }
     }
 
-    //Request and response of user and the bot
-    public static void mainFunction(String[] args) {
-        MagicBooleans.trace_mode = false;
-        //System.out.println("trace mode = " + MagicBooleans.trace_mode);
-        Graphmaster.enableShortCuts = true;
-        Timer timer = new Timer();
-        String request = "Hello.";
-        String response = chat.multisentenceRespond(request);
-
-        //System.out.println("Human: "+request);
-        //System.out.println("Robot: " + response);
-    }
 
     // Sends the user's message to the chatListView
     // To debug, call the bot's message to reply in a default way
     private Weather weather = new Weather(this);
 
+    //redirects to a specific function implemented in our bot by classified user input from checkForAction()
     public void sendUserMessage(String message) {
         notTalking = false; // used to set up corresponding animation mode
         eventRequest = message;  // used for events commands
         int action = checkForAction(message);
+
+        //redirects to rock paper scissors
         if (game2IsOn) {
             action = 8;
         }
@@ -451,10 +441,6 @@ public class  Home_screen extends AppCompatActivity {
             }
         }
     }
-
-    // Add an else if and check if user replies with "weather"
-    //chatMessage.getContent().toLowerCase().contains(("weather"))
-
 
     // Sends the bot's message to the chatListView
     public void sendBotMessage(String message) {
@@ -731,8 +717,9 @@ public class  Home_screen extends AppCompatActivity {
         }
     }
 
-    public int gameAction = 0;
 
+    //determines how the chat progresses the game
+    public int gameAction = 0;
     public void confirmGamesAction(String message) {
         chatFlag = 8;
         if (message.equalsIgnoreCase("no")) {
@@ -797,6 +784,7 @@ public class  Home_screen extends AppCompatActivity {
         }
     }
 
+    //implements the game
     public void rockPaperScissors() {
         RockPaperScissors rps = new RockPaperScissors();
         String message = rps.checkUserGesture(messageEditText.getText().toString());
@@ -812,6 +800,7 @@ public class  Home_screen extends AppCompatActivity {
     }
 
 
+    //variables for lottie
     LottieAnimationView talkingAnimationView_dark;
     LottieAnimationView robotStartAnimationView_dark;
     LottieAnimationView robotOffAnimationView_dark;
@@ -989,12 +978,6 @@ public class  Home_screen extends AppCompatActivity {
         }.start();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-
     //switch to other screens
     // Method for opening Profile screen
     public void open_Profile_screen() {
@@ -1010,11 +993,14 @@ public class  Home_screen extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //restores the chat messages for restart of the activity
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         chatMessages = savedInstanceState.getParcelableArrayList("chatMessages");
     }
 
+    //saves the chat messages for the next restart of the activity
+    // (will disappear once a new intent starts or the app is closed)
     @Override
     public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
