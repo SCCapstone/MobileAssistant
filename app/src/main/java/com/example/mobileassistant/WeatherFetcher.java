@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-
+/**
+ * WeatherFetcher extends AsyncTask so that we can get weather information
+ */
 public class WeatherFetcher extends AsyncTask<Object, Void, String> {
 
     @Override
@@ -62,6 +64,7 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
             else {
                 Scanner sc = new Scanner(url.openStream());
 
+                // Scans through the api
                 while (sc.hasNext()) {
                     result += sc.nextLine();
                 }
@@ -76,8 +79,10 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
             double longitude = Double.parseDouble(json_coord.getString("lon"));
             double latitude = Double.parseDouble(json_coord.getString("lat"));
 
+            // Gets the true location which is the lat/long from the api
             String trueLocation = getTrueLocation(context, latitude, longitude);
 
+            // current weather
             if (!is8DayForecast) {
                 // Json Main
                 JSONObject json_main = new JSONObject(json.getString("main"));
@@ -191,7 +196,7 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
                     ret_response += "The 8-day forecast in " + trueLocation + " is:";
 
 
-
+                // loop through the 8-day result
                 for (int i = 0; i < json_daily.length(); i++) {
                     long dt = Long.parseLong(json_daily.getJSONObject(i).getString("dt"));
                     date.setTime(dt * 1000); // Date and time
@@ -212,6 +217,8 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
 
                     // Building output, building the body
                     ret_response += "\n" + date.toString();
+
+                    // Check which weather information the user would like
                     if (weatherInfo.equalsIgnoreCase("temperature"))
                         ret_response += "\n\tTemperature: " + temperature;
 
@@ -242,9 +249,6 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
                                 + "\n\tPressure: " + pressure
                                 + "\n\tDescription: " + description;
                     }
-
-
-
                 }
                 conn2.disconnect();
             }
@@ -255,6 +259,15 @@ public class WeatherFetcher extends AsyncTask<Object, Void, String> {
         return ret_response;
     }
 
+    /**
+     * This method just gets the actual location with the latitude and longitude
+     * The api returns these lat/long.
+     * @param context
+     * @param latitude
+     * @param longitude
+     * @return
+     * @throws IOException
+     */
     public String getTrueLocation(Context context, double latitude, double longitude) throws IOException {
         Geocoder geocoder;
         List<Address> addresses;
