@@ -5,7 +5,13 @@ import android.content.Context;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Weather Class that will be called in the Home_screen
+ * This class will attempt to obtain the right information before
+ * calling the WeatherFetcher Class
+ */
 public class Weather {
+    // Varaibles
     private WeatherFetcher weatherFetcher;
     private boolean isDefaultWeather;
     private boolean is8DayForecast;
@@ -151,6 +157,7 @@ public class Weather {
         this.chatFlag = 4; // keeps conversation going with chat bot
         String ret_string = "";
 
+        // Allows the bot to keep the conversation about the same subject going
         if (weatherAction == 0) {
             ret_string += "Did you want the current weather or an 8-day forecast?";
             weatherAction++;
@@ -186,7 +193,7 @@ public class Weather {
             weatherAction++;
         }
         else {
-            ret_string += parseWeatherInformation(message);
+            ret_string += parseWeatherInformation(message); // Parse out city/state information
 
             //reset globals
             weatherAction = 0;
@@ -222,11 +229,15 @@ public class Weather {
             location = location.replace(s, "");
         }
 
+        // We split city and state into arrays
         String[] locations = location.split(" ");
         String temp = "";
         String validStateName = "";
         int marker = 0;
+
+        // We start at the end of the array to find the states first
         for (int i = locations.length - 1; i >= 0; i--) {
+            // If there is a word "tomorrow", that means this will be an 8-day forecast
             if(locations[i].equals("TOMORROW"))
                 continue;
             temp = locations[i] + " " + temp;
