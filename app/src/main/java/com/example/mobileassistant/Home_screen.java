@@ -403,11 +403,6 @@ public class  Home_screen extends AppCompatActivity {
             mapLauncher.openDirections(message);
         }
 
-        // default bot responds
-        //else if(action == 6){
-        //confirmNewsAction(message);
-        //}
-
         // Launches the Google MapActivity for traffic near the user's last known location
         else if (action == 7) {
             Intent intent = new Intent(this, MapsActivity.class);
@@ -476,7 +471,6 @@ public class  Home_screen extends AppCompatActivity {
         String[] eventKeywords = {"event", "events"};
         String[] searchKeywords = {"search", "look up", "news", "headlines"};
         String[] weatherKeywords = {"weather", "forecast", "temperature", "high", "low", "wind speed", "humidity", "description", "pressure"};
-        //String[] newsKeywords = {"news", "headlines"};
         String[] mapKeywords = {"directions to", "directions"};
         String[] trafficKeywords = {"traffic", "show traffic"};
         String[] trafficPlaceKeywords = {"traffic in", "traffic to", "traffic near"};
@@ -517,10 +511,6 @@ public class  Home_screen extends AppCompatActivity {
             if (i < mapKeywords.length && message.toLowerCase().contains(mapKeywords[i]))
                 return 5;
 
-            // News
-            //if (i < newsKeywords.length && message.toLowerCase().contains(newsKeywords[i]))
-            //return 6;
-
             // Traffic keywords
             if (i < trafficKeywords.length && message.toLowerCase().contains(trafficKeywords[i])) {
                 // If the keywords contain traffic keywords for a place, return 11 for that intent
@@ -540,8 +530,6 @@ public class  Home_screen extends AppCompatActivity {
             if (i < helpKeywords.length && message.toLowerCase().contains(helpKeywords[i])) {
                 return 10;
             }
-
-
         }
         return 0;
     }
@@ -553,53 +541,19 @@ public class  Home_screen extends AppCompatActivity {
         chatFlag = weather.getChatFlag();
     }
 
-    /*
-        public int newsAction = 0;
-        private void confirmNewsAction(String message){
-            chatFlag=6;
-            String botMessage="";
-
-            if(newsAction==0)
-            {
-                botMessage="What type of news would you like? If you would like to know the news for a city, Columbia SC for example, then say Columbia SC News. You can also specify the number of results by including something like 'top 5' or '5 results' in your message.";
-                newsAction++;
-                sendBotMessage(botMessage);
-            }
-            else
-            {
-                newsAction=0;
-                chatFlag=0;
-                gsearch c = new gsearch();
-                botMessage = c.doInBackground(message);
-                sendBotMessage(botMessage);
-            }
-        }
-    */
     // This will take us to which conversation they are currently in
     public void findChatFlag(String message, int num) {
         // 1 = show events, 2 = create events, 3 = Google search,
         // 4 = weather, 5 = map search, 6 = news
 
         if (num == 1) {
-            //System.out.println("the chatFlag is: "+num+" go to search event");
             searchEvents(message);
         } else if (num == 2) {
-            //  System.out.println("the chatFlag is: "+num+" go to create event");
             createEvents(message);
-        } else if (num == 3) {
-
         } else if (num == 4) {
             runWeatherSearch(message);
-        } else if (num == 5) {
-
-        } else if (num == 6) {
-            //confirmNewsAction(message);
-        } else if (num == 7) {
-
         } else if (num == 8) {
             confirmGamesAction(message);
-        } else if (num == 9) {
-
         } else if (num == 10) {
             confirmHelpAction(message);
         }
@@ -608,8 +562,6 @@ public class  Home_screen extends AppCompatActivity {
     // Method for show events
     public void searchEvents(String message) {
         create = false;
-        //System.out.println("search request is: "+message);
-        //System.out.println("searching event");
 
         // get event label or get number of requested events
         if (message.contains("\"")) {
@@ -633,21 +585,16 @@ public class  Home_screen extends AppCompatActivity {
                 // get the number of events request
             else number = Integer.parseInt(newStr.toString());
         }
-        //System.out.println("The id is: "+id);
         // start AccessCalendar activity to get results
         Intent intent = new Intent(this, AccessCalendar.class);
         startActivityForResult(intent, LAUNCH_CALENDAR);
     }
 
-    //private int createEventsAction = 0;
-    //private boolean loca = false;
     // Method for create events
     public void createEvents(String message) {
         chatFlag = 2; // Lets bot know to keep the conversation going
         String botMessage = "";
         create = true;
-        //System.out.println("the create request is: "+message);
-        //System.out.println("Creating event");
 
         // at 0 ask if want to add location, goes to 1
         if (createEventsAction == 0) {
@@ -669,7 +616,6 @@ public class  Home_screen extends AppCompatActivity {
                 location = null;
                 botMessage = "Do you want to add attendees? yes/no";
                 createEventsAction = createEventsAction + 2;
-                //System.out.println("in 1:" + createEventsAction);
                 sendBotMessage(botMessage);
             }
         }
@@ -681,7 +627,6 @@ public class  Home_screen extends AppCompatActivity {
             createEventsAction++;
             botMessage = "Do you want to add attendees? yes/no";
             // createEventsAction++;
-            // System.out.println("in 2:" +createEventsAction);
             sendBotMessage(botMessage);
         }
 
